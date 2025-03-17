@@ -1,0 +1,27 @@
+PROCEDIMIENTO DEL SISTEMA
+
+1. Intervalo de tiempo (ej.: cada 30 minutos):
+   - El programa inicia el proceso de lectura de temperatura y humedad.
+
+2. Lectura del sensor DHT11:
+   - Se obtiene la humedad y la temperatura actual.
+
+3. Toma de fotografía:
+   - Se utiliza la cámara conectada a la Raspberry Pi para capturar una imagen.
+
+4. Indicador con LEDs:
+   - LED ROJO: Encendido desde que inicia la lectura de datos hasta que finaliza la toma de la foto y el guardado de los datos.
+   - LED VERDE: Encendido durante 5 segundos para indicar que el proceso fue exitoso y los datos se han guardado.
+
+5. Almacenamiento de datos en la base de datos:
+   - Se guarda la información de temperatura, humedad y la imagen en la base de datos (aún sin definir).
+
+6. Consulta a la API de OpenAI:
+   - Se envían los valores de humedad y temperatura para recibir una opinión o recomendación especializada.
+   - La respuesta obtenida se guarda igualmente en la base de datos.
+
+7. Actualización de la aplicación web:
+   - La app web obtiene y muestra la información más reciente (humedad, temperatura, imagen y recomendación).
+   - Puede estar monitoreando la base de datos de forma continua, o recibir una señal que indique que los datos han sido actualizados.
+
+FIN DEL PROCEDIMIENTO
