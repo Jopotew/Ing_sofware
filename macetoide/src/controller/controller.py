@@ -7,6 +7,7 @@ from typing import Optional
 # from led_controller import LEDController, LEDData
 # from servo_motor import ServoMotor
 
+
 class Controller:
     """
     This Controller class orchestrates the entire process of:
@@ -20,18 +21,18 @@ class Controller:
 
     def __init__(
         self,
-        dht_sensor,            # type: DHT11Sensor
-        camera,                # type: RaspberryPiCamera
-        led_red_controller,    # type: LEDController
+        dht_sensor,  # type: DHT11Sensor
+        camera,  # type: RaspberryPiCamera
+        led_red_controller,  # type: LEDController
         led_green_controller,  # type: LEDController
-        db_service=None,       # placeholder for a DB service or connection
-        openai_service=None,   # placeholder for an OpenAI API client
-        servo_motor=None       # type: Optional[ServoMotor]
+        db_service=None,  # placeholder for a DB service or connection
+        openai_service=None,  # placeholder for an OpenAI API client
+        servo_motor=None,  # type: Optional[ServoMotor]
     ):
         """
         Initialize the Controller with references to the sensor, camera,
         LED controllers, and optional services (database, OpenAI, servo).
-        
+
         :param dht_sensor: An instance of DHT11Sensor for reading temp/humidity.
         :param camera: An instance of RaspberryPiCamera for capturing images.
         :param led_red_controller: An LEDController instance for the red LED.
@@ -78,7 +79,7 @@ class Controller:
             measurement_id = self.db_service.save_measurement(
                 temperature=temperature,
                 humidity=humidity,
-                image_path=image_data.file_name
+                image_path=image_data.file_name,
             )
 
         # 5) Send data to OpenAI API and store the response (placeholder)
@@ -86,8 +87,7 @@ class Controller:
         openai_advice = None
         if self.openai_service is not None:
             openai_advice = self.openai_service.get_advice(
-                temperature=temperature,
-                humidity=humidity
+                temperature=temperature, humidity=humidity
             )
             if openai_advice and self.db_service is not None:
                 self.db_service.save_advice(measurement_id, openai_advice)
