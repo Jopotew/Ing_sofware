@@ -91,9 +91,5 @@ class OpenAIChatbot:
         return answer
 
 
-
-
-
-
 gpt = OpenAIChatbot()
 print(gpt.ask("35 °C,  humedad >= 70 %  "))

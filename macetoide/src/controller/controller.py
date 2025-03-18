@@ -110,4 +110,4 @@ class Controller:
                 # Return servo to closed position (angle 0)
                 self.servo_motor.set_angle(0)
 
-        # End of cycle. The system is ready for the next cycle.
+        # End of cycle. The system is ready for the next cycle.d
