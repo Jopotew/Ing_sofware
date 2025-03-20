@@ -1,6 +1,7 @@
 import openai
 import os
 import json
+import time 
 
 from pathlib import Path
 from dotenv import load_dotenv
@@ -9,7 +10,75 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class OpenAIChatbot:
+class PlantAssistant:
+    """
+    Clase para interactuar con el asistente personalizado de OpenAI usando Assistant API.
+    Envía datos de la planta y recibe recomendaciones con el personaje configurado.
+    """
+
+    def __init__(self):
+        """
+        Inicializa la clase con la clave API y el ID del asistente.
+        """
+        self.api_key = os.getenv("OPENAI_API_KEY")
+        self.assistant_id = "asst_qysrgPulnpfwd76CsDwMLCZZ".strip()
+        openai.api_key = self.api_key
+
+    def get_recommendation(self, temperature: int, humidity: int) -> str:
+        """
+        Envía los datos al asistente y devuelve la recomendación en personaje.
+        """
+
+        try:
+            # Crear un hilo de conversación
+            thread = openai.beta.threads.create()
+
+            # Formar el mensaje solo con los datos
+            message = f"Temperatura: {temperature}°C\nHumedad: {humidity}%"
+
+            # Agregar el mensaje al thread
+            openai.beta.threads.messages.create(
+                thread_id=thread.id,
+                role="user",
+                content=message
+            )
+
+            # Ejecutar el asistente configurado
+            run = openai.beta.threads.runs.create(
+                thread_id=thread.id,
+                assistant_id=self.assistant_id
+            )
+
+            # Esperar a que el run termine (POLLING)
+            while True:
+                run_status = openai.beta.threads.runs.retrieve(
+                    thread_id=thread.id,
+                    run_id=run.id
+                )
+                if run_status.status == "completed":
+                    break
+                elif run_status.status in ["failed", "cancelled"]:
+                    return "Error: La ejecución del asistente falló."
+                time.sleep(1)  # Espera 1 segundo antes de volver a consultar
+
+            # Obtener la respuesta del asistente
+            messages = openai.beta.threads.messages.list(thread_id=thread.id)
+
+            # Buscar el mensaje del assistant
+            for msg in messages.data:
+                if msg.role == "assistant":
+                    return msg.content[0].text.value.strip()
+
+            return "No se recibió respuesta del asistente."
+
+        except Exception as e:
+            return f"Error al obtener la recomendación: {str(e)}"
+
+
+
+
+
+class APIChatbot:
     """
     Clase OpenAIChatbot para interactuar con la API de OpenAI.
 
@@ -90,7 +159,12 @@ class OpenAIChatbot:
         print(f"Tokens usados en la respuesta: {completion_tokens}")
 
         return answer
+    
 
 
-gpt = OpenAIChatbot()
-print(gpt.ask("35 °C,  humedad >= 70 %  "))
+
+
+
+
+gpt = PlantAssistant()
+print(gpt.get_recommendation(25, 50))

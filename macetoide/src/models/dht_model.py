@@ -2,7 +2,7 @@ import Adafruit_DHT
 
 class DHT11Data:
     """
-    Data model representing temperature and humidity readings
+    Data model representing temperature and humidity readings of the room
     from a DHT11 sensor.
     """
 
