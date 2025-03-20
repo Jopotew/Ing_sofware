@@ -4,7 +4,6 @@ from models.irrigation_status import StatusIrrigation
 from models.data_pot import DataPot
 from models.analisis_time import AnalysisTime
 from models.user import User
-from models.
 
 
 class Log:
