@@ -14,8 +14,8 @@ class Pot:
         Initializes a new pot with data and related objects.
         """
         self.name = name
-        self.plant: Plant = plant                  # Plant object
-        self.analysis_time: AnalysisTime = analysis_time  # AnalysisTime object
+        self.plant: Plant = plant                  
+        self.analysis_time: AnalysisTime = analysis_time  
         self.user: User = user
 
     def link_plant(self, new_plant):

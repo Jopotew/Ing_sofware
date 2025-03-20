@@ -4,6 +4,7 @@ from models.irrigation_status import StatusIrrigation
 from models.data_pot import DataPot
 from models.analisis_time import AnalysisTime
 from models.user import User
+from models.irrigation_event import IrrigationEvent
 
 
 class Log:
@@ -11,16 +12,16 @@ class Log:
     Class that represents a log record of a pot's analysis process.
     """
 
-    def __init__(self, pot: Pot, data_pot: DataPot, irrigation_status: StatusIrrigation, expert_advice: ExpertAdvice):
+    def __init__(self, pot: Pot, data_pot: DataPot, expert_advice: ExpertAdvice, irrigation_event: IrrigationEvent):
         """
         Initializes the log with all related objects and data.
         """
         self.pot:Pot = pot.user
         self.user: User = pot.user   
-        self.data_pot: DataPot = data_pot                 
-        self.irrigation_status: StatusIrrigation = irrigation_status  
+        self.data_pot: DataPot = data_pot                  
         self.analysis_time: AnalysisTime = pot.analysis_time          
-        self.expert_advice: ExpertAdvice = expert_advice         
+        self.expert_advice: ExpertAdvice = expert_advice  
+        self.irrigation_event: IrrigationEvent = irrigation_event     
 
 
 
