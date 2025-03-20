@@ -1,0 +1,20 @@
+📝 Lista Completa de Materiales:
+🌱 1. Componentes Principales (que ya tienes):
+✅ Raspberry Pi 5
+✅ Sensor DHT11 (temperatura y humedad ambiente)
+✅ ADC0834 (convertidor analógico-digital)
+✅ Bomba de agua Kangde BL-200CL (2W, 220V, para acuario)
+✅ Relé (Relay) módulo azul (para controlar la bomba desde Raspberry Pi)
+✅ Protoboard (Breadboard)
+✅ Jumpers/cables GPIO macho-hembra y hembra-hembra
+✅ Cables GPIO (40 pin)
+✅ Resistencias variadas
+
+
+🛒 2. Componentes adicionales (que necesitas adquirir):
+❌ Sensor capacitivo de humedad para suelo (sensor negro largo tipo "Capacitive Soil Moisture v2.0")
+
+Imprescindible para medir directamente la humedad del suelo.
+❌ Fuente o módulo para alimentar la bomba de agua
+
+Una fuente o adaptador 220V AC con conexión segura (o enchufe protegido)
