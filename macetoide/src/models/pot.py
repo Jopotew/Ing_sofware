@@ -17,6 +17,7 @@ class Pot:
         self.plant: Plant = plant                  
         self.analysis_time: AnalysisTime = analysis_time  
         self.user: User = user
+        self.last_checked: int
 
     def link_plant(self, new_plant):
         """
