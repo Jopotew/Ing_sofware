@@ -1,8 +1,8 @@
-import RPi.GPIO as GPIO
+from gpiozero import LED
 
 class LEDData:
     """
-    Data model representing the state of an LED (on/off).
+    Data model representing the state of an LED (ON/OFF).
     """
 
     def __init__(self, led_state: str):
@@ -16,19 +16,17 @@ class LEDData:
 
 class LEDController:
     """
-    Controller for an LED connected to a Raspberry Pi's GPIO pin.
+    Controller for an LED connected to a Raspberry Pi's GPIO pin using gpiozero.
     Provides methods to turn the LED on or off and returns LEDData objects.
     """
 
     def __init__(self, led_pin: int):
         """
-        Initialize the LEDController by setting up the specified GPIO pin as output.
+        Initialize the LEDController with gpiozero LED object.
 
         :param led_pin: The GPIO pin number where the LED is connected.
         """
-        self.led_pin = led_pin
-        GPIO.setmode(GPIO.BCM)  # or GPIO.BOARD if you use board numbering
-        GPIO.setup(self.led_pin, GPIO.OUT)
+        self.led = LED(led_pin)
         self._current_state = LEDData("OFF")
 
     def turn_on(self) -> LEDData:
@@ -37,7 +35,7 @@ class LEDController:
 
         :return: LEDData object with state set to "ON".
         """
-        GPIO.output(self.led_pin, GPIO.HIGH)
+        self.led.on()
         self._current_state = LEDData("ON")
         return self._current_state
 
@@ -47,7 +45,7 @@ class LEDController:
 
         :return: LEDData object with state set to "OFF".
         """
-        GPIO.output(self.led_pin, GPIO.LOW)
+        self.led.off()
         self._current_state = LEDData("OFF")
         return self._current_state
 

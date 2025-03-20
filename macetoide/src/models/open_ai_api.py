@@ -78,7 +78,7 @@ class PlantAssistant:
 
 
 
-class APIChatbot:
+class Chatbot:
     """
     Clase OpenAIChatbot para interactuar con la API de OpenAI.
 
@@ -160,6 +160,45 @@ class APIChatbot:
 
         return answer
     
+    def ask_species(self, plant_name: str) -> str:
+        """
+        Asks the AI to identify the species of a plant by its common name.
+        Returns only the species name.
+        """
+        prompt = (
+            f"Dime la especie científica de la planta llamada '{plant_name}'. "
+            f"Solo responde el nombre de la especie, sin explicaciones ni detalles extras."
+        )
+
+        response = openai.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=self.history + [{"role": "user", "content": prompt}],
+            temperature=0.3,
+            max_tokens=50
+        )
+
+        species = response.choices[0].message.content.strip()
+        return species
+
+    def ask_description(self, plant_name: str, species: str) -> str:
+        """
+        Asks the AI to generate a scientific and humorous description of the plant.
+        """
+        prompt = (
+            f"Genera una descripción científica sobre la planta '{plant_name}' "
+            f"de la especie '{species}'. No uses más de 350 caracteres."
+        )
+
+        response = openai.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=self.history + [{"role": "user", "content": prompt}],
+            temperature=0.7,
+            max_tokens=350
+        )
+
+        description = response.choices[0].message.content.strip()
+        return description
+    
 
 
 
@@ -167,4 +206,4 @@ class APIChatbot:
 
 
 gpt = PlantAssistant()
-print(gpt.get_recommendation(25, 50))
+print(gpt.get_recommendation(40, 20))
