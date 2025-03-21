@@ -1,4 +1,4 @@
-from models.open_ai_api import Chatbot
+from models.entities.open_ai_api import Chatbot
 
 
 class Plant:

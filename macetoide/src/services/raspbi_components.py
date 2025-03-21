@@ -6,11 +6,10 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 src_path = os.path.join(current_dir, "..")
 sys.path.append(src_path)
 
-from providers.raspberry_components import led_component
-from models.led import Led
-
-from models.dht11 import DHT11Sensor
-from providers.raspberry_components import dht11
+from providers.raspberry_components import led_component, dht11, soil_sensor
+from macetoide.src.models.components.led import Led
+from macetoide.src.models.components.dht11 import DHT11Sensor
+from macetoide.src.models.components.soil_sensor import SoilMoistureSensor
 
 
 class RaspbiComponents:
@@ -32,13 +31,22 @@ class RaspbiComponents:
         Sets up the DHT11 sensors connected to GPIO pins and returns a list of DHT11Sensor objects.
         Iterates through the dht11 configuration and creates a DHT11Sensor instance for each.
         """
-        sensors = []  
+        sensors: list = []  
         for item in dht11:
-            sensor = DHT11Sensor(item["pin"])
+            sensor = DHT11Sensor(item["component"],item["function"],item["pin"])
             sensors.append(sensor)
         return sensors
 
-    #def soil_sensor
+
+
+    def set_up_soil_sensor() -> list:
+        sensors: list = []
+        for item in soil_sensor:
+            sensor = SoilMoistureSensor(item["component", item["function"], item["pin_cs"], item["pin_clk"], item["pin_dio"]])
+            sensors.append(sensor)
+        return sensors
+    
+    
     #def servo
     #def camera
 

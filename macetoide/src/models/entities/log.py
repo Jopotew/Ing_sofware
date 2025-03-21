@@ -1,10 +1,10 @@
-from models.pot import Pot
-from models.expert_advice import ExpertAdvice
-from models.irrigation_status import StatusIrrigation
-from models.data_pot import DataPot
-from models.analisis_time import AnalysisTime
-from models.user import User
-from models.irrigation_event import IrrigationEvent
+from models.entities.pot import Pot
+from models.entities.expert_advice import ExpertAdvice
+from models.entities.irrigation_status import StatusIrrigation
+from macetoide.src.models.entities.data_pot import DataPot
+from macetoide.src.models.entities.analisis_time import AnalysisTime
+from models.entities.user import User
+from models.entities.irrigation_event import IrrigationEvent
 
 
 class Log:

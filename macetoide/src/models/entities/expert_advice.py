@@ -1,5 +1,5 @@
-from models.open_ai_api import PlantAssistant
-from models.data_pot import DataPot
+from models.entities.open_ai_api import PlantAssistant
+from macetoide.src.models.entities.data_pot import DataPot
 
 class ExpertAdvice:
     """

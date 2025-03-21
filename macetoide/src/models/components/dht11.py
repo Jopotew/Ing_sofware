@@ -24,12 +24,14 @@ class DHT11Sensor:
     from the sensor.
     """
 
-    def __init__(self, pin: int):
+    def __init__(self, component: str ,function: str, pin: int):
         """
         Initialize the DHT11Sensor with the specified GPIO pin.
 
         :param pin: The GPIO pin number to which the DHT11 data pin is connected.
         """
+        self.component: str = component
+        self.function: str = function
         self.pin = pin
 
     def read_sensor_data(self) -> DHT11Data:

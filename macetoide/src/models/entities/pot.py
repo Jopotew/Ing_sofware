@@ -1,6 +1,6 @@
-from models.analisis_time import AnalysisTime
-from models.user import User
-from models.plant import Plant
+from macetoide.src.models.entities.analisis_time import AnalysisTime
+from models.entities.user import User
+from models.entities.plant import Plant
 
 
 

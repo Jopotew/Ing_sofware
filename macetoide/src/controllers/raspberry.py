@@ -1,15 +1,20 @@
 
+from macetoide.src.models.components.camera import Camera
+from macetoide.src.models.components.dht11 import DHT11Sensor
+from macetoide.src.models.components.led import Led
+from macetoide.src.models.components.servo import Servo
+from macetoide.src.models.components.soil_sensor import SoilMoistureSensor
 from services.raspbi_components import RaspbiComponents
 
 class RaspberryControll:
 
     def __init__(self):
         self.rb = RaspbiComponents
-        self.leds: list 
-        self.dht11: list # list of 1
-        self.servo: list # list of 1
-        self.soil_sensor: list # list of 1
-        self.camera: list # list of 1
+        self.leds: list[Led]
+        self.dht11: list[DHT11Sensor] # list of 1
+        self.servo: list[Servo] # list of 1
+        self.soil_sensor: list[SoilMoistureSensor] # list of 1
+        self.camera: list[Camera] # list of 1
 
         self.set_lists()
 
@@ -26,9 +31,9 @@ class RaspberryControll:
         if led_function == "completion":
             for i in self.leds:
                 if i.function == "completion" and value:
-                    i.turn_on()
+                    i.on()
                 elif i.function == "completion" and not value:
-                    i.turn_off()
+                    i.off()
         elif led_function == "processing":
             for i in self.leds:
                 if i.function == "processing" and value:

@@ -1,5 +1,5 @@
 
-from models.database import Database
+from models.entities.database import Database
 
 class User:
     """
