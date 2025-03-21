@@ -38,6 +38,9 @@ class RaspbiComponents:
             sensors.append(sensor)
         return sensors
 
+    #def soil_sensor
+    #def servo
+    #def camera
 
 r = RaspbiComponents
 a = r.set_up_leds()
