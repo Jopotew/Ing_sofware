@@ -1,4 +1,4 @@
-from models.pot import pot
+
 from models.database import Database
 
 class User:

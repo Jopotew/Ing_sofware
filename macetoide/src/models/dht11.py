@@ -1,4 +1,4 @@
-import Adafruit_DHT
+#import Adafruit_DHT
 
 class DHT11Data:
     """
