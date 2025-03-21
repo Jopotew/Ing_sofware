@@ -24,7 +24,7 @@ class PlantAssistant:
         self.assistant_id = "asst_qysrgPulnpfwd76CsDwMLCZZ".strip()
         openai.api_key = self.api_key
 
-    def get_recommendation(self, temperature: int, humidity: int) -> str:
+    def get_recommendation(self, temperature: float, soil_humidity: float, air_humidity: float) -> str:
         """
         Envía los datos al asistente y devuelve la recomendación en personaje.
         """
@@ -34,7 +34,7 @@ class PlantAssistant:
             thread = openai.beta.threads.create()
 
             # Formar el mensaje solo con los datos
-            message = f"Temperatura: {temperature}°C\nHumedad: {humidity}%"
+            message = f"Temperatura: {temperature}°C\nHumedad del Suelo: {soil_humidity}%\nHumedad del aire: {air_humidity}%"
 
             # Agregar el mensaje al thread
             openai.beta.threads.messages.create(

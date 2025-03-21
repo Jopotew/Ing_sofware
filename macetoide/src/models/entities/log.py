@@ -1,7 +1,7 @@
 from models.entities.pot import Pot
 from models.entities.expert_advice import ExpertAdvice
 from models.entities.irrigation_status import StatusIrrigation
-from macetoide.src.models.entities.data_pot import DataPot
+from macetoide.src.models.entities.pot_data import PotData
 from macetoide.src.models.entities.analisis_time import AnalysisTime
 from models.entities.user import User
 from models.entities.irrigation_event import IrrigationEvent
@@ -12,13 +12,13 @@ class Log:
     Class that represents a log record of a pot's analysis process.
     """
 
-    def __init__(self, pot: Pot, data_pot: DataPot, expert_advice: ExpertAdvice, irrigation_event: IrrigationEvent):
+    def __init__(self, pot: Pot, pot_data: PotData, expert_advice: ExpertAdvice, irrigation_event: IrrigationEvent):
         """
         Initializes the log with all related objects and data.
         """
         self.pot:Pot = pot.user
         self.user: User = pot.user   
-        self.data_pot: DataPot = data_pot                  
+        self.pot_data: PotData = pot_data                  
         self.analysis_time: AnalysisTime = pot.analysis_time          
         self.expert_advice: ExpertAdvice = expert_advice  
         self.irrigation_event: IrrigationEvent = irrigation_event     
@@ -30,12 +30,13 @@ class Log:
         """
         Generates a summary of the log with all relevant information.
         """
-        irrigation_text = "Irrigation completed" if self.irrigation_status.status else "No irrigation"
+        irrigation_text = "Log completed"
         summary = (
             f"Pot: {self.pot.name}\n"
-            f"Humidity: {self.data_pot.humidity}%\n"
-            f"Temperature: {self.data_pot.temperature}°C\n"
-            f"Image Path: {self.data_pot.image}\n"
+            f"Soil Humidity: {self.pot_data.soil_humidity}%\n"
+            f"Air Humidity: {self.pot_data.air_humidity}"
+            f"Temperature: {self.pot_data.temperature}°C\n"
+            f"Image Path: {self.pot_data.image}\n"
             f"Irrigation Status: {irrigation_text}\n"
             f"Expert Advice: {self.expert_advice.detail}\n"
             f"User: {self.user.username}\n"

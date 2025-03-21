@@ -11,20 +11,25 @@ class RaspberryControll:
     def __init__(self):
         self.rb = RaspbiComponents
         self.leds: list[Led]
-        self.dht11: list[DHT11Sensor] # list of 1
-        self.servo: list[Servo] # list of 1
-        self.soil_sensor: list[SoilMoistureSensor] # list of 1
-        self.camera: list[Camera] # list of 1
+        self.dht11: DHT11Sensor
+        self.servo: Servo
+        self.soil_sensor: SoilMoistureSensor
+        self.camera: Camera
 
         self.set_lists()
 
 
-    def set_lists(self):
+    def set_components(self):
         self.leds = self.rb.set_up_leds()
         self.dht11 = self.rb.set_up_dht11()
-        self.servo = self.rb.set_up_servo_motor()
+        self.servo = self.rb.set_up_servo()
         self.soil_sensor = self.rb.set_up_soil_sensor()
         self.camera = self.rb.set_up_camera()
+
+
+    def process_pot_data():
+        pass
+
 
 
     def set_led_status(self, led_function: str, value: bool):
@@ -45,12 +50,17 @@ class RaspberryControll:
         
 
     def get_dht11_data(self):
-        dht11_data = []
-        for i in self.dht11:
-            dht11_data.append(i.read_sensor_data())
-        return dht11_data[0]
+        return self.dht11.read_sensor_data()
                     
 
-    def set_servo_angle(self, angle: int):
-        for i in self.servo:
-            i.set_angle(angle)
+    def set_servo_angle(self, angle: float):
+        self.servo.set_angle(angle)
+
+
+    def get_camera_picture(self):
+        picture_data = self.camera.capture_image
+        return picture_data
+    
+
+    def get_soil_data(self):
+        return self.soil_sensor.read_percentage()

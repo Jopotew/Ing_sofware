@@ -1,5 +1,5 @@
 from models.entities.open_ai_api import PlantAssistant
-from macetoide.src.models.entities.data_pot import DataPot
+from macetoide.src.models.entities.pot_data import PotData
 
 class ExpertAdvice:
     """
@@ -13,13 +13,14 @@ class ExpertAdvice:
         self.detail: str
         self.get_detail()
 
-    def get_detail(self, data_pot: DataPot):
+    def get_detail(self, pot_data: PotData):
         assistant = PlantAssistant()
 
-        temp = data_pot.temperature
-        humidity = data_pot.humidity
+        temp = pot_data.temperature
+        soil_humidity = pot_data.soil_humidity
+        air_humidity = pot_data.air_humidity
         
 
-        self.detail(assistant.get_recommendation(temp, humidity))
+        self.detail(assistant.get_recommendation(temp, soil_humidity, air_humidity))
 
           

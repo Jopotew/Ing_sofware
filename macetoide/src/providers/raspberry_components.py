@@ -10,3 +10,33 @@ dht11 = [{"component" : "dht11", "function":"measure air humidity & temperature"
 
 
 soil_sensor = [{"component": "soil_sensor", "function": "measure soil humidity", "pin_cs": 3, "pin_clk": 3, "pin_dio":3 }]
+
+
+servo_list = [{"component" : "servo", "function":"do servo things, rotate uwuw", "pin": 2 }]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
