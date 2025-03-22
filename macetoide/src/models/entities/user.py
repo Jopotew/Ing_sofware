@@ -1,12 +1,14 @@
-
 from models.entities.database import Database
+
 
 class User:
     """
     Clase que representa a un usuario con manejo de codificación UTF-8 para la contraseña.
     """
 
-    def __init__(self, name: str, surname: str, username: str, mail: str, password: str):
+    def __init__(
+        self, name: str, surname: str, username: str, mail: str, password: str
+    ):
         """
         Inicializa un nuevo usuario con los datos proporcionados.
         """
@@ -16,8 +18,6 @@ class User:
         self.username = username
         self.mail = mail
         self.password = password
-
-
 
     def change_username(self, new_username):
         db = Database()

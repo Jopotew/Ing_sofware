@@ -12,19 +12,22 @@ class Log:
     Class that represents a log record of a pot's analysis process.
     """
 
-    def __init__(self, pot: Pot, pot_data: PotData, expert_advice: ExpertAdvice, irrigation_event: IrrigationEvent):
+    def __init__(
+        self,
+        pot: Pot,
+        pot_data: PotData,
+        expert_advice: ExpertAdvice,
+        irrigation_event: IrrigationEvent,
+    ):
         """
         Initializes the log with all related objects and data.
         """
-        self.pot:Pot = pot
-        self.user: User = pot.user   
-        self.pot_data: PotData = pot_data                  
-        self.analysis_time: AnalysisTime = pot.analysis_time          
-        self.expert_advice: ExpertAdvice = expert_advice  
-        self.irrigation_event: IrrigationEvent = irrigation_event     
-
-
-
+        self.pot: Pot = pot
+        self.user: User = pot.user
+        self.pot_data: PotData = pot_data
+        self.analysis_time: AnalysisTime = pot.analysis_time
+        self.expert_advice: ExpertAdvice = expert_advice
+        self.irrigation_event: IrrigationEvent = irrigation_event
 
     def generate_summary(self) -> str:
         """

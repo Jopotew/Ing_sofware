@@ -1,2 +1,2 @@
-class Database():
+class Database:
     pass

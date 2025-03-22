@@ -1,6 +1,7 @@
 from gpiozero import Servo
 from time import sleep
 
+
 class Servo:
     """
     Model for controlling a servo motor connected to a Raspberry Pi GPIO pin using gpiozero.
@@ -29,6 +30,6 @@ class Servo:
             raise ValueError("Angle must be between 0 and 180 degrees.")
 
         # Convert 0-180 degrees to -1 to 1 for gpiozero
-        servo_value = (angle / 90.0) - 1 
+        servo_value = (angle / 90.0) - 1
         self.servo.value = servo_value
-        sleep(0.5)  
+        sleep(0.5)

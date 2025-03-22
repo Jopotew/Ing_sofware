@@ -7,4 +7,4 @@ class StatusIrrigation:
         """
         Initializes the irrigation status.
         """
-        self.status = status  
+        self.status = status

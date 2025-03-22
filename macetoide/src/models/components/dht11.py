@@ -1,4 +1,5 @@
-#import Adafruit_DHT
+# import Adafruit_DHT
+
 
 class DHT11Data:
     """
@@ -24,7 +25,7 @@ class DHT11Sensor:
     from the sensor.
     """
 
-    def __init__(self, component: str ,function: str, pin: int):
+    def __init__(self, component: str, function: str, pin: int):
         """
         Initialize the DHT11Sensor with the specified GPIO pin.
 

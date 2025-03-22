@@ -1,17 +1,20 @@
 import RPi.GPIO as GPIO
 import time
 
+
 class SoilMoistureSensor:
     """
     Clase para manejar un sensor de humedad de suelo conectado al ADC0834.
     La clase inicializa y controla el ADC internamente.
     """
-    def __init__(self, component: str, function: str, pin_cs: int, pin_clk: int, pin_dio: int):
+
+    def __init__(
+        self, component: str, function: str, pin_cs: int, pin_clk: int, pin_dio: int
+    ):
         # Pines de control del ADC0834
 
         self.component = component
         self.function = function
-
 
         self.pin_cs = pin_cs
         self.pin_clk = pin_clk
@@ -46,7 +49,7 @@ class SoilMoistureSensor:
         self._send_bit(1)  # Start bit
         self._send_bit(1)  # Single-ended mode
         self._send_bit((self.channel >> 1) & 1)  # D1
-        self._send_bit(self.channel & 1)         # D0
+        self._send_bit(self.channel & 1)  # D0
 
         # Cambiar DIO a modo lectura
         GPIO.setup(self.pin_dio, GPIO.IN)
@@ -90,5 +93,3 @@ class SoilMoistureSensor:
         Limpia los pines GPIO utilizados.
         """
         GPIO.cleanup()
-
-

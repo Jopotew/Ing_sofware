@@ -1,7 +1,7 @@
 import openai
 import os
 import json
-import time 
+import time
 
 from pathlib import Path
 from dotenv import load_dotenv
@@ -24,7 +24,9 @@ class PlantAssistant:
         self.assistant_id = "asst_qysrgPulnpfwd76CsDwMLCZZ".strip()
         openai.api_key = self.api_key
 
-    def get_recommendation(self, temperature: float, soil_humidity: float, air_humidity: float) -> str:
+    def get_recommendation(
+        self, temperature: float, soil_humidity: float, air_humidity: float
+    ) -> str:
         """
         Envía los datos al asistente y devuelve la recomendación en personaje.
         """
@@ -38,22 +40,18 @@ class PlantAssistant:
 
             # Agregar el mensaje al thread
             openai.beta.threads.messages.create(
-                thread_id=thread.id,
-                role="user",
-                content=message
+                thread_id=thread.id, role="user", content=message
             )
 
             # Ejecutar el asistente configurado
             run = openai.beta.threads.runs.create(
-                thread_id=thread.id,
-                assistant_id=self.assistant_id
+                thread_id=thread.id, assistant_id=self.assistant_id
             )
 
             # Esperar a que el run termine (POLLING)
             while True:
                 run_status = openai.beta.threads.runs.retrieve(
-                    thread_id=thread.id,
-                    run_id=run.id
+                    thread_id=thread.id, run_id=run.id
                 )
                 if run_status.status == "completed":
                     break
@@ -73,9 +71,6 @@ class PlantAssistant:
 
         except Exception as e:
             return f"Error al obtener la recomendación: {str(e)}"
-
-
-
 
 
 class Chatbot:
@@ -159,7 +154,7 @@ class Chatbot:
         print(f"Tokens usados en la respuesta: {completion_tokens}")
 
         return answer
-    
+
     def ask_species(self, plant_name: str) -> str:
         """
         Asks the AI to identify the species of a plant by its common name.
@@ -174,7 +169,7 @@ class Chatbot:
             model="gpt-4-turbo",
             messages=self.history + [{"role": "user", "content": prompt}],
             temperature=0.3,
-            max_tokens=50
+            max_tokens=50,
         )
 
         species = response.choices[0].message.content.strip()
@@ -193,16 +188,11 @@ class Chatbot:
             model="gpt-4-turbo",
             messages=self.history + [{"role": "user", "content": prompt}],
             temperature=0.7,
-            max_tokens=350
+            max_tokens=350,
         )
 
         description = response.choices[0].message.content.strip()
         return description
-    
-
-
-
-
 
 
 gpt = PlantAssistant()

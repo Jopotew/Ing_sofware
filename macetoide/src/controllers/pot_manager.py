@@ -48,7 +48,14 @@ class PotManager:
         analysis_time = AnalysisTime(minutes, hours)
         return analysis_time
 
-    def create_pot(self, pot_name: str, plant_name: str, species: str = None, minutes: int = 0, hours: int = 0) -> Pot:
+    def create_pot(
+        self,
+        pot_name: str,
+        plant_name: str,
+        species: str = None,
+        minutes: int = 0,
+        hours: int = 0,
+    ) -> Pot:
         """
         Creates a new Pot with the specified plant, analysis time, and assigns the user.
 

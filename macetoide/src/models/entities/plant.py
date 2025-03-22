@@ -6,23 +6,20 @@ class Plant:
     Class that represents a plant in the pot system.
     """
 
-    def __init__(self, name: str, species: str = None ):
+    def __init__(self, name: str, species: str = None):
         """
         Initializes a new plant with its name, species, and an optional description.
         """
         self.name = name
         self.species = species
         self.manage_info()
-        
-
 
     def manage_info(self):
         chatbot = Chatbot()
         if self.species == None:
             self._update_species(chatbot.ask_species(self.name))
-            
+
         self._update_description(chatbot.ask_description(self.name, self.species))
-        
 
     def _update_description(self, new_description: str):
         """
@@ -32,6 +29,6 @@ class Plant:
 
     def _update_species(self, new_species: str):
         """
-        Updates the plant's species. 
+        Updates the plant's species.
         """
         self.species = new_species
