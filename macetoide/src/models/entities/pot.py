@@ -1,6 +1,7 @@
 from macetoide.src.models.entities.analisis_time import AnalysisTime
 from models.entities.user import User
 from models.entities.plant import Plant
+from datetime import datetime 
 
 
 
@@ -17,7 +18,12 @@ class Pot:
         self.plant: Plant = plant                  
         self.analysis_time: AnalysisTime = analysis_time  
         self.user: User = user
-        self.last_checked: int
+        self.last_checked: str
+
+
+    def last_checked(self):
+        self.last_checked = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
 
     def link_plant(self, new_plant):
         """

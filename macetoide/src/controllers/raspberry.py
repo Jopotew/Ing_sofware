@@ -1,6 +1,7 @@
 
-from macetoide.src.models.components.camera import Camera
-from macetoide.src.models.components.dht11 import DHT11Sensor
+from datetime import time
+from macetoide.src.models.components.camera import Camera, ImageData
+from macetoide.src.models.components.dht11 import DHT11Sensor, DHT11Data
 from macetoide.src.models.components.led import Led
 from macetoide.src.models.components.servo import Servo
 from macetoide.src.models.components.soil_sensor import SoilMoistureSensor
@@ -27,9 +28,10 @@ class RaspberryControll:
         self.camera = self.rb.set_up_camera()
 
 
-    def process_pot_data():
-        pass
-
+    def water_plants(self, duration: int):
+        self.set_servo_angle(90)
+        time.sleep(duration)
+        self.set_servo_angle(0)
 
 
     def set_led_status(self, led_function: str, value: bool):
@@ -49,7 +51,7 @@ class RaspberryControll:
             raise ValueError("Invalid led funtion")
         
 
-    def get_dht11_data(self):
+    def get_dht11_data(self) -> DHT11Data:
         return self.dht11.read_sensor_data()
                     
 
@@ -57,7 +59,7 @@ class RaspberryControll:
         self.servo.set_angle(angle)
 
 
-    def get_camera_picture(self):
+    def get_camera_picture(self) -> ImageData:
         picture_data = self.camera.capture_image
         return picture_data
     

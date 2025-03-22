@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from picamera2 import Picamera2
 
-class CameraImageData:
+class ImageData():
     """
     Data model representing an image captured by the Raspberry Pi camera.
     """
@@ -18,7 +18,7 @@ class CameraImageData:
         self.capture_time = capture_time
 
 
-class Camera:
+class Camera():
     """
     Model for managing a Raspberry Pi camera using the picamera2 library.
     Provides a method to capture and save images with a timestamp.

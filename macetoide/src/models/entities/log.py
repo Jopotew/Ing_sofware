@@ -16,7 +16,7 @@ class Log:
         """
         Initializes the log with all related objects and data.
         """
-        self.pot:Pot = pot.user
+        self.pot:Pot = pot
         self.user: User = pot.user   
         self.pot_data: PotData = pot_data                  
         self.analysis_time: AnalysisTime = pot.analysis_time          

@@ -1,17 +1,18 @@
-from models.user import User
-from models.database import Database
+from models.entities.user import User
+from models.entities.database import Database
+from typing import Optional
 
 class UserManagment():
     
     def __init__(self):
         self.user: User 
 
-    def login(self, username: str, password: str) -> bool:
+    def login(self, username: str, password: str) -> Optional[User]:
         db = Database()
-        if self._search_username(username, db) and self._search_password(password, Database):
+        if self._search_username(username, db) and self._search_password(password, db):
             self.user = self._create_user(db)
-            return True
-        return False
+            return self.user
+        return None
 
     def _search_username(self, username: str, db: Database) -> bool:
         return db.search_username(username)
