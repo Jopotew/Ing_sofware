@@ -7,22 +7,25 @@ class User:
     """
 
     def __init__(
-        self, name: str, surname: str, username: str, mail: str, password: str
+        self,
+        name: str,
+        surname: str,
+        username: str,
+        mail: str,
     ):
         """
         Inicializa un nuevo usuario con los datos proporcionados.
         """
-
+        self.id: int
         self.name = name
         self.surname = surname
         self.username = username
         self.mail = mail
-        self.password = password
 
     def change_username(self, new_username):
         db = Database()
-        db.change_user_username(new_username)
+        db.change_user_username(self.id, new_username)
 
     def change_password(self, new_password):
         db = Database()
-        db.change_user_password(new_password)
+        db.change_user_password(self.id, new_password)

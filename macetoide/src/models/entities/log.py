@@ -28,6 +28,7 @@ class Log:
         self.analysis_time: AnalysisTime = pot.analysis_time
         self.expert_advice: ExpertAdvice = expert_advice
         self.irrigation_event: IrrigationEvent = irrigation_event
+        self.id: int
 
     def generate_summary(self) -> str:
         """

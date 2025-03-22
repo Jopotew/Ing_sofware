@@ -12,6 +12,8 @@ class Plant:
         """
         self.name = name
         self.species = species
+        self.description = ""
+        self.id: int
         self.manage_info()
 
     def manage_info(self):

@@ -13,3 +13,4 @@ class PotData:
         self.temperature = temperature
         self.air_humidity = air_humidity
         self.image = image
+        self.id: int

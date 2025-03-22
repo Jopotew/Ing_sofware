@@ -13,6 +13,7 @@ class ExpertAdvice:
         """
 
         self.detail: str = ""
+        self.id: int
 
     def get_detail(self, pot_data: PotData):
         assistant = PlantAssistant()

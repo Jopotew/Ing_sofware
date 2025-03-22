@@ -9,6 +9,7 @@ class AnalysisTime:
         """
 
         self.total_minutes = (hours * 60) + minutes
+        self.id: int
 
         total_hours = self.total_minutes // 60
         remaining_minutes = self.total_minutes % 60

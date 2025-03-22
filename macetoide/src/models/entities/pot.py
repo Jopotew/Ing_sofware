@@ -17,6 +17,7 @@ class Pot:
         self.plant: Plant = plant
         self.analysis_time: AnalysisTime = analysis_time
         self.user: User = user
+        self.id: int
         self.last_checked: str
 
     def last_checked(self):
