@@ -14,6 +14,7 @@ class Log:
 
     def __init__(
         self,
+        id: int,
         pot: Pot,
         pot_data: PotData,
         expert_advice: ExpertAdvice,
@@ -22,7 +23,7 @@ class Log:
         """
         Initializes the log with all related objects and data.
         """
-        self.id: int
+        self.id: int = id
         self.pot: Pot = pot
         self.pot_data: PotData = pot_data
         self.expert_advice: ExpertAdvice = expert_advice

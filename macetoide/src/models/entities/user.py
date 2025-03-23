@@ -8,6 +8,7 @@ class User:
 
     def __init__(
         self,
+        id: int,
         name: str,
         surname: str,
         username: str,
@@ -16,7 +17,7 @@ class User:
         """
         Inicializa un nuevo usuario con los datos proporcionados.
         """
-        self.id: int = 2
+        self.id: int = id
         self.name = name
         self.surname = surname
         self.username = username

@@ -7,13 +7,13 @@ class ExpertAdvice:
     Class that stores the expert advice given by the OpenAI chatbot.
     """
 
-    def __init__(self):
+    def __init__(self, id: int):
         """
         Initializes the expert advice with the OpenAI response.
         """
 
         self.detail: str = ""
-        self.id: int
+        self.id: int = id
 
     def get_detail(self, pot_data: PotData):
         assistant = PlantAssistant()
