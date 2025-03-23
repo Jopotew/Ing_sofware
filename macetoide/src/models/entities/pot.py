@@ -1,6 +1,6 @@
 from macetoide.src.models.entities.analisis_time import AnalysisTime
-from models.entities.user import User
-from models.entities.plant import Plant
+from macetoide.src.models.entities.user import User
+from macetoide.src.models.entities.plant import Plant
 from datetime import datetime
 
 
@@ -9,7 +9,7 @@ class Pot:
     Class that represents a pot in the irrigation and control system.
     """
 
-    def __init__(self, name: str, plant, analysis_time, user):
+    def __init__(self, name: str, plant, analysis_time, user: User):
         """
         Initializes a new pot with data and related objects.
         """

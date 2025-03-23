@@ -1,10 +1,10 @@
-from models.entities.pot import Pot
-from models.entities.expert_advice import ExpertAdvice
-from models.entities.irrigation_status import StatusIrrigation
+from macetoide.src.models.entities.pot import Pot
+from macetoide.src.models.entities.expert_advice import ExpertAdvice
+from macetoide.src.models.entities.irrigation_status import StatusIrrigation
 from macetoide.src.models.entities.pot_data import PotData
 from macetoide.src.models.entities.analisis_time import AnalysisTime
-from models.entities.user import User
-from models.entities.irrigation_event import IrrigationEvent
+from macetoide.src.models.entities.user import User
+from macetoide.src.models.entities.irrigation_event import IrrigationEvent
 
 
 class Log:
@@ -22,13 +22,11 @@ class Log:
         """
         Initializes the log with all related objects and data.
         """
+        self.id: int
         self.pot: Pot = pot
-        self.user: User = pot.user
         self.pot_data: PotData = pot_data
-        self.analysis_time: AnalysisTime = pot.analysis_time
         self.expert_advice: ExpertAdvice = expert_advice
         self.irrigation_event: IrrigationEvent = irrigation_event
-        self.id: int
 
     def generate_summary(self) -> str:
         """

@@ -1,5 +1,5 @@
-from models.entities.user import User
-from models.entities.database import Database
+from macetoide.src.models.entities.user import User
+from macetoide.src.models.entities.database import Database
 from typing import Optional
 
 
@@ -16,14 +16,20 @@ class UserManagment:
         return None
 
     def _search_username(self, username: str, db: Database) -> bool:
-        return db.search_username(username)
+
+        return True
 
     def _search_password(self, password: str, db: Database) -> bool:
-        return db.search_password(password)
+        return True
 
-    def _create_user(self, db: Database) -> User:
-        return db.search_user()
+    def _create_user(self) -> User:
+        user = User("Juan", "maletti", "Jopote", "dd@.com",  )
+        return user
 
+
+    def get_user(self, id):
+        return  User("Juan", "maletti", "Jopote", "dd@.com",  )
+    
     def change_username(self, new_username):
         self.user.change_username(new_username)
 

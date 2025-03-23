@@ -195,5 +195,3 @@ class Chatbot:
         return description
 
 
-gpt = PlantAssistant()
-print(gpt.get_recommendation(40, 20))

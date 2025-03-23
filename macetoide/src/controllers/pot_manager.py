@@ -83,3 +83,7 @@ class PotManager:
         self.pots.append(pot)
 
         return pot
+
+    def get_pot(self, id):
+        anal = AnalysisTime(0, 0)
+        return Pot("MAcetita", "tulipan", anal, self.user)

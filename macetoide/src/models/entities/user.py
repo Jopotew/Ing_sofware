@@ -1,4 +1,4 @@
-from models.entities.database import Database
+from macetoide.src.models.entities.database import Database
 
 
 class User:
@@ -16,7 +16,7 @@ class User:
         """
         Inicializa un nuevo usuario con los datos proporcionados.
         """
-        self.id: int
+        self.id: int = 2
         self.name = name
         self.surname = surname
         self.username = username

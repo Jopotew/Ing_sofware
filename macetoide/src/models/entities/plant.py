@@ -1,4 +1,4 @@
-from models.entities.open_ai_api import Chatbot
+from macetoide.src.models.entities.open_ai_api import Chatbot
 
 
 class Plant:

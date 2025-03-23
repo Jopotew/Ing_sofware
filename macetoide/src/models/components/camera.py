@@ -33,7 +33,7 @@ class Camera:
         self.camera.configure(self.camera.create_still_configuration())
         self.camera.start()
 
-    def capture_image(self) -> CameraImageData:
+    def capture_image(self) -> ImageData:
         """
         Capture an image using the Raspberry Pi camera, save it to the 'captures' folder
         with a timestamp-based file name, and return CameraImageData with relevant details.
@@ -52,4 +52,4 @@ class Camera:
         self.camera.capture_file(file_name)
 
         # Return data model with file information
-        return CameraImageData(file_name=file_name, capture_time=formatted_time)
+        return ImageData(file_name=file_name, capture_time=formatted_time)

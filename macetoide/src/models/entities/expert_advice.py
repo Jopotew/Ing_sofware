@@ -1,4 +1,4 @@
-from models.entities.open_ai_api import PlantAssistant
+from macetoide.src.models.entities.open_ai_api import PlantAssistant
 from macetoide.src.models.entities.pot_data import PotData
 
 
@@ -24,3 +24,6 @@ class ExpertAdvice:
 
         self.detail(assistant.get_recommendation(temp, soil_humidity, air_humidity))
         return self.detail
+    
+    def get_fake_detail(self):
+        return "This is a fake detail for testing purposes."
