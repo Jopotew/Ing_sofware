@@ -6,11 +6,11 @@ class Plant:
     Class that represents a plant in the pot system.
     """
 
-    def __init__(self, id: int, name: str, species: str = None):
+    def __init__(self, name: str, species: str = None):
         """
         Initializes a new plant with its name, species, and an optional description.
         """
-        self.id: int = id
+        self.id: int 
         self.name: str = name
         self.species: str = species
         self.description: str = ""

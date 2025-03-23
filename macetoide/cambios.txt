@@ -1,0 +1,52 @@
+quitar entidad tiempo analissis que sea de maceta nomas como un tiempo
+
+
+
+
+
+Maceta --- ya tiuene user y tiempo analisis -- quitar de logs
+
+logs-- quitar info maceta,  statrus riego open ai --- agregar data maceta y detalle a log
+
+quitar pinraspbi
+
+
+
+
+
+el sv checkea estado de maceta no genera un log
+pot-> 
+last_time_checked o ultima vez que se genero un log -> timestamp (time.now)
+
+Estado (humedad temp imagen regado) --> Potdata
+
+def create_log()-> log:
+return estado como log
+
+
+
+log -> 
+pot_id
+timestamp
+plant
+pot_data
+
+
+
+main pregunta cada tiempo por un cambio en pot.
+
+el front desp pregunta por cambios de info
+
+
+
+
+
+
+opcion 1 
+
+el home del usuario tiene mucha informacion de pots
+
+
+opcion 2
+
+el home tiene solo la cantidad de pots
