@@ -20,7 +20,7 @@ class Repository:
     
     def get_by_id(self, id):
         for entity in self.database:
-            if entity.id == id:
+            if id == entity.id:
                 return entity
         return None
     

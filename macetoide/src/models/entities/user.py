@@ -8,7 +8,6 @@ class User:
 
     def __init__(
         self,
-        id: int,
         name: str,
         surname: str,
         username: str,
@@ -17,21 +16,14 @@ class User:
         """
         Inicializa un nuevo usuario con los datos proporcionados.
         """
-        self.id: int = id
+        self.id: int = None
         self.name = name
         self.surname = surname
         self.username = username
         self.mail = mail
         self.pots = []
 
-    def change_username(self, new_username):
-        db = Database()
-        db.change_user_username(self.id, new_username)
-
-    def change_password(self, new_password):
-        db = Database()
-        db.change_user_password(self.id, new_password)
-
+ 
     def add_pot(self, pot):
         self.pots.append(pot)   
 

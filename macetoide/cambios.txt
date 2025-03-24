@@ -1,17 +1,11 @@
 quitar entidad tiempo analissis que sea de maceta nomas como un tiempo
 
 
-
-
-
 Maceta --- ya tiuene user y tiempo analisis -- quitar de logs
 
 logs-- quitar info maceta,  statrus riego open ai --- agregar data maceta y detalle a log
 
 quitar pinraspbi
-
-
-
 
 
 el sv checkea estado de maceta no genera un log

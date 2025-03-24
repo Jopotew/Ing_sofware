@@ -10,11 +10,11 @@ class Plant:
         """
         Initializes a new plant with its name, species, and an optional description.
         """
-        self.id: int 
+        self.id: int = None
         self.name: str = name
         self.species: str = species
         self.description: str = ""
-        self.manage_info()
+        #self.manage_info()
 
     def manage_info(self):
         chatbot = Chatbot()

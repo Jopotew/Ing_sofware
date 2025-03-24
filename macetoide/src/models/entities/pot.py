@@ -1,4 +1,3 @@
-
 from macetoide.src.models.entities.log import Log
 from macetoide.src.models.entities.pot_data import PotData
 from macetoide.src.models.entities.user import User
@@ -29,7 +28,7 @@ class Pot:
         self.analysis_time: int = analysis_time
         self.user: User = user
         self.pot_data: PotData = pot_data
-        self.last_checked
+        self.last_checked: int = 1
 
     def set_last_checked(self):
         self.last_checked = time.now()
@@ -58,4 +57,5 @@ class Pot:
             "analysis_time": self.analysis_time,
             "user_id": self.user.id,
             "pot_data": self.pot_data,
+            "last_checked": self.last_checked,
         }

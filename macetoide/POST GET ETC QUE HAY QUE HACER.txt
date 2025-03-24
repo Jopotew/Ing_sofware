@@ -1,0 +1,6 @@
+
+hacer querys parameter en las funciones pasarlos como variable en tales funciones
+
+
+
+
