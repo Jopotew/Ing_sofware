@@ -1,4 +1,4 @@
-from macetoide.src.models.entities.database import Database
+from macetoide.src.models.database.database import Database
 
 
 class User:
@@ -22,6 +22,7 @@ class User:
         self.username = username
         self.mail = mail
         self.pots = []
+        self.password = None
 
  
     def add_pot(self, pot):

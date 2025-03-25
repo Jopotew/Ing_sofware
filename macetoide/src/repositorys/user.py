@@ -1,5 +1,5 @@
 from macetoide.src.models.entities.user import User
-from macetoide.src.models.entities.database import Database
+from macetoide.src.models.database.database import Database
 from typing import Optional
 
 from macetoide.src.models.repository.repository import Repository

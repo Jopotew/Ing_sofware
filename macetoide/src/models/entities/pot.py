@@ -16,7 +16,10 @@ class Pot:
         plant: Plant,
         analysis_time: int,
         user: User,
-        pot_data: PotData,
+        
+
+
+        
     ):
         """
         Initializes a new pot with data and related objects.
@@ -27,8 +30,12 @@ class Pot:
         self.plant: Plant = plant
         self.analysis_time: int = analysis_time
         self.user: User = user
-        self.pot_data: PotData = pot_data
         self.last_checked: int = 1
+        self.temperature: float
+        self.soil_humidity: float
+        self.air_humidity: float
+        self.image_path: str 
+        self.expert_advice: str
 
     def set_last_checked(self):
         self.last_checked = time.now()
