@@ -1,31 +1,28 @@
-
+from macetoide.src.models.database.database import database as db
 
 
 class Repository:
 
     def __init__(self):
-        self.database = []
+        self.db = db
+        self.table: str = None
         self.id_counter = 0
 
 
-    def save(self, entity):
-        self.database.append(entity)
-        self.assign_id(entity)
+    def save(self, entity, table):
+        self.db.create_record(entity, table)
+        
 
     def remove(self, entity):
-        self.database.remove(entity)
+        print
+        #recibe un dict la bd con tabla: etc
+        self.db.delete_record(entity)
 
     def get_all(self):
         return self.database
     
-    def get_by_id(self, id):
-        for entity in self.database:
-            if id == entity.id:
-                return entity
-        return None
+    def get_by_id(self, table, id):
+        
     
 
-    def assign_id(self, entity):
-        entity.id = self.id_counter
-        self.id_counter += 1
-        return entity.id
+    

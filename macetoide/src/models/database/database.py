@@ -1,14 +1,9 @@
 import pymysql
 
 class DatabaseConnection:
-    """
-    Manages the connection to the MySQL database and provides query execution methods.
-    """
+    
 
     def __init__(self):
-        """
-        Initializes the database connection parameters.
-        """
         self.connection = pymysql.connect(
         host='127.0.0.1',
         user='root',
@@ -21,9 +16,6 @@ class DatabaseConnection:
       
 
     def execute_query(self, query):
-        """
-        Executes the given SQL query and returns the result.
-        """
         try:
             self.cursor.execute(query)
             result = self.cursor.fetchall()
@@ -33,9 +25,7 @@ class DatabaseConnection:
             return None
 
     def close(self):
-        """
-        Closes the database connection and cursor.
-        """
+       
         if self.cursor:
             self.cursor.close()
         if self.connection:
@@ -79,10 +69,8 @@ class DatabaseConnection:
         except pymysql.MySQLError as error:
             print(f"Error executing create function for {table}: {error}")
             return 0
-        
 
     def delete_record(self, data):
-        
         try:
             table = data.get('table')
             function_map = {
@@ -156,34 +144,61 @@ class DatabaseConnection:
             print(f"Error executing update_pot_id_plant: {error}")
             return 0
 
+    def get_all(self, table):
+        try:
+            function_map = {
+                'plant': 'get_all_plants',
+                'user': 'get_all_users',
+                'pot': 'get_all_pots',
+                'log': 'get_all_logs'
+            }
 
+            if table not in function_map:
+                print("Invalid table name.")
+                return 0
+
+            sql_function = function_map[table]
+            query = f"SELECT {sql_function}()"
+            self.cursor.execute(query)
+            result = self.cursor.fetchone()
+
+            print(f"Total {table} records: {result[0]}")
+            return result[0]
+
+        except pymysql.MySQLError as error:
+            print(f"Error executing get_all for {table}: {error}")
+            return 0
+
+    def get_by_id(self, table, id):
+        try:
+            function_map = {
+                'plant': 'get_plant_by_id',
+                'user': 'get_user_by_id',
+                'pot': 'get_pot_by_id',
+                'log': 'get_log_by_id'
+            }
+
+            if table not in function_map:
+                print("Invalid table name.")
+                return 0
+
+            sql_function = function_map[table]
+            query = f"SELECT {sql_function}(%s)"
+            self.cursor.execute(query, (id,))
+            result = self.cursor.fetchone()
+
+            if result and result[0] > 0:
+                print(f"{table} with ID {id} exists.")
+            else:
+                print(f"{table} with ID {id} does not exist.")
+
+            return result[0]
+
+        except pymysql.MySQLError as error:
+            print(f"Error executing get_by_id for {table}: {error}")
+            return 0
     
 
-# Ejemplo de uso
-if __name__ == "__main__":
-    db = DatabaseConnection()
 
-    # Crear plant
-    plant_data = {
-        'table': 'plant',
-        'name': 'Rosa',
-        'species': 'Rosaceae',
-        'description': 'Planta ornamental'
-    }
-    db.create_record(plant_data)
 
-    # Crear pot
-    pot_data = {
-        'table': 'pot',
-        'p_name': 'Maceta 1',
-        'p_id_user': 1,
-        'p_id_plant': 1,
-        'p_analysis_time': '08:00:00',
-        'p_last_checked': '12:00:00',
-        'p_soil_humidity': 20.5,
-        'p_air_humidity': 50.0,
-        'p_temperature': 22.0,
-        'p_image_path': 'path/to/image.jpg',
-        'p_expert_advice': 'Regar moderadamente'
-    }
-    db.create_record(pot_data)
+database = DatabaseConnection()

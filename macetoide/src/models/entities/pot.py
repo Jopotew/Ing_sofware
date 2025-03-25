@@ -1,5 +1,4 @@
 from macetoide.src.models.entities.log import Log
-
 from macetoide.src.models.entities.user import User
 from macetoide.src.models.entities.plant import Plant
 from time import time
@@ -31,11 +30,7 @@ class Pot:
         self.analysis_time: int = analysis_time
         self.user: User = user
         self.last_checked: int = 1
-        self.temperature: float
-        self.soil_humidity: float
-        self.air_humidity: float
-        self.image_path: str 
-        self.expert_advice: str
+        self.logs: list[Log] = []
 
     def set_last_checked(self):
         self.last_checked = time.now()
@@ -52,9 +47,13 @@ class Pot:
         """
         self.analysis_time = new_time
 
-    def generate_log(self) -> Log:
-        log = Log(self.id, self.plant, self.pot_data)
-        return log
+
+    def add_log(self, log: Log):
+        self.logs.append(log)
+        
+    def get_last_log(self):
+        return self.logs[-1]
+    
 
     def get_dto(self):
         return {
