@@ -1,4 +1,5 @@
 import pymysql
+
 class DatabaseConnection:
     """
     Manages the connection to the MySQL database and provides query execution methods.
@@ -42,39 +43,147 @@ class DatabaseConnection:
             print("Database connection closed.")
 
 
-    def create_user(self, name, surname, username, mail, password):
-        """
-        Calls the pymysql FUNCTION 'create_user' and captures the return value.
-        """
+    def create_record(self, data):
         
-        if not self.cursor:
-            print("❌ No database connection.")
-            return None
-
         try:
-            query = "SELECT create_user(%s, %s, %s, %s, %s)"
-            values = (name, surname, username, mail, password)
-            self.cursor.execute(query, values)
+            table = data.get('table')
+            function_map = {
+                'pot': 'create_pot',
+                'plant': 'create_plant',
+                'log': 'create_log',
+                'user': 'create_user'
+            }
 
+            if table not in function_map:
+                print("Invalid table name.")
+                return 0
+
+            sql_function = function_map[table]
+
+            
+            params = [v for k, v in data.items() if k != 'table']
+            placeholders = ', '.join(['%s'] * len(params))
+
+            query = f"SELECT {sql_function}({placeholders})"
+            self.cursor.execute(query, params)
             result = self.cursor.fetchone()
 
             if result and result[0] == 1:
-                print("✅ User created successfully via SQL FUNCTION.")
+                print(f"{table} record created successfully.")
             else:
-                print("❌ Failed to create user via SQL FUNCTION.")
+                print(f"Failed to create {table} record.")
 
             self.connection.commit()
             return result[0]
 
-        except pymysql.connect.Error as error:
-            print(f"❌ Failed to execute create_user function: {error}")
-            return None
+        except pymysql.MySQLError as error:
+            print(f"Error executing create function for {table}: {error}")
+            return 0
+        
+
+    def delete_record(self, data):
+        
+        try:
+            table = data.get('table')
+            function_map = {
+                'pot': 'delete_pot',
+                'plant': 'delete_plant',
+                'log': 'delete_log',
+                'user': 'delete_user'
+            }
+
+            if table not in function_map:
+                print("Invalid table name.")
+                return 0
+
+            sql_function = function_map[table]
+
+        
+            record_id = data.get('id')
+            if record_id is None:
+                print("Missing 'id' parameter.")
+                return 0
+
+            query = f"SELECT {sql_function}(%s)"
+            self.cursor.execute(query, (record_id,))
+            result = self.cursor.fetchone()
+
+            if result and result[0] == 1:
+                print(f"{table} record deleted successfully.")
+            else:
+                print(f"Failed to delete {table} record or record not found.")
+
+            self.connection.commit()
+            return result[0]
+
+        except pymysql.MySQLError as error:
+            print(f"Error executing delete function for {table}: {error}")
+            return 0
+
+    def update_pot_last_checked(self, pot_id, last_checked_time):
+        try:
+            query = "SELECT update_pot_last_checked(%s, %s)"
+            self.cursor.execute(query, (pot_id, last_checked_time))
+            result = self.cursor.fetchone()
+
+            if result and result[0] == 1:
+                print("last_checked updated successfully.")
+            else:
+                print("Failed to update last_checked or no matching pot.")
+
+            self.connection.commit()
+            return result[0]
+
+        except pymysql.MySQLError as error:
+            print(f"Error executing function: {error}")
+            return 0
+
+    def update_pot_id_plant(self, pot_id, new_plant_id):
+        try:
+            query = "SELECT update_pot_id_plant(%s, %s)"
+            self.cursor.execute(query, (pot_id, new_plant_id))
+            result = self.cursor.fetchone()
+
+            if result and result[0] == 1:
+                print("id_plant updated successfully in pot.")
+            else:
+                print("Failed to update id_plant or pot not found.")
+
+            self.connection.commit()
+            return result[0]
+
+        except pymysql.MySQLError as error:
+            print(f"Error executing update_pot_id_plant: {error}")
+            return 0
 
 
+    
 
-
-# Example usage
+# Ejemplo de uso
 if __name__ == "__main__":
-    db= DatabaseConnection()
-    result = db.create_user("juan", "maletti", "juancito", "juan@hot.com", "1234")
-    print(result)
+    db = DatabaseConnection()
+
+    # Crear plant
+    plant_data = {
+        'table': 'plant',
+        'name': 'Rosa',
+        'species': 'Rosaceae',
+        'description': 'Planta ornamental'
+    }
+    db.create_record(plant_data)
+
+    # Crear pot
+    pot_data = {
+        'table': 'pot',
+        'p_name': 'Maceta 1',
+        'p_id_user': 1,
+        'p_id_plant': 1,
+        'p_analysis_time': '08:00:00',
+        'p_last_checked': '12:00:00',
+        'p_soil_humidity': 20.5,
+        'p_air_humidity': 50.0,
+        'p_temperature': 22.0,
+        'p_image_path': 'path/to/image.jpg',
+        'p_expert_advice': 'Regar moderadamente'
+    }
+    db.create_record(pot_data)
