@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException
 
-from macetoide.src.models.entities.pot_data import PotData
 from macetoide.src.repositorys.user import instance as user_repository
 from macetoide.src.repositorys.pot import instance as pot_repository
 from macetoide.src.repositorys.log import instance as log_repository
