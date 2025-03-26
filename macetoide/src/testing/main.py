@@ -77,9 +77,6 @@ def add_new_pot(user_id: int,):
     1)checkear si el user id existe y esta logeado, mandando la request
     2)checkear si el pot id existe, y pertenece al user
     """
-
-
-
     user = user_repository.get_by_id(user_id)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")

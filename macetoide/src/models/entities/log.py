@@ -10,8 +10,11 @@ class Log:
     """
 
     def __init__(
-            self, pot_id: int,
-            plant: Plant, 
+            
+            self, 
+            id: int, 
+            pot_id: int,
+            plant_id: int, 
             temperature: float, 
             soil_humidity:float, 
             air_humidity: float, 
@@ -19,11 +22,10 @@ class Log:
             expert_advice: str 
             ):
         
-        """
-        Initializes the log with all related objects and data.
-        """
+       
+        self.id = id,
         self.pot_id: int = pot_id
-        self.plant: Plant = plant
+        self.plant_id: int = plant_id
         self.temperature: float = temperature
         self.soil_humidity: float = soil_humidity
         self.air_humidity: float = air_humidity

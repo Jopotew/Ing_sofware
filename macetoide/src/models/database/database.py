@@ -12,7 +12,7 @@ class DatabaseConnection:
         port=3306
         )
 
-        self.cursor = self.connection.cursor() 
+        self.cursor = self.connection.cursor(pymysql.cursors.DictCursor) 
       
 
     def execute_query(self, query):
@@ -33,10 +33,9 @@ class DatabaseConnection:
             print("Database connection closed.")
 
 
-    def create_record(self, data):
+    def create_record(self, data, table):
         
         try:
-            table = data.get('table')
             function_map = {
                 'pot': 'create_pot',
                 'plant': 'create_plant',
@@ -70,9 +69,8 @@ class DatabaseConnection:
             print(f"Error executing create function for {table}: {error}")
             return 0
 
-    def delete_record(self, data):
+    def delete_record(self, data, table):
         try:
-            table = data.get('table')
             function_map = {
                 'pot': 'delete_pot',
                 'plant': 'delete_plant',
@@ -124,6 +122,16 @@ class DatabaseConnection:
 
         except pymysql.MySQLError as error:
             print(f"Error executing function: {error}")
+            return 0
+
+    def update_pot_analysis_time(self, pot_id, analysis_time):
+        try:
+            self.cursor.callproc('update_pot_analysis_time', (pot_id, analysis_time))
+            self.connection.commit()
+            print("analysis_time updated successfully.")
+            return 1
+        except pymysql.MySQLError as error:
+            print(f"Error executing update_pot_analysis_time: {error}")
             return 0
 
     def update_pot_id_plant(self, pot_id, new_plant_id):
@@ -198,7 +206,71 @@ class DatabaseConnection:
             print(f"Error executing get_by_id for {table}: {error}")
             return 0
     
+    def get_user_pots(self, user_id):
+        try:
+            self.cursor.callproc('get_user_pots', [user_id])
+            result = self.cursor.fetchall()
+            return result
+
+        except pymysql.MySQLError as error:
+            print(f"Error executing get_user_pots: {error}")
+            return []
+
+    def get_all_logs_by_pot(self, pot_id):
+        try:
+            self.cursor.callproc('get_logs_by_pot', [pot_id])
+            logs = self.cursor.fetchall()
+            return logs
+        except pymysql.MySQLError as error:
+            print(f"Error executing get_logs_by_pot: {error}")
+            return []
+
+    def get_all_plants_by_user(self, user_id):
+        try:
+            self.cursor.callproc('get_plants_by_user', [user_id])
+            plants = self.cursor.fetchall()
+            return plants
+        except pymysql.MySQLError as error:
+            print(f"Error executing get_plants_by_user: {error}")
+            return []
+
+    def get_all_logs_by_plant(self, plant_id):
+        try:
+            self.cursor.callproc('get_logs_by_plant', [plant_id])
+            logs = self.cursor.fetchall()
+            return logs
+        except pymysql.MySQLError as error:
+            print(f"Error executing get_logs_by_plant: {error}")
+            return []
+
+    def get_all_logs_by_user(self, user_id):
+        try:
+            self.cursor.callproc('get_logs_by_user', [user_id])
+            logs = self.cursor.fetchall()
+            return logs
+        except pymysql.MySQLError as error:
+            print(f"Error executing get_logs_by_user: {error}")
+            return []
+        
+    def get_last_logs_by_user(self, user_id):
+        try:
+            self.cursor.callproc('get_last_logs_by_user', [user_id])
+            logs = self.cursor.fetchall()
+            return logs
+        except pymysql.MySQLError as error:
+            print(f"Error executing get_last_logs_by_user: {error}")
+            return []
+
+    def get_last_log_by_pot(self, pot_id):
+        try:
+            self.cursor.callproc('get_last_log_by_pot', [pot_id])
+            log = self.cursor.fetchone()
+            return log
+        except pymysql.MySQLError as error:
+            print(f"Error executing get_last_log_by_pot: {error}")
+            return None
 
 
 
+#falta user (validaciones)
 database = DatabaseConnection()

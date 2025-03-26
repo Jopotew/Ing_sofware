@@ -9,19 +9,21 @@ class Repository:
         self.id_counter = 0
 
 
-    def save(self, entity, table):
-        self.db.create_record(entity, table)
+    def save(self, entity):
+        db.create_record(entity, self.table)
         
 
     def remove(self, entity):
-        print
+    
         #recibe un dict la bd con tabla: etc
-        self.db.delete_record(entity)
+        db.delete_record(entity, self.table)
 
     def get_all(self):
-        return self.database
+        return db.get_all(self.table)
     
-    def get_by_id(self, table, id):
+    def get_by_id(self, id):
+        i_dict = db.get_by_id(self.table, id)
+        
         
     
 

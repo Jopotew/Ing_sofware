@@ -11,10 +11,12 @@ class Pot:
 
     def __init__(
         self,
+        id: int,
         name: str,
-        plant: Plant,
-        analysis_time: int,
+        plant_id: int,
+        analysis_time: time,
         user: User,
+        last_checked: time
         
 
 
@@ -24,22 +26,22 @@ class Pot:
         Initializes a new pot with data and related objects.
         """
 
-        self.id = None
+        self.id = id
         self.name: str = name
-        self.plant: Plant = plant
-        self.analysis_time: int = analysis_time
+        self.plant_id: int = plant_id
+        self.analysis_time = analysis_time
         self.user: User = user
-        self.last_checked: int = 1
+        self.last_checked = last_checked
         self.logs: list[Log] = []
 
     def set_last_checked(self):
         self.last_checked = time.now()
 
-    def link_plant(self, new_plant):
+    def link_plant_id(self, new_plant_id):
         """
         Links a new plant object to the pot.
         """
-        self.plant = new_plant
+        self.plant_id = new_plant_id
 
     def link_analysis_time(self, new_time):
         """
@@ -59,9 +61,8 @@ class Pot:
         return {
             "id": self.id,
             "name": self.name,
-            "plant": self.plant,
             "analysis_time": self.analysis_time,
+            "plant_id": self.plant_id,
             "user_id": self.user.id,
-            "pot_data": self.pot_data,
             "last_checked": self.last_checked,
         }
