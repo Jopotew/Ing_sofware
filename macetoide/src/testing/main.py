@@ -1,9 +1,11 @@
-from fastapi import FastAPI, HTTPException
-
+from fastapi import FastAPI, HTTPException, Response, Depends
 from macetoide.src.repositorys.user import instance as user_repository
 from macetoide.src.repositorys.pot import instance as pot_repository
 from macetoide.src.repositorys.log import instance as log_repository
 from macetoide.src.repositorys.plant import instance as plant_repository
+from macetoide.src.models.server_credentials.security import get_current_user
+
+from macetoide.src.models.server_credentials.auth import LoginRequest
 from macetoide.src.models.entities.user import User
 from macetoide.src.models.entities.pot import Pot
 from macetoide.src.models.entities.plant import Plant
@@ -23,14 +25,19 @@ def home():
     return {"Retorno a Home"}
 
 
-
-@app.get("/users/{user_id}/pots/", tags=["Pots"])
-def get_user_pots(user):
-    #checkear si el user id existe y esta logeado, mandando la request (creo con cookies)
-    pots: list[dict]
-    pots = user_repository.get_pots(use)
+@app.post("/login", tags=["Auth"])
+def login(data: LoginRequest, response: Response):
     
-    pass
+    user: User = user_repository.verify_user(data.username, data.password)
+    if not user:
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas")
+
+    response.set_cookie(key="user_id", value=str(user.id), httponly=True)
+    return {"message": "Login exitoso"}
+
+@app.get("/pots/", tags=["Pots"])
+def get_user_pots(user: User = Depends(get_current_user)):
+    return user_repository.get_pots(user.id)
 
 
 

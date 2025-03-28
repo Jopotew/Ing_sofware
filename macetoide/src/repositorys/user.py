@@ -2,9 +2,10 @@ from macetoide.src.models.entities.log import Log
 from macetoide.src.models.entities.pot import Pot
 from macetoide.src.models.entities.user import User
 from macetoide.src.models.database.database import database as db
+from macetoide.src.models.server_credentials.security import verify_password
 from typing import Optional
 import bcrypt
-from macetoide.src.models.server_credentials.security import verify_password
+
 from macetoide.src.models.repository.repository import Repository
 
 
