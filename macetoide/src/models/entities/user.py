@@ -9,21 +9,20 @@ class User:
 
     def __init__(
         self,
-        name: str,
-        surname: str,
+        id: int,
         username: str,
         mail: str,
     ):
         """
         Inicializa un nuevo usuario con los datos proporcionados.
         """
-        self.id: int = None
-        self.name = name
-        self.surname = surname
+        self.id: int = id
+        self.name: str
+        self.surname:str 
         self.username = username
         self.mail = mail
         self.pots: list[Pot] = []
-        self.password = None
+        self.password: str
 
  
     def add_pot(self, pot):

@@ -3,7 +3,8 @@ from macetoide.src.models.entities.pot import Pot
 from macetoide.src.models.entities.user import User
 from macetoide.src.models.database.database import database as db
 from typing import Optional
-
+import bcrypt
+from macetoide.src.models.server_credentials.security import verify_password
 from macetoide.src.models.repository.repository import Repository
 
 
@@ -14,17 +15,29 @@ class UserRepository(Repository):
         self.table = "user"
 
     
-    def get_pots(self, user):
-        pots_dict = db.get_user_pots(user.id)
-        for pot in pots_dict:
-            if pot["id_user"] == user.id:
-                new = Pot(pot["id"],pot["name"],pot["id_plant"],pot["analysis_time"],user, pot["last_checked"])
-                user.add_pot(new)
-                
-            else: 
-                print("Esta maceta no pertenece a este usuario. Acceso Cucatrap")
+    def verify_user(self, username: str, password: str) -> User | None:
+        """
+        Verifica las credenciales de un usuario usando bcrypt.
+        """
+        users = db.execute_query("SELECT * FROM user")
+        for u in users:
+            if u["username"] == username and verify_password(password, u["password"]):
+                return User(u["id"], u["username"], u["email"])
+        return None
 
-        return user.pots
+    def get_pots(self, user_id: int) -> list[dict]:
+        """
+        Obtiene todas las macetas de un usuario por su ID.
+        """
+        pots_dict = db.get_user_pots(user_id)
+        user_pots: list[dict] = []
+
+        for pot in pots_dict:
+            if pot["id_user"] == user_id:
+                new = Pot(pot["id"], pot["name"], pot["id_plant"], pot["analysis_time"], pot["user"], pot["last_checked"])
+                user_pots.append(new.get_dto())
+        return user_pots
+
    
     def get_all_logs(self, user):
         user_logs: list[Log] = []

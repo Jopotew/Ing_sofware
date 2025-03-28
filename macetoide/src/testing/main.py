@@ -23,50 +23,15 @@ def home():
     return {"Retorno a Home"}
 
 
-def create_user():
-    user = User("juan", "maletti", "jopote", "@jopote")
-    user.id = 0
-    return user
 
+@app.get("/users/{user_id}/pots/", tags=["Pots"])
+def get_user_pots(user):
+    #checkear si el user id existe y esta logeado, mandando la request (creo con cookies)
+    pots: list[dict]
+    pots = user_repository.get_pots(use)
+    
+    pass
 
-def create_plant(planta):
-    plant = Plant(planta)
-    return plant
-
-
-def create_pot_data():
-    pot_data = PotData(20, 50, 60, "2222", "442424")
-    return pot_data
-
-
-def create_pot(planta, analiss):
-
-    pot = Pot(
-        "pot1", create_plant(), 20, user_repository.database[1], create_pot_data()
-    )
-    return pot
-
-
-@app.post("/plants/", tags=["Plants"])
-def save_plant(plant):
-    new = create_plant()
-    plant_repository.save(new)
-    return new.get_dto()
-
-
-@app.post("/pots/", tags=["Pots"])
-def save_pot(pot):
-    new = create_pot()
-    pot_repository.save(new)
-    return new.get_dto()
-
-
-@app.post("/users/", tags=["Users"])
-def save_user(user):
-    new = create_user()
-    user_repository.save(new)
-    print(user_repository.database)
-    return new.get_dto()
 
 
 @app.post("/users/{user_id}/pots/", tags=["Pots"])
@@ -104,11 +69,3 @@ def get_pot(user_id: int, pot_id: int):
 
     return pot.get_dto()
 
-
-@app.get("/users/{user_id}/pots", tags=["Users"])
-def get_user(user_id):
-    user = user_repository.get_by_id(user_id)
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    return user.get_dto()
