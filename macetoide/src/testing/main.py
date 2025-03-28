@@ -27,7 +27,7 @@ def home():
 
 @app.post("/login", tags=["Auth"])
 def login(data: LoginRequest, response: Response):
-    
+
     user: User = user_repository.verify_user(data.username, data.password)
     if not user:
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
@@ -35,14 +35,16 @@ def login(data: LoginRequest, response: Response):
     response.set_cookie(key="user_id", value=str(user.id), httponly=True)
     return {"message": "Login exitoso"}
 
+
 @app.get("/pots/", tags=["Pots"])
 def get_user_pots(user: User = Depends(get_current_user)):
     return user_repository.get_pots(user.id)
 
 
-
 @app.post("/users/{user_id}/pots/", tags=["Pots"])
-def add_new_pot(user_id: int,):
+def add_new_pot(
+    user_id: int,
+):
     """
     Agrega una maceta a un usuario donde el id de la maceta es el id del usuario
     1)checkear si el user id existe y esta logeado, mandando la request
@@ -75,4 +77,3 @@ def get_pot(user_id: int, pot_id: int):
         raise HTTPException(status_code=403, detail="Pot does not belong to user")
 
     return pot.get_dto()
-

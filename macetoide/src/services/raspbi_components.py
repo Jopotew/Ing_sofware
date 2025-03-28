@@ -27,40 +27,31 @@ class RaspbiComponents:
             leds.append(led)
         return leds
 
-    @staticmethod  #No puedo probarla hasta que se intale en la raspi por el pip install 
+    @staticmethod  # No puedo probarla hasta que se intale en la raspi por el pip install
     def set_up_dht11() -> DHT11Sensor:
         """
         Sets up the DHT11 sensors connected to GPIO pins and returns a list of DHT11Sensor objects.
         Iterates through the dht11 configuration and creates a DHT11Sensor instance for each.
-        """ 
+        """
         for item in dht11:
-            sensor = DHT11Sensor(item["component"],item["function"],item["pin"])
+            sensor = DHT11Sensor(item["component"], item["function"], item["pin"])
         return sensor
-
 
     def set_up_soil_sensor() -> SoilMoistureSensor:
         for item in soil_sensor:
-            sensor = SoilMoistureSensor(item["component"], item["function"], item["pin_cs"], item["pin_clk"], item["pin_dio"])
+            sensor = SoilMoistureSensor(
+                item["component"],
+                item["function"],
+                item["pin_cs"],
+                item["pin_clk"],
+                item["pin_dio"],
+            )
         return sensor
-    
 
     def set_up_servo() -> Servo:
         for item in servo_list:
             servo = Servo(item["component"], item["function"], item["pin"])
         return servo
-            
-            
-    def set_up_camera()-> Camera:
+
+    def set_up_camera() -> Camera:
         return Camera()
-        
-
-
-
-
-
-
-
-
-
-
-

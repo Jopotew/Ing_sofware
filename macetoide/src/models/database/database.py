@@ -1,19 +1,18 @@
 import pymysql
 
+
 class DatabaseConnection:
-    
 
     def __init__(self):
         self.connection = pymysql.connect(
-        host='127.0.0.1',
-        user='root',
-        password='Jopotew22!!',
-        database='macetoide',
-        port=3306
+            host="127.0.0.1",
+            user="root",
+            password="Jopotew22!!",
+            database="macetoide",
+            port=3306,
         )
 
-        self.cursor = self.connection.cursor(pymysql.cursors.DictCursor) 
-      
+        self.cursor = self.connection.cursor(pymysql.cursors.DictCursor)
 
     def execute_query(self, query):
         try:
@@ -25,22 +24,21 @@ class DatabaseConnection:
             return None
 
     def close(self):
-       
+
         if self.cursor:
             self.cursor.close()
         if self.connection:
             self.connection.close()
             print("Database connection closed.")
 
-
     def create_record(self, data, table):
-        
+
         try:
             function_map = {
-                'pot': 'create_pot',
-                'plant': 'create_plant',
-                'log': 'create_log',
-                'user': 'create_user'
+                "pot": "create_pot",
+                "plant": "create_plant",
+                "log": "create_log",
+                "user": "create_user",
             }
 
             if table not in function_map:
@@ -49,9 +47,8 @@ class DatabaseConnection:
 
             sql_function = function_map[table]
 
-            
-            params = [v for k, v in data.items() if k != 'table']
-            placeholders = ', '.join(['%s'] * len(params))
+            params = [v for k, v in data.items() if k != "table"]
+            placeholders = ", ".join(["%s"] * len(params))
 
             query = f"SELECT {sql_function}({placeholders})"
             self.cursor.execute(query, params)
@@ -72,10 +69,10 @@ class DatabaseConnection:
     def delete_record(self, data, table):
         try:
             function_map = {
-                'pot': 'delete_pot',
-                'plant': 'delete_plant',
-                'log': 'delete_log',
-                'user': 'delete_user'
+                "pot": "delete_pot",
+                "plant": "delete_plant",
+                "log": "delete_log",
+                "user": "delete_user",
             }
 
             if table not in function_map:
@@ -84,8 +81,7 @@ class DatabaseConnection:
 
             sql_function = function_map[table]
 
-        
-            record_id = data.get('id')
+            record_id = data.get("id")
             if record_id is None:
                 print("Missing 'id' parameter.")
                 return 0
@@ -126,7 +122,7 @@ class DatabaseConnection:
 
     def update_pot_analysis_time(self, pot_id, analysis_time):
         try:
-            self.cursor.callproc('update_pot_analysis_time', (pot_id, analysis_time))
+            self.cursor.callproc("update_pot_analysis_time", (pot_id, analysis_time))
             self.connection.commit()
             print("analysis_time updated successfully.")
             return 1
@@ -155,10 +151,10 @@ class DatabaseConnection:
     def get_all(self, table):
         try:
             function_map = {
-                'plant': 'get_all_plants',
-                'user': 'get_all_users',
-                'pot': 'get_all_pots',
-                'log': 'get_all_logs'
+                "plant": "get_all_plants",
+                "user": "get_all_users",
+                "pot": "get_all_pots",
+                "log": "get_all_logs",
             }
 
             if table not in function_map:
@@ -180,10 +176,10 @@ class DatabaseConnection:
     def get_by_id(self, table, id):
         try:
             function_map = {
-                'plant': 'get_plant_by_id',
-                'user': 'get_user_by_id',
-                'pot': 'get_pot_by_id',
-                'log': 'get_log_by_id'
+                "plant": "get_plant_by_id",
+                "user": "get_user_by_id",
+                "pot": "get_pot_by_id",
+                "log": "get_log_by_id",
             }
 
             if table not in function_map:
@@ -205,10 +201,10 @@ class DatabaseConnection:
         except pymysql.MySQLError as error:
             print(f"Error executing get_by_id for {table}: {error}")
             return 0
-    
+
     def get_user_pots(self, user_id):
         try:
-            self.cursor.callproc('get_user_pots', [user_id])
+            self.cursor.callproc("get_user_pots", [user_id])
             result = self.cursor.fetchall()
             return result
 
@@ -218,7 +214,7 @@ class DatabaseConnection:
 
     def get_all_logs_by_pot(self, pot_id):
         try:
-            self.cursor.callproc('get_logs_by_pot', [pot_id])
+            self.cursor.callproc("get_logs_by_pot", [pot_id])
             logs = self.cursor.fetchall()
             return logs
         except pymysql.MySQLError as error:
@@ -227,7 +223,7 @@ class DatabaseConnection:
 
     def get_all_plants_by_user(self, user_id):
         try:
-            self.cursor.callproc('get_plants_by_user', [user_id])
+            self.cursor.callproc("get_plants_by_user", [user_id])
             plants = self.cursor.fetchall()
             return plants
         except pymysql.MySQLError as error:
@@ -236,7 +232,7 @@ class DatabaseConnection:
 
     def get_all_logs_by_plant(self, plant_id):
         try:
-            self.cursor.callproc('get_logs_by_plant', [plant_id])
+            self.cursor.callproc("get_logs_by_plant", [plant_id])
             logs = self.cursor.fetchall()
             return logs
         except pymysql.MySQLError as error:
@@ -245,16 +241,16 @@ class DatabaseConnection:
 
     def get_all_logs_by_user(self, user_id):
         try:
-            self.cursor.callproc('get_logs_by_user', [user_id])
+            self.cursor.callproc("get_logs_by_user", [user_id])
             logs = self.cursor.fetchall()
             return logs
         except pymysql.MySQLError as error:
             print(f"Error executing get_logs_by_user: {error}")
             return []
-        
+
     def get_last_logs_by_user(self, user_id):
         try:
-            self.cursor.callproc('get_last_logs_by_user', [user_id])
+            self.cursor.callproc("get_last_logs_by_user", [user_id])
             logs = self.cursor.fetchall()
             return logs
         except pymysql.MySQLError as error:
@@ -263,7 +259,7 @@ class DatabaseConnection:
 
     def get_last_log_by_pot(self, pot_id):
         try:
-            self.cursor.callproc('get_last_log_by_pot', [pot_id])
+            self.cursor.callproc("get_last_log_by_pot", [pot_id])
             log = self.cursor.fetchone()
             return log
         except pymysql.MySQLError as error:
@@ -271,6 +267,5 @@ class DatabaseConnection:
             return None
 
 
-
-#falta user (validaciones)
+# falta user (validaciones)
 database = DatabaseConnection()
