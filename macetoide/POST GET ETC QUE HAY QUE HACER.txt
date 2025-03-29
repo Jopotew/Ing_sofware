@@ -12,7 +12,7 @@ buscar ultimo log -> /GET/ search_last_log(pot_id) -> logdto(?
 
 hacer update de la informacion -> /POST/ new_log(pot_id) -> bool
 
-
+ARCHIVO DE EXCEPCIONES
 
 
 

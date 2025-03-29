@@ -1,4 +1,4 @@
-from macetoide.src.models.database.database import Database
+\
 from macetoide.src.models.entities.pot import Pot
 
 
