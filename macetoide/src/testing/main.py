@@ -23,7 +23,7 @@ from macetoide.src.models.server_credentials.security import (
     verify_password,
 )
 
-# from macetoide.src.repositorys.user import instance as user_repository
+from macetoide.src.repositorys.user import instance as user_repository
 # from macetoide.src.repositorys.pot import instance as pot_repository
 # from macetoide.src.repositorys.log import instance as log_repository
 # from macetoide.src.repositorys.plant import instance as plant_repository
@@ -37,9 +37,7 @@ from macetoide.src.models.server_credentials.security import (
 
 app = FastAPI()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-secret_key = "jdanvgpijnwDJGNjindvijNGDJINwijpgnp9uWNGEP9UINhwpuhg9IUPWREHGPU"
 app.title = "Macetoide API"
 app.description = (
     "API for Macetoide, a platform for sharing and checking your macetoides."
@@ -73,25 +71,17 @@ class LoginForm(BaseModel):
     password: str
 
 
-def create_token(user: dict):
-    payload = {"user_id": user["id"]}
-    token_jwt = jwt.encode(payload, secret_key, algorithm="HS256")
-    return token_jwt
 
 
 @app.post("/token", tags=["Auth"])
 def login(response: Response, login_form: LoginForm):
     # user_repositoy.get_by_username(login_form.username)
-    user = None
-    for u in users.values():
-        if u["username"] == login_form.username:
-            user = u
-            break
-
+    user = user_repository.get_by_username(login_form.username)
+    print(user)
     if user is None:
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
 
-    if user["password"] != login_form.password:
+    if user.password != login_form.password:
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
 
     token = create_token(user)
@@ -136,6 +126,22 @@ def login(response: Response, login_form: LoginForm):
 # @app.get("/ajksdksjd2", tags=["Auth"])
 # def get_algo2(persona: Annotated[dict, Depends(common_parameters)], nombre_padre: Annotated[str, Query()]):
 #     return persona
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # @app.post("/login", tags=["Auth"])

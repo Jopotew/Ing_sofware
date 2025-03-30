@@ -1,4 +1,4 @@
-\
+
 from macetoide.src.models.entities.pot import Pot
 
 
@@ -12,6 +12,7 @@ class User:
         id: int,
         username: str,
         mail: str,
+        password: str,
     ):
         """
         Inicializa un nuevo usuario con los datos proporcionados.
@@ -22,7 +23,7 @@ class User:
         self.username = username
         self.mail = mail
         self.pots: list[Pot] = []
-        self.password: str
+        self.password: str =  password
 
  
     def add_pot(self, pot):

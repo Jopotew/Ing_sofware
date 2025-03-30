@@ -15,6 +15,15 @@ class UserRepository(Repository):
         super().__init__()
         self.table = "user"
 
+
+    def get_by_username(self, username):
+        u = db.get_by_username(username)  
+        if u:
+            user = User(u["id"],u["username"],u["mail"], u["password"] )
+            return user
+        return None
+
+
     def verify_user(self, username: str, password: str) -> User | None:
         users = db.execute_query("SELECT * FROM user")
         for u in users:
@@ -81,3 +90,4 @@ class UserRepository(Repository):
 
 
 instance = UserRepository()
+print(instance.get_by_username("juan"))

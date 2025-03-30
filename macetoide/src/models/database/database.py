@@ -5,9 +5,9 @@ class DatabaseConnection:
 
     def __init__(self):
         self.connection = pymysql.connect(
-            host="127.0.0.1",
-            user="root",
-            password="Jopotew22!!",
+            host="192.168.0.21",
+            user="jp",
+            password="Juanpi22!",
             database="macetoide",
             port=3306,
         )
@@ -202,6 +202,16 @@ class DatabaseConnection:
             print(f"Error executing get_by_id for {table}: {error}")
             return 0
 
+    def get_by_username(self, username):
+        try: 
+            self.cursor.callproc("get_by_username", [username])
+            result = result = self.cursor.fetchall()
+            return result
+
+        except pymysql.MySQLError as error:
+            print(f"Error executing get_user_pots: {error}")
+            return []
+
     def get_user_pots(self, user_id):
         try:
             self.cursor.callproc("get_user_pots", [user_id])
@@ -269,3 +279,4 @@ class DatabaseConnection:
 
 # falta user (validaciones)
 database = DatabaseConnection()
+
