@@ -1,3 +1,11 @@
+import sys
+import os
+
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_path = os.path.join(current_dir, "..")
+sys.path.append(src_path)
+
 from macetoide.src.models.entities.log import Log
 from macetoide.src.models.entities.pot import Pot
 from macetoide.src.models.entities.user import User
@@ -15,14 +23,12 @@ class UserRepository(Repository):
         super().__init__()
         self.table = "user"
 
-
     def get_by_username(self, username):
-        u = db.get_by_username(username)  
+        u = db.get_by_username(username)
         if u:
-            user = User(u["id"],u["username"],u["mail"], u["password"] )
+            user = User(u["id"], u["username"], u["mail"], u["password"])
             return user
         return None
-
 
     def verify_user(self, username: str, password: str) -> User | None:
         users = db.execute_query("SELECT * FROM user")
