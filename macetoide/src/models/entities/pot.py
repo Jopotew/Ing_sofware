@@ -1,6 +1,6 @@
-from macetoide.src.models.entities.log import Log
-from macetoide.src.models.entities.user import User
-from macetoide.src.models.entities.plant import Plant
+from models.entities.log import Log
+from models.entities.user import User
+from models.entities.plant import Plant
 from time import time
 
 

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from time import time
-from macetoide.src.models.entities.plant import Plant
+from models.entities.plant import Plant
 
 
 @dataclass

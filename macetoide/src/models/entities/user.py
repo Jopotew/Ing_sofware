@@ -1,7 +1,4 @@
 
-from macetoide.src.models.entities.pot import Pot
-
-
 class User:
     """
     Clase que representa a un usuario con manejo de codificación UTF-8 para la contraseña.
@@ -22,7 +19,7 @@ class User:
         self.surname:str 
         self.username = username
         self.mail = mail
-        self.pots: list[Pot] = []
+        self.pots: list = []
         self.password: str =  password
 
  
