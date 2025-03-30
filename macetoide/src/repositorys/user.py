@@ -24,10 +24,14 @@ class UserRepository(Repository):
 
     def get_by_username(self, username):
         u = db.get_by_username(username)
-        if u:
-            user = User(u["id"], u["username"], u["mail"], u["password"])
-            return user
-        return None
+        if len(u) == 0:
+            return None
+        user = User(u[0]["id_user"], u[0]["username"], u[0]["mail"], u[0]["password"])
+        return user
+     
+    def create_user(self, dict):
+        user = User(dict[0]["id_user"], dict[0]["username"], dict[0]["mail"], dict[0]["password"])
+        return user
 
     def verify_user(self, username: str, password: str) -> User | None:
         users = db.execute_query("SELECT * FROM user")
@@ -38,4 +42,4 @@ class UserRepository(Repository):
 
 
 instance = UserRepository()
-print(instance.get_by_username("juan"))
+

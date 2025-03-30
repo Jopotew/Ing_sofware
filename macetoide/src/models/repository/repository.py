@@ -1,4 +1,11 @@
-from macetoide.src.models.database.database import database as db
+import sys
+import os
+
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_path = os.path.join(current_dir, "..")
+sys.path.append(src_path)
+from database.database import database as db
 
 
 class Repository:
@@ -23,6 +30,7 @@ class Repository:
     
     def get_by_id(self, id):
         i_dict = db.get_by_id(self.table, id)
+        return i_dict
         
         
     

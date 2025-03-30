@@ -16,7 +16,6 @@ class User:
         """
         self.id: int = id
         self.name: str
-        self.surname:str 
         self.username = username
         self.mail = mail
         self.pots: list = []
