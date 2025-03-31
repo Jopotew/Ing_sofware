@@ -368,8 +368,8 @@ class FakeDatabase():
             },
             {
                 "id": 2,
-                "pot_id": 2,
-                "plant_id": 2,
+                "pot_id": 1,
+                "plant_id": 1,
                 "temperature": 24.1,
                 "soil_humidity": 28.6,
                 "air_humidity": 60.3,
@@ -379,8 +379,8 @@ class FakeDatabase():
             },
             {
                 "id": 3,
-                "pot_id": 3,
-                "plant_id": 3,
+                "pot_id": 1,
+                "plant_id": 1,
                 "temperature": 23.8,
                 "soil_humidity": 15.0,
                 "air_humidity": 50.0,
@@ -454,13 +454,22 @@ class FakeDatabase():
         return u_pots
 
     def get_last_log(self, pot_id):
-        pass
+        logs = []
+        for log in self.logs:
+            if log["pot_id"] == pot_id:
+                logs.append(log)
+        if len(logs)==0:
+            return []
+        else:
+            return logs[-1]
     
     def get_all_logs(self, pot_id):
-        pass
-
+        logs = []
+        for log in self.logs:
+            if log["pot_id"] == pot_id:
+                logs.append(log)
+        return logs
 
 
 # falta user (validaciones)
 database = FakeDatabase()
-

@@ -93,3 +93,12 @@ class SoilMoistureSensor:
         Limpia los pines GPIO utilizados.
         """
         GPIO.cleanup()
+
+
+
+
+
+
+
+
+

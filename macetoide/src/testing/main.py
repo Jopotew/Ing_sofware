@@ -113,6 +113,47 @@ def get_user_email(user: Annotated[User, Depends(get_current_user)]):
     return user.mail
 
 
+
+@app.get("/user/pots", tags=["Pots"])
+def get_user_pots(user: Annotated[User,Depends(get_current_user)]):
+    if user:
+        pots = pot_repository.get_pots(user.id)
+        return pots
+    else:
+        print("No hay conexion con el usuario")
+
+
+@app.post("pots", tags=["Pots"])
+def save_pot(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
+    if user:
+        return pot_repository.save_pot(pot)
+    else:
+        print("No hay conexion con el usuario")
+
+
+@app.get("/user/pots/pot", tags=["Pot"])
+def get_pot_by_id(pot_id, user: Annotated[User,Depends(get_current_user)])
+    if user:
+        return pot_repository.get_by_id(pot_id)
+    else:
+        print("No hay conexion con el usuario")
+
+
+@app.get("/user/pots/pot/plants/plant", tags=["Plant"])
+def get_plant_by_id(plant_id, user: Annotated[User,Depends(get_current_user)])
+    if user:
+        return plant_repository.get_by_id(plant_id)
+    else:
+        print("No hay conexion con el usuario")
+
+@app.get("Plants", tags=["Plants"])
+def get_plants(user: Annotated[User,Depends(get_current_user)])
+    if user:
+        return plant_repository.get_all()
+    else:
+        print("No hay conexion con el usuario")
+
+
 # def common_parameters(id: str, edad: int, nombre: str) -> dict:
 #     return { "id": id, "edad": edad, "nombre": nombre}
 
