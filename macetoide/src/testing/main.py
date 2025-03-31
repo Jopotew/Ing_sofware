@@ -18,12 +18,14 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 
+from macetoide.src.models.entities.user import User
 from macetoide.src.models.server_credentials.security import (
     hash_password,
     verify_password,
 )
 
 from macetoide.src.repositorys.user import instance as user_repository
+from macetoide.src.repositorys.fake import instance as fake_repository
 
 # from macetoide.src.repositorys.pot import instance as pot_repository
 # from macetoide.src.repositorys.log import instance as log_repository
@@ -57,7 +59,7 @@ def home():
 
 @app.post("/token", tags=["Auth"])
 def login(response: Response, login_form: LoginForm):
-    user = user_repository.get_by_username(login_form.username)
+    user = fake_repository.get_by_username(login_form.username)
 
     if user is None:
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
@@ -106,11 +108,9 @@ def get_current_user(request: Request):
     return user
 
 
-#    
-
-# @app.get("/user/email", tags=["Auth"])
-# def get_user_email(user: Annotated[dict, Depends(get_current_user)]):
-#     return user["email"]
+@app.get("/user/email", tags=["Auth"])
+def get_user_email(user: Annotated[User, Depends(get_current_user)]):
+    return user.mail
 
 
 # def common_parameters(id: str, edad: int, nombre: str) -> dict:

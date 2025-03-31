@@ -15,7 +15,7 @@ class Pot:
         name: str,
         plant_id: int,
         analysis_time: time,
-        user: User,
+        user_id: int,
         last_checked: time
         
 
@@ -30,7 +30,7 @@ class Pot:
         self.name: str = name
         self.plant_id: int = plant_id
         self.analysis_time = analysis_time
-        self.user: User = user
+        self.user_id: int = user_id
         self.last_checked = last_checked
         self.logs: list[Log] = []
 

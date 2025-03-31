@@ -22,11 +22,12 @@ class UserRepository(Repository):
         super().__init__()
         self.table = "user"
 
-    def get_by_username(self, username):
+    def get_by_username(self, username) -> User:
         u = db.get_by_username(username)
         if len(u) == 0:
             return None
-        user = User(u[0]["id_user"], u[0]["username"], u[0]["mail"], u[0]["password"])
+        db.get_pots(u["id"])
+        user = User(u[0]["id_user"], u[0]["username"], u[0]["mail"], u[0]["password"], list_pots)
         return user
      
     def create_user(self, dict):

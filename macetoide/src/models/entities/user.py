@@ -10,6 +10,7 @@ class User:
         username: str,
         mail: str,
         password: str,
+        pots: list
     ):
         """
         Inicializa un nuevo usuario con los datos proporcionados.
@@ -18,7 +19,7 @@ class User:
         self.name: str
         self.username = username
         self.mail = mail
-        self.pots: list = []
+        self.pots: list = pots
         self.password: str =  password
 
  
@@ -30,7 +31,6 @@ class User:
         return {
             "id": self.id,
             "name": self.name,
-            "surname": self.surname, 
             "username": self.username,
             "mail": self.mail, 
             "pots": self.pots,
