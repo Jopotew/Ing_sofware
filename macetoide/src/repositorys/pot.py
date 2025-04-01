@@ -1,9 +1,18 @@
+import sys
+import os
+
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_path = os.path.join(current_dir, "..")
+sys.path.append(src_path)
+
+
 from typing import Optional
 
 
-from macetoide.src.models.entities.pot import Pot
-from macetoide.src.models.repository.repository import Repository
-from macetoide.src.models.database.database import database as db
+from models.entities.pot import Pot
+from models.repository.repository import Repository
+from models.database.database import database as db
 
 
 class PotRepository(Repository):

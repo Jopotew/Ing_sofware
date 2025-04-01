@@ -43,6 +43,8 @@ class UserRepository(Repository):
 
     def update_user(self, user_id, field, old_data, new_data):
         return db.update_user(user_id, field, old_data, new_data)
+    
+    
 
 instance = UserRepository()
 

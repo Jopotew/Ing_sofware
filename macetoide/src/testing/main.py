@@ -1,3 +1,12 @@
+import sys
+import os
+
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_path = os.path.join(current_dir, "..")
+sys.path.append(src_path)
+
+
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
@@ -18,26 +27,26 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 
-from macetoide.src.models.entities.log import Log
-from macetoide.src.models.entities.pot import Pot
-from macetoide.src.models.entities.user import User
-from macetoide.src.models.server_credentials.security import (
+from models.entities.log import Log
+from models.entities.pot import Pot
+from models.entities.user import User
+from models.server_credentials.security import (
     hash_password,
     verify_password,
 )
 
-from macetoide.src.repositorys.user import instance as user_repository
-from macetoide.src.repositorys.fake import instance as fake_repository
+from repositorys.user import instance as user_repository
+from repositorys.fake import instance as fake_repository
 
-from macetoide.src.repositorys.pot import instance as pot_repository
-from macetoide.src.repositorys.log import instance as log_repository
-from macetoide.src.repositorys.plant import instance as plant_repository
-
-
-from macetoide.src.models.server_credentials.auth import LoginForm
+from repositorys.pot import instance as pot_repository
+from repositorys.log import instance as log_repository
+from repositorys.plant import instance as plant_repository
 
 
-from macetoide.src.models.entities.plant import Plant
+from models.server_credentials.auth import LoginForm
+
+
+from models.entities.plant import Plant
 
 
 app = FastAPI()
@@ -57,6 +66,7 @@ token_exp = 3
 def home():
     return {"Retorno a Home"}
 
+#Modificar entidades para q tamb exista BASEMODEL en si, esas son las que se usn en las func. 
 
 @app.post("/token", tags=["Auth"])
 def login(response: Response, login_form: LoginForm):
@@ -134,6 +144,7 @@ def save_pot(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
+
 @app.get("/user/pots/pot", tags=["Pot"])
 def get_pot_by_id(pot_id, user: Annotated[User,Depends(get_current_user)]):
     if user:
@@ -141,18 +152,22 @@ def get_pot_by_id(pot_id, user: Annotated[User,Depends(get_current_user)]):
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
+
 @app.get("/user/pots/pot/plants/plant", tags=["Plant"])
 def get_plant_by_id(plant_id, user: Annotated[User,Depends(get_current_user)]):
     if user:
         return plant_repository.get_by_id(plant_id)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    
+
 @app.get("/plants", tags=["Plants"])
 def get_plants(user: Annotated[User,Depends(get_current_user)]):
     if user:
         return plant_repository.get_all()
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
 
 @app.get("/user/pots/pot/logs/log", tags=["Log"])
 def get_last_log(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
@@ -161,12 +176,14 @@ def get_last_log(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
+
 @app.get("/user/pots/pot/logs", tags=["Log"])
 def get_logs(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
     if user:
         return log_repository.get_logs(pot)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
 
 @app.get("/user/pots/pot/logs/log", tags=["Log"])
 def save_log(log: Log):
@@ -191,8 +208,9 @@ def update_username(old_username: str, new_username, user: Annotated[User,Depend
 @app.post("/user", tags=["User"])
 def update_password(old_password: str, new_password: str, user: Annotated[User,Depends(get_current_user)]):
     if user:
-
-        st = user_repository.update_user(user.id, "password", old_password, new_password)
+        old_pw_hash = hash_password(old_password)
+        new_pw_hash = hash_password(new_password)
+        st = user_repository.update_user(user.id, "password", old_pw_hash, new_pw_hash)
         if st:
             return st
         else:

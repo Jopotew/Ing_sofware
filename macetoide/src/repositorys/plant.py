@@ -1,4 +1,4 @@
-from macetoide.src.models.repository.repository import Repository
+from models.repository.repository import Repository
 
 
 class PlantRepository(Repository):
