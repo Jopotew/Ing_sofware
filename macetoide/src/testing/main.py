@@ -127,10 +127,13 @@ def get_user_pots(user: Annotated[User,Depends(get_current_user)]):
 @app.post("/user/pots", tags=["Pots"])
 def save_pot(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
     if user:
-        return pot_repository.save_pot(pot)
+        st = pot_repository.save_pot(pot)
+        if st:
+            return st
+        else:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
     else:
-        print("No hay conexion con el usuario")
-
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 @app.get("/user/pots/pot", tags=["Pot"])
 def get_pot_by_id(pot_id, user: Annotated[User,Depends(get_current_user)]):
@@ -173,8 +176,11 @@ def get_logs(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
 
 @app.get("/user/pots/pot/logs/log", tags=["Log"])
 def save_log(log: Log):
-    return log_repository.save_log(log)
-
+    st = log_repository.save_log(log)
+    if st:
+        return st
+    else:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 
