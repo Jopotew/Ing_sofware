@@ -413,8 +413,19 @@ class FakeDatabase():
         ]
 
 
-    def save(self, table, entity):
-        pass
+    def update_user(self, user_id: int, field: str, old_value: str, new_value: str) -> bool:
+        if field not in ["username", "password", "mail"]:
+            return False
+      
+        for user in self.users:
+            if user["id"] == user_id:
+                if user.get(field) != old_value:
+                    return False
+                user[field] = new_value
+                return True
+
+        return False
+  
 
     def get_by_username(self, username):
         for user in self.users:
@@ -475,10 +486,6 @@ class FakeDatabase():
 
         target_list.append(data_dict)
         return True
-
-
-
-        
 
 
     def get_last_log(self, pot_id):

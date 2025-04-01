@@ -177,6 +177,48 @@ def save_log(log: Log):
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
+@app.post("/user", tags=["User"])
+def update_username(old_username: str, new_username, user: Annotated[User,Depends(get_current_user)]):
+    if user:
+        st = user_repository.update_user(user.id, "username", old_username, new_username)
+        if st:
+            return st
+        else:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    
+@app.post("/user", tags=["User"])
+def update_password(old_password: str, new_password: str, user: Annotated[User,Depends(get_current_user)]):
+    if user:
+
+        st = user_repository.update_user(user.id, "password", old_password, new_password)
+        if st:
+            return st
+        else:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    
+
+
+@app.post("/user", tags=["User"])
+def update_mail(old_mail: str, new_mail: str, user: Annotated[User,Depends(get_current_user)]):
+    if user:
+
+        st = user_repository.update_user(user.id, "mail", old_mail, new_mail)
+        if st:
+            return st
+        else:
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+#modificar y elimnar pots
+#modificar username y password
+
+
+
 
 # def common_parameters(id: str, edad: int, nombre: str) -> dict:
 #     return { "id": id, "edad": edad, "nombre": nombre}
