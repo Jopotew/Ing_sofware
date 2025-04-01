@@ -413,7 +413,8 @@ class FakeDatabase():
         ]
 
 
-
+    def save(self, table, entity):
+        pass
 
     def get_by_username(self, username):
         for user in self.users:
@@ -454,23 +455,28 @@ class FakeDatabase():
         return u_pots
 
 
-    def save_pot(self, pot):
+    def save(self, table, data_dict):
         
-        for i, existing_pot in enumerate(self.pots):
-            if existing_pot["id"] == pot.id:
-                
-                self.pots[i] = {
-                    "id": pot.id,
-                    "name": pot.name,
-                    "plant_id": pot.plant_id,
-                    "analysis_time": pot.analysis_time.strftime("%H:%M"),
-                    "last_checked": pot.last_checked.strftime("%H:%M"),
-                    "user_id": pot.user_id
-                }
+        if table == "log":
+            target_list = self.logs
+        elif table == "pots":
+            target_list = self.pots
+        elif table == "plants":
+            target_list = self.plants
+        elif table == "user":
+            target_list = self.users
+        else:
+            return False  
+
+        for i, existing in enumerate(target_list):
+            if existing["id"] == data_dict["id"]:
+                target_list[i] = data_dict
                 return True
-            
-        return False
-        
+
+        target_list.append(data_dict)
+        return True
+
+
 
         
 

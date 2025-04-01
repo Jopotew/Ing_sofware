@@ -18,6 +18,8 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 
+from macetoide.src.models.entities.log import Log
+from macetoide.src.models.entities.pot import Pot
 from macetoide.src.models.entities.user import User
 from macetoide.src.models.server_credentials.security import (
     hash_password,
@@ -28,15 +30,14 @@ from macetoide.src.repositorys.user import instance as user_repository
 from macetoide.src.repositorys.fake import instance as fake_repository
 
 from macetoide.src.repositorys.pot import instance as pot_repository
-# from macetoide.src.repositorys.log import instance as log_repository
-# from macetoide.src.repositorys.plant import instance as plant_repository
-# from macetoide.src.models.server_credentials.security import get_current_user
+from macetoide.src.repositorys.log import instance as log_repository
+from macetoide.src.repositorys.plant import instance as plant_repository
+
 
 from macetoide.src.models.server_credentials.auth import LoginForm
 
-# from macetoide.src.models.entities.user import User
-# from macetoide.src.models.entities.pot import Pot
-# from macetoide.src.models.entities.plant import Plant
+
+from macetoide.src.models.entities.plant import Plant
 
 
 app = FastAPI()
@@ -123,7 +124,7 @@ def get_user_pots(user: Annotated[User,Depends(get_current_user)]):
         print("No hay conexion con el usuario")
 
 
-@app.post("pots", tags=["Pots"])
+@app.post("/user/pots", tags=["Pots"])
 def save_pot(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
     if user:
         return pot_repository.save_pot(pot)
@@ -132,7 +133,7 @@ def save_pot(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
 
 
 @app.get("/user/pots/pot", tags=["Pot"])
-def get_pot_by_id(pot_id, user: Annotated[User,Depends(get_current_user)])
+def get_pot_by_id(pot_id, user: Annotated[User,Depends(get_current_user)]):
     if user:
         return pot_repository.get_by_id(pot_id)
     else:
@@ -140,18 +141,41 @@ def get_pot_by_id(pot_id, user: Annotated[User,Depends(get_current_user)])
 
 
 @app.get("/user/pots/pot/plants/plant", tags=["Plant"])
-def get_plant_by_id(plant_id, user: Annotated[User,Depends(get_current_user)])
+def get_plant_by_id(plant_id, user: Annotated[User,Depends(get_current_user)]):
     if user:
         return plant_repository.get_by_id(plant_id)
     else:
         print("No hay conexion con el usuario")
 
-@app.get("Plants", tags=["Plants"])
-def get_plants(user: Annotated[User,Depends(get_current_user)])
+@app.get("/plants", tags=["Plants"])
+def get_plants(user: Annotated[User,Depends(get_current_user)]):
     if user:
         return plant_repository.get_all()
     else:
         print("No hay conexion con el usuario")
+
+
+@app.get("/user/pots/pot/logs/log", tags=["Log"])
+def get_last_log(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
+    if user:
+        return log_repository.get_last_log(pot)
+    else:
+        print("No hay conexion con el usuario")
+
+
+@app.get("/user/pots/pot/logs", tags=["Log"])
+def get_logs(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
+    if user:
+        return log_repository.get_logs(pot)
+    else:
+        print("No hay conexion con el usuario")
+
+
+@app.get("/user/pots/pot/logs/log", tags=["Log"])
+def save_log(log: Log):
+    return log_repository.save_log(log)
+
+
 
 
 # def common_parameters(id: str, edad: int, nombre: str) -> dict:
