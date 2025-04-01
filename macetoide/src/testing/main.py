@@ -27,7 +27,7 @@ from macetoide.src.models.server_credentials.security import (
 from macetoide.src.repositorys.user import instance as user_repository
 from macetoide.src.repositorys.fake import instance as fake_repository
 
-# from macetoide.src.repositorys.pot import instance as pot_repository
+from macetoide.src.repositorys.pot import instance as pot_repository
 # from macetoide.src.repositorys.log import instance as log_repository
 # from macetoide.src.repositorys.plant import instance as plant_repository
 # from macetoide.src.models.server_credentials.security import get_current_user

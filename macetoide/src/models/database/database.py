@@ -453,6 +453,28 @@ class FakeDatabase():
                 u_pots.append(pot)
         return u_pots
 
+
+    def save_pot(self, pot):
+        
+        for i, existing_pot in enumerate(self.pots):
+            if existing_pot["id"] == pot.id:
+                
+                self.pots[i] = {
+                    "id": pot.id,
+                    "name": pot.name,
+                    "plant_id": pot.plant_id,
+                    "analysis_time": pot.analysis_time.strftime("%H:%M"),
+                    "last_checked": pot.last_checked.strftime("%H:%M"),
+                    "user_id": pot.user_id
+                }
+                return True
+            
+        return False
+        
+
+        
+
+
     def get_last_log(self, pot_id):
         logs = []
         for log in self.logs:

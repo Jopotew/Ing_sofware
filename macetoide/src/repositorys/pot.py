@@ -1,6 +1,7 @@
 from typing import Optional
 
 
+from macetoide.src.models.entities.pot import Pot
 from macetoide.src.models.repository.repository import Repository
 from macetoide.src.models.database.database import database as db
 
@@ -26,7 +27,12 @@ class PotRepository(Repository):
                 )
                 user_pots.append(new.get_dto())
         return user_pots
-    
+
+    def new_pot(pot: Pot):
+        return db.create_pot(pot)
+
+    def save_pot(pot: Pot):
+        return db.save_pot(pot)
 
     def set_last_checked(self, pot, new_time):
         return db.update_pot_last_checked(pot.id, new_time)
