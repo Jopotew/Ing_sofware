@@ -121,8 +121,7 @@ def get_user_pots(user: Annotated[User,Depends(get_current_user)]):
         pots = pot_repository.get_pots(user.id)
         return pots
     else:
-        print("No hay conexion con el usuario")
-
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 @app.post("/user/pots", tags=["Pots"])
 def save_pot(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
@@ -140,39 +139,34 @@ def get_pot_by_id(pot_id, user: Annotated[User,Depends(get_current_user)]):
     if user:
         return pot_repository.get_by_id(pot_id)
     else:
-        print("No hay conexion con el usuario")
-
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 @app.get("/user/pots/pot/plants/plant", tags=["Plant"])
 def get_plant_by_id(plant_id, user: Annotated[User,Depends(get_current_user)]):
     if user:
         return plant_repository.get_by_id(plant_id)
     else:
-        print("No hay conexion con el usuario")
-
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 @app.get("/plants", tags=["Plants"])
 def get_plants(user: Annotated[User,Depends(get_current_user)]):
     if user:
         return plant_repository.get_all()
     else:
-        print("No hay conexion con el usuario")
-
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 @app.get("/user/pots/pot/logs/log", tags=["Log"])
 def get_last_log(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
     if user:
         return log_repository.get_last_log(pot)
     else:
-        print("No hay conexion con el usuario")
-
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 @app.get("/user/pots/pot/logs", tags=["Log"])
 def get_logs(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
     if user:
         return log_repository.get_logs(pot)
     else:
-        print("No hay conexion con el usuario")
-
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 @app.get("/user/pots/pot/logs/log", tags=["Log"])
 def save_log(log: Log):
