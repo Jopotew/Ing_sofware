@@ -42,18 +42,7 @@ class LogRepository(Repository):
         return new_l
     
 
-    def save_log(self, log):
-        log_dict = {
-            "id": log.id,
-            "pot_id": log.pot_id,
-            "plant_id": log.plant_id,
-            "temperature": log.temperature,
-            "soil_humidity": log.soil_humidity,
-            "air_humidity": log.air_humidity,
-            "image_path": log.image_path,
-            "expert_advice": log.expert_advice,
-            "timestamp": log.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
-        }
-        return db.save(self.table, log_dict)
+    def save_log(self, log: dict):
+        return db.save(self.table, log)
 
 instance = LogRepository()

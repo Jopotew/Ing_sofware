@@ -119,6 +119,8 @@ def get_current_user(request: Request):
     return user
 
 
+
+
 @app.get("/user/email", tags=["Auth"])
 def get_user_email(user: Annotated[User, Depends(get_current_user)]):
     return user.mail
@@ -134,7 +136,7 @@ def get_user_pots(user: Annotated[User,Depends(get_current_user)]):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 @app.post("/user/pots", tags=["Pots"])
-def save_pot(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
+def save_pot(pot: dict, user: Annotated[User,Depends(get_current_user)]):
     if user:
         st = pot_repository.save_pot(pot)
         if st:
@@ -146,16 +148,18 @@ def save_pot(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
 
 
 @app.get("/user/pots/pot", tags=["Pot"])
-def get_pot_by_id(pot_id, user: Annotated[User,Depends(get_current_user)]):
+def get_pot_by_id(pot_id: dict, user: Annotated[User,Depends(get_current_user)]):
     if user:
-        return pot_repository.get_by_id(pot_id)
+        id = pot_id["pot_id"]
+        return pot_repository.get_by_id(id)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
 @app.get("/user/pots/pot/plants/plant", tags=["Plant"])
-def get_plant_by_id(plant_id, user: Annotated[User,Depends(get_current_user)]):
+def get_plant_by_id(plant_id: dict, user: Annotated[User,Depends(get_current_user)]):
     if user:
+        id = plant_id["plant_id"]
         return plant_repository.get_by_id(plant_id)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
@@ -170,23 +174,26 @@ def get_plants(user: Annotated[User,Depends(get_current_user)]):
 
 
 @app.get("/user/pots/pot/logs/log", tags=["Log"])
-def get_last_log(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
+def get_last_log(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
     if user:
+        pot = pot_repository.create_pot(pot_dict)
         return log_repository.get_last_log(pot)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
 @app.get("/user/pots/pot/logs", tags=["Log"])
-def get_logs(pot: Pot, user: Annotated[User,Depends(get_current_user)]):
+def get_logs(pot_dict : dict , user: Annotated[User,Depends(get_current_user)]):
     if user:
+        pot = pot_repository.create_pot(pot_dict)
         return log_repository.get_logs(pot)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
 @app.get("/user/pots/pot/logs/log", tags=["Log"])
-def save_log(log: Log):
+def save_log(log: dict):
+
     st = log_repository.save_log(log)
     if st:
         return st
@@ -233,7 +240,7 @@ def update_mail(old_mail: str, new_mail: str, user: Annotated[User,Depends(get_c
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 #modificar y elimnar pots
-#modificar username y password
+
 
 
 

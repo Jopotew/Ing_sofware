@@ -29,6 +29,7 @@ class Repository:
         return db.get_all(self.table)
     
     def get_by_id(self, id):
+
         i_dict = db.get_by_id(self.table, id)
         return i_dict
         

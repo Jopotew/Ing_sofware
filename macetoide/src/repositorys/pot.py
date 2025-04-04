@@ -20,6 +20,12 @@ class PotRepository(Repository):
         super().__init__()
         self.table = "pot"
 
+
+    def create_pot(dict: dict):
+        pot = Pot(dict["id"], dict["name"], dict["id_plant"], dict["analysis_time"], dict["id_user"], dict["last_checked"] )
+        return pot
+
+
     def get_pots(self, user_id: int) -> list[dict]:
         pots_dict = db.get_user_pots(user_id)
         user_pots: list[dict] = []
@@ -40,8 +46,8 @@ class PotRepository(Repository):
     def new_pot(pot: Pot):
         return db.create_pot(pot)
 
-    def save_pot(pot: Pot):
-        return db.save_pot(pot)
+    def save_pot(pot: dict):
+        return db.save(pot)
 
     def set_last_checked(self, pot, new_time):
         return db.update_pot_last_checked(pot.id, new_time)
