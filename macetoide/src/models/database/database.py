@@ -435,7 +435,6 @@ class FakeDatabase():
                 return True
 
         table_ref.append(data)
-        print(table_ref, ":", data)
         return True
 
     def delete(self, id: int, table: str) -> bool:
@@ -490,6 +489,7 @@ class FakeDatabase():
 
     def get_by_username(self, username):
         for user in self.users:
+            print("USER IN BD:",user )
             if user["username"] == username:
                 return user
         return None
