@@ -256,10 +256,13 @@ def delete_user(user: Annotated[User,Depends(get_current_user)]):
 
 
 #FALTA LA VALIDACION DE QUE YA EXISTE UN USUARIO EN LA DB.
-
+def validate_user(username: str):
+    pass
 
 @app.post("/users/", tags=["User"])
 def create_user(user: dict):
+    if not validate_user(user["username"]):
+        pass
     if "password" in user:
         user["password"] = hash_password(user["password"])
     st = user_repository.save(user)
