@@ -8,7 +8,6 @@ sys.path.append(src_path)
 
 
 from models.entities.user import User
-from models.database.database import database as db
 from models.server_credentials.security import verify_password
 from typing import Optional
 import bcrypt
@@ -23,11 +22,10 @@ class UserRepository(Repository):
         self.table = "user"
 
     def get_by_username(self, username) -> User:
-        u = db.get_by_username(username)
-        print("USER REPO U :", u)
+        u = self.db.get_by_username(username)
         if u is None:
             return None
-        pots = db.get_user_pots(u["id"])
+        pots = self.db.get_user_pots(u["id"])
         user = User(u["id"], u["username"], u["mail"], u["password"], pots)
         return user
      
@@ -40,7 +38,7 @@ class UserRepository(Repository):
         return user
 
     def update_user(self, user_id, field, old_data, new_data):
-        return db.update_user(user_id, field, old_data, new_data)
+        return self.db.update_user(user_id, field, old_data, new_data)
     
     
 

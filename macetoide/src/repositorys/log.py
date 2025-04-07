@@ -1,6 +1,6 @@
 from models.repository.repository import Repository
 from models.entities.log import Log
-from models.database.database import database as db
+
 
 class LogRepository(Repository):
     def __init__(self):
@@ -9,7 +9,7 @@ class LogRepository(Repository):
 
     def get_logs(self, pot):
 
-        log_list = db.get_all_logs(pot.id)
+        log_list = self.db.get_all_logs(pot.id)
 
         for log in log_list:
             if pot.id == log["id_pot"]:
@@ -31,7 +31,7 @@ class LogRepository(Repository):
         return pot.logs
 
     def get_last_log(self, pot): #controlar que se haya actualizado sino esta en pot agregarlo
-        log_d = db.get_last_log(pot.id)
+        log_d = self.db.get_last_log(pot.id)
         if len(log_d) == 0:
             return None
         for log in pot.logs:

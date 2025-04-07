@@ -284,6 +284,7 @@ class FakeDatabase():
 
     def __init__(self):
         
+        
 
         self.users = [
         {"id": 1, "username": "juan", "password": "", "mail": "juan@123.com"},
@@ -425,13 +426,13 @@ class FakeDatabase():
         return None
 
     def save(self, data: dict, table: str) -> bool:
+         
         if table == "user":
             for i, user in enumerate(self.users):
                 if user["id"] == data["id"]:
                     self.users[i] = data
                     return True
             self.users.append(data)
-            print(self.users)
             return True
 
         elif table == "log":
@@ -513,7 +514,6 @@ class FakeDatabase():
 
     def get_by_username(self, username):
         for user in self.users:
-            print("USER IN BD:",user )
             if user["username"] == username:
                 return user
         return None

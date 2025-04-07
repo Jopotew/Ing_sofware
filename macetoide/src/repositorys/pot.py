@@ -12,7 +12,7 @@ from typing import Optional
 
 from models.entities.pot import Pot
 from models.repository.repository import Repository
-from models.database.database import database as db
+
 
 
 class PotRepository(Repository):
@@ -27,7 +27,7 @@ class PotRepository(Repository):
 
 
     def get_pots(self, user_id: int) -> list[dict]:
-        pots_dict = db.get_user_pots(user_id)
+        pots_dict = self.db.get_user_pots(user_id)
         user_pots: list[dict] = []
 
         for pot in pots_dict:
@@ -44,19 +44,20 @@ class PotRepository(Repository):
         return user_pots
 
     def new_pot(pot: Pot):
-        return db.create_pot(pot)
+        return self.db.create_pot(pot)
 
     def save_pot(pot: dict):
-        return db.save(pot)
+        return self.db.save(pot)
 
     def set_last_checked(self, pot, new_time):
-        return db.update_pot_last_checked(pot.id, new_time)
+        return self.db.update_pot_last_checked(pot.id, new_time)
 
     def change_plant(self, pot, new_plant_id):
-        return db.update_pot_id_plant(pot.id, new_plant_id)
+        return self.db.update_pot_id_plant(pot.id, new_plant_id)
 
     def change_analysis_time(self, pot, new_analysis_time):
-        return db.update_pot_analysis_time(pot.id, new_analysis_time)
+        return self.db.update_pot_analysis_time(pot.id, new_analysis_time)
 
 
 instance = PotRepository()
+    

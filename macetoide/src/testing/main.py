@@ -29,17 +29,12 @@ from models.server_credentials.security import (
 )
 
 from repositorys.user import instance as user_repository
-from repositorys.fake import instance as fake_repository
-
 from repositorys.pot import instance as pot_repository
 from repositorys.log import instance as log_repository
 from repositorys.plant import instance as plant_repository
 
 
 from models.server_credentials.auth import LoginForm
-
-
-from models.entities.plant import Plant
 
 
 app = FastAPI()
@@ -76,7 +71,7 @@ def login(response: Response, login_form: LoginForm):
     token = create_token(user)
     response.set_cookie("token", token)
 
-    return "Success!"
+    return "Login Succesful! Welcome", user.username
 
 
 def create_token(user):
