@@ -266,9 +266,7 @@ def delete_user(user: Annotated[User,Depends(get_current_user)]):
 def create_user(user: dict):
     if "password" in user:
         user["password"] = hash_password(user["password"])
-        print(user["password"])
     st = user_repository.save(user)
-
     if st:
         return st
     else:

@@ -424,18 +424,42 @@ class FakeDatabase():
             return self.logs
         return None
 
-    def save(self, data: dict, table: str) -> bool: 
-        table_ref = self.get_all(table)
-        if table_ref is None:
+    def save(self, data: dict, table: str) -> bool:
+        if table == "user":
+            for i, user in enumerate(self.users):
+                if user["id"] == data["id"]:
+                    self.users[i] = data
+                    return True
+            self.users.append(data)
+            print(self.users)
+            return True
+
+        elif table == "log":
+            for i, log in enumerate(self.logs):
+                if log["id"] == data["id"]:
+                    self.logs[i] = data
+                    return True
+            self.logs.append(data)
+            return True
+
+        elif table == "plants":
+            for i, plant in enumerate(self.plants):
+                if plant["id"] == data["id"]:
+                    self.plants[i] = data
+                    return True
+            self.plants.append(data)
+            return True
+
+        elif table == "pots":
+            for i, pot in enumerate(self.pots):
+                if pot["id"] == data["id"]:
+                    self.pots[i] = data
+                    return True
+            self.pots.append(data)
+            return True
+
+        else:
             return False
-
-        for i, item in enumerate(table_ref):
-            if item["id"] == data["id"]:
-                table_ref[i] = data
-                return True
-
-        table_ref.append(data)
-        return True
 
     def delete(self, id: int, table: str) -> bool:
         table_ref = self.get_all(table)

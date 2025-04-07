@@ -28,15 +28,15 @@ class UserRepository(Repository):
         if u is None:
             return None
         pots = db.get_user_pots(u["id"])
-        user = User(u[0]["id_user"], u[0]["username"], u[0]["mail"], u[0]["password"], pots)
+        user = User(u["id"], u["username"], u["mail"], u["password"], pots)
         return user
      
 
     def new():
         pass
     
-    def create_user(self, dict):
-        user = User(dict[0]["id_user"], dict[0]["username"], dict[0]["mail"], dict[0]["password"])
+    def create_user(self, user_dict):
+        user = User(user_dict["id"], user_dict["username"], user_dict["mail"], user_dict["password"])
         return user
 
     def update_user(self, user_id, field, old_data, new_data):
