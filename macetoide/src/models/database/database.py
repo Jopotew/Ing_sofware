@@ -413,26 +413,42 @@ class FakeDatabase():
         ]
 
 
-    def update_user(self, user_id: int, field: str, old_value: str, new_value: str) -> bool:
-        if field not in ["username", "password", "mail"]:
+    def get_all(self, table: str):
+        if table == "user":
+            return self.users
+        elif table == "pots":
+            return self.pots
+        elif table == "plants":
+            return self.plants
+        elif table == "log":
+            return self.logs
+        return None
+
+    def save(self, data: dict, table: str) -> bool: 
+        table_ref = self.get_all(table)
+        if table_ref is None:
             return False
-      
-        for user in self.users:
-            if user["id"] == user_id:
-                if user.get(field) != old_value:
-                    return False
-                user[field] = new_value
+
+        for i, item in enumerate(table_ref):
+            if item["id"] == data["id"]:
+                table_ref[i] = data
+                return True
+
+        table_ref.append(data)
+        print(table_ref, ":", data)
+        return True
+
+    def delete(self, id: int, table: str) -> bool:
+        table_ref = self.get_all(table)
+        if table_ref is None:
+            return False
+
+        for i, item in enumerate(table_ref):
+            if item["id"] == id:
+                del table_ref[i]
                 return True
 
         return False
-  
-
-    def get_by_username(self, username):
-        for user in self.users:
-            if user["username"] == username:
-                return user
-        return None
-
 
     def get_by_id(self, table, id):
         if table == "user":
@@ -457,36 +473,33 @@ class FakeDatabase():
             return None
         else:
             return None
+    
+    def update_user(self, user_id: int, field: str, old_value: str, new_value: str) -> bool:
+        if field not in ["username", "password", "mail"]:
+            return False
+      
+        for user in self.users:
+            if user["id"] == user_id:
+                if user.get(field) != old_value:
+                    return False
+                user[field] = new_value
+                return True
 
-    def get_pots(self, user_id):
+        return False
+  
+
+    def get_by_username(self, username):
+        for user in self.users:
+            if user["username"] == username:
+                return user
+        return None
+
+    def get_user_pots(self, user_id):
         u_pots: list = []
         for pot in self.pots:
             if pot["user_id"] == user_id:
                 u_pots.append(pot)
         return u_pots
-
-
-    def save(self, table, data_dict):
-        
-        if table == "log":
-            target_list = self.logs
-        elif table == "pots":
-            target_list = self.pots
-        elif table == "plants":
-            target_list = self.plants
-        elif table == "user":
-            target_list = self.users
-        else:
-            return False  
-
-        for i, existing in enumerate(target_list):
-            if existing["id"] == data_dict["id"]:
-                target_list[i] = data_dict
-                return True
-
-        target_list.append(data_dict)
-        return True
-
 
     def get_last_log(self, pot_id):
         logs = []

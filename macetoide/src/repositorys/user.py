@@ -24,22 +24,19 @@ class UserRepository(Repository):
 
     def get_by_username(self, username) -> User:
         u = db.get_by_username(username)
-        if len(u) == 0:
+        if u is None:
             return None
-        db.get_pots(u["id"])
-        user = User(u[0]["id_user"], u[0]["username"], u[0]["mail"], u[0]["password"], list_pots)
+        pots = db.get_user_pots(u["id"])
+        user = User(u[0]["id_user"], u[0]["username"], u[0]["mail"], u[0]["password"], pots)
         return user
      
+
+    def new():
+        pass
+    
     def create_user(self, dict):
         user = User(dict[0]["id_user"], dict[0]["username"], dict[0]["mail"], dict[0]["password"])
         return user
-
-    def verify_user(self, username: str, password: str) -> User | None:
-        users = db.execute_query("SELECT * FROM user")
-        for u in users:
-            if u["username"] == username and verify_password(password, u["password"]):
-                return User(u["id"], u["username"], u["email"])
-        return None
 
     def update_user(self, user_id, field, old_data, new_data):
         return db.update_user(user_id, field, old_data, new_data)

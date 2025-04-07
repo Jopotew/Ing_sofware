@@ -42,7 +42,6 @@ class LogRepository(Repository):
         return new_l
     
 
-    def save_log(self, log: dict):
-        return db.save(self.table, log)
+    
 
 instance = LogRepository()

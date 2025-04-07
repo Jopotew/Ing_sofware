@@ -17,13 +17,11 @@ class Repository:
 
 
     def save(self, entity):
-        db.create_record(entity, self.table)
+        return db.save(entity, self.table)
         
 
-    def remove(self, entity):
-    
-        #recibe un dict la bd con tabla: etc
-        db.delete_record(entity, self.table)
+    def delete(self, id):
+        return db.delete(id, self.table)
 
     def get_all(self):
         return db.get_all(self.table)

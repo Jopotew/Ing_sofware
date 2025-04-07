@@ -22,13 +22,6 @@ from fastapi import (
     Request,
 )
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jwt.exceptions import InvalidTokenError
-from passlib.context import CryptContext
-from pydantic import BaseModel
-
-
-from models.entities.log import Log
-from models.entities.pot import Pot
 from models.entities.user import User
 from models.server_credentials.security import (
     hash_password,
@@ -56,7 +49,7 @@ app.title = "Macetoide API"
 app.description = (
     "API for Macetoide, a platform for sharing and checking your macetoides."
 )
-app.version = "0.0.1"
+app.version = "0.69"
 
 secret_key = "opdiwfnpoiajqjuanpilocuraknaspjnpjasdnfbpjinmanoloeltronadordrakukeoelempaladorleinsertoeldedodiceporfavortkiosodvo"
 token_exp = 3
@@ -70,12 +63,14 @@ def home():
 
 @app.post("/token", tags=["Auth"])
 def login(response: Response, login_form: LoginForm):
-    user = fake_repository.get_by_username(login_form.username)
-
+    user = user_repository.get_by_username(login_form.username)
+    print(user)
     if user is None:
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
 
     if not verify_password(login_form.password, user.password):
+        print("USER IN DB PW",user.password)
+        print("USER IN LOGIN FORM PW",login_form.password)
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
 
     token = create_token(user)
@@ -89,6 +84,7 @@ def create_token(user):
     payload = {"user_id": user.id, "exp": expiration.timestamp()}
     token_jwt = jwt.encode(payload, secret_key, algorithm="HS256")
     return token_jwt
+
 
 
 def get_current_user(request: Request):
@@ -120,8 +116,7 @@ def get_current_user(request: Request):
 
 
 
-
-@app.get("/user/email", tags=["Auth"])
+@app.get("/user/email", tags=["User"])
 def get_user_email(user: Annotated[User, Depends(get_current_user)]):
     return user.mail
 
@@ -142,7 +137,7 @@ def save_pot(pot: dict, user: Annotated[User,Depends(get_current_user)]):
         if st:
             return st
         else:
-            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
@@ -182,7 +177,7 @@ def get_last_log(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
-@app.get("/user/pots/pot/logs", tags=["Log"])
+@app.get("/user/pots/pot/logs", tags=["Logs"])
 def get_logs(pot_dict : dict , user: Annotated[User,Depends(get_current_user)]):
     if user:
         pot = pot_repository.create_pot(pot_dict)
@@ -194,25 +189,25 @@ def get_logs(pot_dict : dict , user: Annotated[User,Depends(get_current_user)]):
 @app.get("/user/pots/pot/logs/log", tags=["Log"])
 def save_log(log: dict):
 
-    st = log_repository.save_log(log)
+    st = log_repository.save(log)
     if st:
         return st
     else:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
 
-@app.post("/user", tags=["User"])
+@app.post("/users/user", tags=["User"])
 def update_username(old_username: str, new_username, user: Annotated[User,Depends(get_current_user)]):
     if user:
         st = user_repository.update_user(user.id, "username", old_username, new_username)
         if st:
             return st
         else:
-            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     
-@app.post("/user", tags=["User"])
+@app.post("/users/user", tags=["User"])
 def update_password(old_password: str, new_password: str, user: Annotated[User,Depends(get_current_user)]):
     if user:
         old_pw_hash = hash_password(old_password)
@@ -221,13 +216,13 @@ def update_password(old_password: str, new_password: str, user: Annotated[User,D
         if st:
             return st
         else:
-            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     
 
 
-@app.post("/user", tags=["User"])
+@app.post("/users/user", tags=["User"])
 def update_mail(old_mail: str, new_mail: str, user: Annotated[User,Depends(get_current_user)]):
     if user:
 
@@ -235,15 +230,49 @@ def update_mail(old_mail: str, new_mail: str, user: Annotated[User,Depends(get_c
         if st:
             return st
         else:
-            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 #modificar y elimnar pots
+@app.post("/users/user/pots/pot", tags=["Pot"])
+def delete_pot(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
+    if user:
+        st = pot_repository.delete(pot_dict["id"])
+        if st:
+            return st
+        else:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)     
+
+@app.post("/users/user", tags=["User"])
+def delete_user(user: Annotated[User,Depends(get_current_user)]):
+    if user:
+        st = pot_repository.delete(user.id)
+        if st:
+            return st
+        else:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED) 
 
 
 
+#FALTA LA VALIDACION DE QUE YA EXISTE UN USUARIO EN LA DB.
 
+
+@app.post("/users/", tags=["User"])
+def create_user(user: dict):
+    if "password" in user:
+        user["password"] = hash_password(user["password"])
+        print(user["password"])
+    st = user_repository.save(user)
+
+    if st:
+        return st
+    else:
+        raise HTTPException(status_code=status.HTTP_418_IM_A_TEAPOT, detail="No se pudo crear el usuario")
 
 # def common_parameters(id: str, edad: int, nombre: str) -> dict:
 #     return { "id": id, "edad": edad, "nombre": nombre}
