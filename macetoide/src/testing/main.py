@@ -229,7 +229,8 @@ def update_mail(old_mail: str, new_mail: str, user: Annotated[User,Depends(get_c
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-#modificar y elimnar pots
+#modificar pots
+
 @app.post("/users/user/pots/pot", tags=["Pot"])
 def delete_pot(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
     if user:
