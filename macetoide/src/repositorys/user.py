@@ -24,7 +24,7 @@ class UserRepository(Repository):
 
     def get_by_username(self, username) -> User:
         u = db.get_by_username(username)
-        print("USER REPO U :"u)
+        print("USER REPO U :", u)
         if u is None:
             return None
         pots = db.get_user_pots(u["id"])
