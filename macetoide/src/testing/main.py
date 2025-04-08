@@ -27,13 +27,10 @@ from models.server_credentials.security import (
     hash_password,
     verify_password,
 )
-
-from repositorys.user import instance as user_repository
-from repositorys.pot import instance as pot_repository
-from repositorys.log import instance as log_repository
-from repositorys.plant import instance as plant_repository
-
-
+from repositories.user import instance as user_repository
+from repositories.pot import instance as pot_repository
+from repositories.log import instance as log_repository
+from repositories.plant import instance as plant_repository
 from models.server_credentials.auth import LoginForm
 
 
@@ -81,7 +78,6 @@ def create_token(user):
     return token_jwt
 
 
-
 def get_current_user(request: Request):
     token = request.cookies.get("token")
 
@@ -110,11 +106,9 @@ def get_current_user(request: Request):
     return user
 
 
-
 @app.get("/user/email", tags=["User"])
 def get_user_email(user: Annotated[User, Depends(get_current_user)]):
     return user.mail
-
 
 
 @app.get("/user/pots", tags=["Pots"])
@@ -138,10 +132,13 @@ def save_pot(pot: dict, user: Annotated[User,Depends(get_current_user)]):
 
 
 @app.get("/user/pots/pot", tags=["Pot"])
-def get_pot_by_id(pot_id: dict, user: Annotated[User,Depends(get_current_user)]):
+def get_pot_by_id(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
     if user:
-        id = pot_id["pot_id"]
-        return pot_repository.get_by_id(id)
+        pot = pot_repository.create_obj(pot_dict)
+        p = pot_repository.get_by_id(pot.id)
+        if p is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        return p
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
@@ -149,10 +146,11 @@ def get_pot_by_id(pot_id: dict, user: Annotated[User,Depends(get_current_user)])
 @app.get("/user/pots/pot/plant", tags=["Plant"])
 def get_plant_by_id(plant_dict: dict, user: Annotated[User,Depends(get_current_user)]):
     if user:
-        plant = plant_repository.get_by_id(plant_dict["id"])
-        if plant is None:
+        plant = plant_repository.create_obj(plant_dict)
+        p = plant_repository.get_by_id(plant.id)
+        if p is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-        return plant
+        return p
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     
@@ -168,7 +166,7 @@ def get_all_plants(user: Annotated[User,Depends(get_current_user)]):
 @app.get("/user/pots/pot/logs/log", tags=["Log"])
 def get_last_log(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
     if user:
-        pot = pot_repository.create_pot(pot_dict)
+        pot = pot_repository.create_obj(pot_dict)
         return log_repository.get_last_log(pot)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)

@@ -13,19 +13,21 @@ from typing import Optional
 import bcrypt
 
 from models.repository.repository import Repository
+from repositories.pot import instance as pot_repository
 
 
 class UserRepository(Repository):
 
-    def __init__(self):
+    def __init__(self, pot_repository):
         super().__init__()
         self.table = "user"
+        self.pot_repository = pot_repository
 
     def get_by_username(self, username) -> User:
         u = self.db.get_by_username(username)
         if u is None:
             return None
-        pots = self.db.get_user_pots(u["id"])
+        pots = pot_repository.get_user_pots(u["id"])
         user = User(u["id"], u["username"], u["mail"], u["password"], pots)
         return user
      
@@ -34,7 +36,7 @@ class UserRepository(Repository):
         return self.db.validate_user(username)
     
     def create_obj(self, data: dict):
-        pots = 
+        pots = pot_repository.get_user_pots(data["id"])
         user = User(data["id"], data["username"], data["mail"], data["password"])
         return user
 
@@ -43,5 +45,5 @@ class UserRepository(Repository):
     
     
 
-instance = UserRepository()
+instance = UserRepository(pot_repository)
 

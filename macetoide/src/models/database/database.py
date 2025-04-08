@@ -532,14 +532,9 @@ class FakeDatabase():
         return u_pots
 
     def get_last_log(self, pot_id):
-        logs = []
-        for log in self.logs:
-            if log["pot_id"] == pot_id:
-                logs.append(log)
-        if len(logs)==0:
-            return []
-        else:
-            return logs[-1]
+        logs = [log for log in self.logs if log["pot_id"] == pot_id]
+        return logs[-1] if logs else None
+
     
     def get_all_logs(self, pot_id):
         logs = []
@@ -548,6 +543,15 @@ class FakeDatabase():
                 logs.append(log)
         return logs
 
+
+    def update_pot_last_checked():
+        pass
+
+    def update_pot_id_plant():
+        pass
+
+    def update_pot_analysis_time():
+        pass
 
 # falta user (validaciones)
 database = FakeDatabase()

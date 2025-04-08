@@ -20,35 +20,21 @@ class PotRepository(Repository):
         super().__init__()
         self.table = "pot"
 
-
-
-    def create_objs(data: dict):
+    def create_objs(data: dict) -> Pot:
         pot = Pot(data["id"], data["name"], data["id_plant"], data["analysis_time"], data["id_user"], data["last_checked"] )
         return pot
         
+    def get_user_pots(self, user_id) -> list:
+        pots: list = []
+        p_dict = self.db.get_user_pots(user_id)
+        for i in p_dict:
+            pots.append(self.create_obj(i))
+        return pots
 
-
-    def get_pots(self, user_id: int) -> list[dict]:
-        pots_dict = self.db.get_user_pots(user_id)
-        user_pots: list[dict] = []
-
-        for pot in pots_dict:
-            if pot["id_user"] == user_id:
-                new = Pot(
-                    pot["id"],
-                    pot["name"],
-                    pot["id_plant"],
-                    pot["analysis_time"],
-                    pot["user"],
-                    pot["last_checked"],
-                )
-                user_pots.append(new.get_dto())
-        return user_pots
-
-    def new_pot(pot: Pot):
+    def new_pot(self, pot: Pot):
         return self.db.create_pot(pot)
 
-    def save_pot(pot: dict):
+    def save_pot(self, pot: dict):
         return self.db.save(pot)
 
     def set_last_checked(self, pot, new_time):
@@ -59,6 +45,9 @@ class PotRepository(Repository):
 
     def change_analysis_time(self, pot, new_analysis_time):
         return self.db.update_pot_analysis_time(pot.id, new_analysis_time)
+    
+    def update_timestamp_modifier(self):
+        pass
 
 
 instance = PotRepository()

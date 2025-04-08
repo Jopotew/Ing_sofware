@@ -1,5 +1,6 @@
 from models.repository.repository import Repository
 from models.entities.log import Log
+from models.entities.pot import Pot
 
 
 class LogRepository(Repository):
@@ -29,17 +30,22 @@ class LogRepository(Repository):
                 print("Este log no pertenece al pot, Acceso cukatrap")
 
         return pot.logs
+    
 
-    def get_last_log(self, pot): 
+    def get_pot_logs(self, pot: Pot, quantity: int = None):
+        logs = self.db.get_all_logs(pot.id)
+        if quantity is None:
+            return logs
+        else:
+            return logs[-quantity:] 
+        
+        
+    def get_last_log(self, pot: Pot) -> Log: 
         log_d = self.db.get_last_log(pot.id)
-        if len(log_d) == 0:
+        if log_d is None:
             return None
-        for log in pot.logs:
-            if log_d["id"] == log.id:
-                return log
-        new_l = Log(log_d["id"],log_d["pot_id"], log_d["plant_id"],log_d["temperature"],log_d["soil_humidity"],log_d["air_humidity"],log_d["image_path"],log_d["expert_advice"])
-        pot.logs.append(new_l)
-        return new_l
+        log = self.create_obj(log_d)
+        return log
     
 
     
