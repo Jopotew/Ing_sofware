@@ -1,16 +1,7 @@
-AGREGUE UN ID A LAS CLASES DE ENTITIES PARA QUE DESP SEA MAS FACIL BUSCARSE EN LA BD...
+- Modificar Repositories para que incluyan una devolcion de objetos. 
+    - Clase user tiene que agregar pots como objs a su obj(user)
+    - Modificar Logs
+    - Ver las funcs de la bd para que sea mas simple
 
 
-SEGUIR CON FASTAPI MAIN. ARMAR BIEN LAS CLASES PARA SER USADAS Y PROBAR
-BUENOS AVANCES JP VOS PODES
-CONFIA 
-
-COSAS QUE FALTAN
-    - Comprar sensor analogico de suelo
-    - Probar raspberry componentes
-    - Probar la bd en la raspberry
-    - Crear la clase de BD
-    - Testear que ande todoooo
-
-
-VER COMO Y SI USAR LA BOMBA DE AGUA
+- Modificar Main para devolucion de objetos.

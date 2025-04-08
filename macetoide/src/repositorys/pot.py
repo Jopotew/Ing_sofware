@@ -21,9 +21,11 @@ class PotRepository(Repository):
         self.table = "pot"
 
 
-    def create_pot(dict: dict):
-        pot = Pot(dict["id"], dict["name"], dict["id_plant"], dict["analysis_time"], dict["id_user"], dict["last_checked"] )
+
+    def create_objs(data: dict):
+        pot = Pot(data["id"], data["name"], data["id_plant"], data["analysis_time"], data["id_user"], data["last_checked"] )
         return pot
+        
 
 
     def get_pots(self, user_id: int) -> list[dict]:

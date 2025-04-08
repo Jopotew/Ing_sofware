@@ -30,11 +30,12 @@ class UserRepository(Repository):
         return user
      
 
-    def new():
-        pass
+    def validate_user(self, username: str):
+        return self.db.validate_user(username)
     
-    def create_user(self, user_dict):
-        user = User(user_dict["id"], user_dict["username"], user_dict["mail"], user_dict["password"])
+    def create_obj(self, data: dict):
+        pots = 
+        user = User(data["id"], data["username"], data["mail"], data["password"])
         return user
 
     def update_user(self, user_id, field, old_data, new_data):

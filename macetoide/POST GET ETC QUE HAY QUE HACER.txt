@@ -1,18 +1,2 @@
-
-
-login -> /GET/ get_user(credenciales) -> pasarlo por ufh-8
-
-sing in -> /POST/ save_user(credenciales) -> pasarlo por ufh-8
-
-buscar todas las macetas del user -> /GET/ all_user_pots(user_id) -> potdto (?
-
-agregar maceta al user -> /POST/ save_pot(user_id, pot_dict) -> bool
-
-buscar ultimo log -> /GET/ search_last_log(pot_id) -> logdto(?
-
-hacer update de la informacion -> /POST/ new_log(pot_id) -> bool
-
-ARCHIVO DE EXCEPCIONES
-
-
-
+que nivel
+todo hecho.

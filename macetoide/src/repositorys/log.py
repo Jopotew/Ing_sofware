@@ -22,7 +22,7 @@ class LogRepository(Repository):
                     log["air_humidity"],
                     log["image_path"],
                     log["expert_advice"],
-                )
+                ) 
                 pot.add_log(new)
 
             else:
@@ -30,7 +30,7 @@ class LogRepository(Repository):
 
         return pot.logs
 
-    def get_last_log(self, pot): #controlar que se haya actualizado sino esta en pot agregarlo
+    def get_last_log(self, pot): 
         log_d = self.db.get_last_log(pot.id)
         if len(log_d) == 0:
             return None

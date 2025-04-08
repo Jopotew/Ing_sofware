@@ -518,6 +518,12 @@ class FakeDatabase():
                 return user
         return None
 
+    def validate_user(self, username) -> bool:
+        for user in self.users:
+            if user["username"] == username:
+                return True
+        return False
+
     def get_user_pots(self, user_id):
         u_pots: list = []
         for pot in self.pots:

@@ -146,17 +146,19 @@ def get_pot_by_id(pot_id: dict, user: Annotated[User,Depends(get_current_user)])
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
-@app.get("/user/pots/pot/plants/plant", tags=["Plant"])
-def get_plant_by_id(plant_id: dict, user: Annotated[User,Depends(get_current_user)]):
+@app.get("/user/pots/pot/plant", tags=["Plant"])
+def get_plant_by_id(plant_dict: dict, user: Annotated[User,Depends(get_current_user)]):
     if user:
-        id = plant_id["plant_id"]
-        return plant_repository.get_by_id(plant_id)
+        plant = plant_repository.get_by_id(plant_dict["id"])
+        if plant is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        return plant
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     
 
 @app.get("/plants", tags=["Plants"])
-def get_plants(user: Annotated[User,Depends(get_current_user)]):
+def get_all_plants(user: Annotated[User,Depends(get_current_user)]):
     if user:
         return plant_repository.get_all()
     else:
@@ -220,7 +222,6 @@ def update_password(old_password: str, new_password: str, user: Annotated[User,D
 @app.post("/users/user", tags=["User"])
 def update_mail(old_mail: str, new_mail: str, user: Annotated[User,Depends(get_current_user)]):
     if user:
-
         st = user_repository.update_user(user.id, "mail", old_mail, new_mail)
         if st:
             return st
@@ -230,8 +231,22 @@ def update_mail(old_mail: str, new_mail: str, user: Annotated[User,Depends(get_c
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 #modificar pots
+@app.post("/users/user/pots/pot/", tags=["Pot"])
+def update_pot(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
+    if user:
+        st = pot_repository.save(pot_dict["id"])
+        if st:
+            return st
+        else:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    else:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED) 
 
-@app.post("/users/user/pots/pot", tags=["Pot"])
+
+
+
+
+@app.post("/users/user/pots/pot/", tags=["Pot"])
 def delete_pot(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
     if user:
         st = pot_repository.delete(pot_dict["id"])
@@ -254,15 +269,10 @@ def delete_user(user: Annotated[User,Depends(get_current_user)]):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED) 
 
 
-
-#FALTA LA VALIDACION DE QUE YA EXISTE UN USUARIO EN LA DB.
-def validate_user(username: str):
-    pass
-
 @app.post("/users/", tags=["User"])
 def create_user(user: dict):
-    if not validate_user(user["username"]):
-        pass
+    if not user_repository.validate_user(user["username"]):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Nombre de Usuario ya en uso.")
     if "password" in user:
         user["password"] = hash_password(user["password"])
     st = user_repository.save(user)

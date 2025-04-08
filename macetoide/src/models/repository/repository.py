@@ -24,14 +24,19 @@ class Repository:
         return db.delete(id, self.table)
 
     def get_all(self):
-        return db.get_all(self.table)
+        objs: list = []
+        results = db.get_all(self.table)
+        for i in results:
+            objs.append(self.create_obj(i))
+        return objs
     
-    def get_by_id(self, id):
-
+    def get_by_id(self, id): 
         i_dict = db.get_by_id(self.table, id)
-        return i_dict
+        obj = self.create_obj(i_dict)
+        return obj
         
-        
+    def create_obj(data: dict):
+        pass    
     
 
     
