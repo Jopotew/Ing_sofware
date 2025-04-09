@@ -1,5 +1,5 @@
 import pymysql
-
+from typing import Optional
 
 class DatabaseConnection:
 
@@ -287,11 +287,11 @@ class FakeDatabase():
         
 
         self.users = [
-        {"id": 1, "username": "juan", "password": "", "mail": "juan@123.com"},
-        {"id": 2, "username": "maria", "password": "", "mail": "maria@correo.com"},
-        {"id": 3, "username": "luis", "password": "", "mail": "luis@example.com"},
-        {"id": 4, "username": "ana", "password": "", "mail": "ana@dominio.com"},
-        {"id": 5, "username": "pedro", "password": "", "mail": "pedro@mail.com"},
+        {"id": 1, "username": "juan", "password": "", "mail": "juan@123.com","last_modified": 0},
+        {"id": 2, "username": "maria", "password": "", "mail": "maria@correo.com","last_modified": 0},
+        {"id": 3, "username": "luis", "password": "", "mail": "luis@example.com","last_modified": 0},
+        {"id": 4, "username": "ana", "password": "", "mail": "ana@dominio.com","last_modified": 0},
+        {"id": 5, "username": "pedro", "password": "", "mail": "pedro@mail.com","last_modified": 0},
         ]
 
         self.pots = [
@@ -302,6 +302,7 @@ class FakeDatabase():
                 "analysis_time": "08:00",
                 "last_checked": "09:00",
                 "user_id": 1,
+                "last_modified": 0
             },
             {
                 "id": 2,
@@ -310,6 +311,7 @@ class FakeDatabase():
                 "analysis_time": "08:10",
                 "last_checked": "09:10",
                 "user_id": 4,
+                "last_modified": 0
             },
             {
                 "id": 3,
@@ -318,6 +320,7 @@ class FakeDatabase():
                 "analysis_time": "08:20",
                 "last_checked": "09:20",
                 "user_id": 3,
+                "last_modified": 0
             },
             {
                 "id": 4,
@@ -326,6 +329,7 @@ class FakeDatabase():
                 "analysis_time": "08:30",
                 "last_checked": "09:30",
                 "user_id": 2,
+                "last_modified": 0
             },
             {
                 "id": 5,
@@ -334,6 +338,7 @@ class FakeDatabase():
                 "analysis_time": "08:40",
                 "last_checked": "09:40",
                 "user_id": 5,
+                "last_modified": 0
             },
         ]
 
@@ -511,7 +516,6 @@ class FakeDatabase():
 
         return False
   
-
     def get_by_username(self, username):
         for user in self.users:
             if user["username"] == username:
@@ -531,16 +535,21 @@ class FakeDatabase():
                 u_pots.append(pot)
         return u_pots
 
-    def get_last_log(self, pot_id):
+
+
+    def get_last_log(self, pot_id) -> Optional[dict]:
         logs = [log for log in self.logs if log["pot_id"] == pot_id]
         return logs[-1] if logs else None
 
     
-    def get_all_logs(self, pot_id):
-        logs = []
-        for log in self.logs:
-            if log["pot_id"] == pot_id:
-                logs.append(log)
+    def get_all_logs(self, pot_id: int, limit: int = None) -> list:
+    
+        logs = [log for log in self.logs if log["pot_id"] == pot_id]
+
+        logs.sort(key=lambda log: log["id_log"])
+
+        if limit is not None:
+            logs = logs[-limit:]  
         return logs
 
 
@@ -551,6 +560,9 @@ class FakeDatabase():
         pass
 
     def update_pot_analysis_time():
+        pass
+
+    def  update_timestamp_modifier():
         pass
 
 # falta user (validaciones)

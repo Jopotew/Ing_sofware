@@ -19,7 +19,7 @@ class Log:
             soil_humidity:float, 
             air_humidity: float, 
             image_path: str, 
-            expert_advice: str 
+            expert_advice: str, 
             ):
         
        

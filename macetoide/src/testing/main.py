@@ -193,7 +193,7 @@ def save_log(log: dict):
 @app.post("/users/user", tags=["User"])
 def update_username(old_username: str, new_username, user: Annotated[User,Depends(get_current_user)]):
     if user:
-        st = user_repository.update_user(user.id, "username", old_username, new_username)
+        st = user_repository.update_user(user, "username", old_username, new_username)
         if st:
             return st
         else:
@@ -206,11 +206,12 @@ def update_password(old_password: str, new_password: str, user: Annotated[User,D
     if user:
         old_pw_hash = hash_password(old_password)
         new_pw_hash = hash_password(new_password)
-        st = user_repository.update_user(user.id, "password", old_pw_hash, new_pw_hash)
+        st = user_repository.update_user(user, "password", old_pw_hash, new_pw_hash)
         if st:
             return st
         else:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+           # st es  un dict  con el error           
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = st)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     

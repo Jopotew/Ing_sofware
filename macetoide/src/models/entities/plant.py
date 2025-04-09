@@ -1,4 +1,5 @@
 from models.entities.open_ai_api import Chatbot
+from datetime import datetime
 
 
 class Plant:
@@ -6,7 +7,7 @@ class Plant:
     Class that represents a plant in the pot system.
     """
 
-    def __init__(self, name: str, species: str = None, description: str = None):
+    def __init__(self, name: str, last_modified, species: str = None, description: str = None):
         """
         Initializes a new plant with its name, species, and an optional description.
         """
@@ -14,23 +15,16 @@ class Plant:
         self.name: str = name
         self.species: str = species
         self.description: str = description
-        #self.manage_info()
+        self.last_modified = last_modified
 
-    def manage_info(self):
-        chatbot = Chatbot()
-        if self.species == None:
-            self._update_species(chatbot.ask_species(self.name))
-        if self.description == None:
-            self._update_description(chatbot.ask_description(self.name, self.species))
+    def update_modified(self):
+        self.last_modified = datetime.now()       
 
-    def _update_description(self, new_description: str):
-        """
-        Updates the plant's description.
-        """
-        self.description = new_description
-
-    def _update_species(self, new_species: str):
-        """
-        Updates the plant's species.
-        """
-        self.species = new_species
+    def get_dto(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "species": self.species,
+            "description": self.description,
+            "last_modified": self.last_modified
+        }

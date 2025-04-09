@@ -1,7 +1,7 @@
 from models.entities.log import Log
 from models.entities.user import User
 from models.entities.plant import Plant
-from time import time
+from datetime import datetime
 
 
 class Pot:
@@ -14,14 +14,12 @@ class Pot:
         id: int,
         name: str,
         plant_id: int,
-        analysis_time: time,
+        analysis_time: datetime,
         user_id: int,
-        last_checked: time
-        
-
-
-        
+        last_checked: datetime,
+        last_modified: int
     ):
+        
         """
         Initializes a new pot with data and related objects.
         """
@@ -32,23 +30,20 @@ class Pot:
         self.analysis_time = analysis_time
         self.user_id: int = user_id
         self.last_checked = last_checked
+        self.last_modified: int = last_modified
         self.logs: list[Log] = []
 
     def set_last_checked(self):
-        self.last_checked = time.now()
+        self.last_checked = datetime.now()
 
     def link_plant_id(self, new_plant_id):
-        """
-        Links a new plant object to the pot.
-        """
         self.plant_id = new_plant_id
 
     def link_analysis_time(self, new_time):
-        """
-        Links a new analysis time object to the pot.
-        """
         self.analysis_time = new_time
 
+    def update_modified(self):
+        self.last_modified = datetime.now()   
 
     def add_log(self, log: Log):
         self.logs.append(log)
@@ -57,12 +52,13 @@ class Pot:
         return self.logs[-1]
     
 
-    def get_dto(self):
+    def get_dto(self) -> dict:
         return {
             "id": self.id,
             "name": self.name,
             "analysis_time": self.analysis_time,
             "plant_id": self.plant_id,
-            "user_id": self.user.id,
+            "user_id": self.user_id,
             "last_checked": self.last_checked,
+            "last_modified": self.last_modified
         }

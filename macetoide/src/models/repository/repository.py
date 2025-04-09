@@ -35,8 +35,7 @@ class Repository:
         obj = self.create_obj(i_dict)
         return obj
         
-    def create_obj(data: dict):
+    def create_obj(self, data: dict):
         pass    
-    
 
     

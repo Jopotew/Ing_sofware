@@ -6,49 +6,35 @@ import time
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Cargar las variables de entorno del archivo .env
+
 load_dotenv()
 
 
 class PlantAssistant:
-    """
-    Clase para interactuar con el asistente personalizado de OpenAI usando Assistant API.
-    Envía datos de la planta y recibe recomendaciones con el personaje configurado.
-    """
 
     def __init__(self):
-        """
-        Inicializa la clase con la clave API y el ID del asistente.
-        """
+       
         self.api_key = os.getenv("OPENAI_API_KEY")
         self.assistant_id = "asst_qysrgPulnpfwd76CsDwMLCZZ".strip()
         openai.api_key = self.api_key
 
+
     def get_recommendation(
         self, temperature: float, soil_humidity: float, air_humidity: float
     ) -> str:
-        """
-        Envía los datos al asistente y devuelve la recomendación en personaje.
-        """
 
         try:
-            # Crear un hilo de conversación
             thread = openai.beta.threads.create()
-
-            # Formar el mensaje solo con los datos
             message = f"Temperatura: {temperature}°C\nHumedad del Suelo: {soil_humidity}%\nHumedad del aire: {air_humidity}%"
 
-            # Agregar el mensaje al thread
             openai.beta.threads.messages.create(
                 thread_id=thread.id, role="user", content=message
             )
 
-            # Ejecutar el asistente configurado
             run = openai.beta.threads.runs.create(
                 thread_id=thread.id, assistant_id=self.assistant_id
             )
 
-            # Esperar a que el run termine (POLLING)
             while True:
                 run_status = openai.beta.threads.runs.retrieve(
                     thread_id=thread.id, run_id=run.id
@@ -57,12 +43,10 @@ class PlantAssistant:
                     break
                 elif run_status.status in ["failed", "cancelled"]:
                     return "Error: La ejecución del asistente falló."
-                time.sleep(1)  # Espera 1 segundo antes de volver a consultar
-
-            # Obtener la respuesta del asistente
+                time.sleep(1)  
+           
             messages = openai.beta.threads.messages.list(thread_id=thread.id)
 
-            # Buscar el mensaje del assistant
             for msg in messages.data:
                 if msg.role == "assistant":
                     return msg.content[0].text.value.strip()
@@ -74,30 +58,14 @@ class PlantAssistant:
 
 
 class Chatbot:
-    """
-    Clase OpenAIChatbot para interactuar con la API de OpenAI.
-
-    Atributos:
-        api_key (str): Clave de API de OpenAI.
-        system_prompt (str): Mensaje del sistema que define el estilo de las respuestas.
-        history (list): Historial de mensajes de la conversación.
-    """
-
     def __init__(
         self,
     ):
-        """
-        Inicializa el chatbot con API Key y configuración de TTS.
-
-        Args:
-            system_prompt (str, opcional): Mensaje de sistema para definir el tono de las respuestas.
-            audio_folder (Path, opcional): Carpeta donde se guardarán los audios.
-        """
         self.api_key = os.getenv("OPENAI_API_KEY")
         if not self.api_key:
             raise ValueError("No se encontró la API_KEY en las variables de entorno.")
 
-        openai.api_key = self.api_key  # Configura la API Key
+        openai.api_key = self.api_key  
 
         self.system_prompt = """
                             Eres un científico experto especializado en Macetología llamado Marcelo Larrondo Tercero Serrano Martinez.
@@ -123,17 +91,6 @@ class Chatbot:
     def ask(
         self, user_message: str, temperature: float = 0.7, max_tokens: int = 350
     ) -> str:
-        """
-        Envía un mensaje del usuario a la API de OpenAI y devuelve la respuesta generada.
-
-        Args:
-            user_message (str): Mensaje del usuario.
-            temperature (float, opcional): Controla la aleatoriedad de la respuesta.
-            max_tokens (int, opcional): Número máximo de tokens en la respuesta.
-
-        Returns:
-            str: Respuesta generada por ChatGPT.
-        """
         if not user_message:
             raise ValueError("El mensaje del usuario no puede estar vacío.")
 
@@ -155,11 +112,9 @@ class Chatbot:
 
         return answer
 
+
     def ask_species(self, plant_name: str) -> str:
-        """
-        Asks the AI to identify the species of a plant by its common name.
-        Returns only the species name.
-        """
+
         prompt = (
             f"Dime la especie científica de la planta llamada '{plant_name}'. "
             f"Solo responde el nombre de la especie, sin explicaciones ni detalles extras."
@@ -175,10 +130,8 @@ class Chatbot:
         species = response.choices[0].message.content.strip()
         return species
 
+
     def ask_description(self, plant_name: str, species: str) -> str:
-        """
-        Asks the AI to generate a scientific and humorous description of the plant.
-        """
         prompt = (
             f"Genera una descripción científica sobre la planta '{plant_name}' "
             f"de la especie '{species}'. No uses más de 350 caracteres."
@@ -195,3 +148,5 @@ class Chatbot:
         return description
 
 
+instance_chatbot = Chatbot() 
+instance_assistant = PlantAssistant()

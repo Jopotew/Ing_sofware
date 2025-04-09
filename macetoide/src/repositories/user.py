@@ -13,7 +13,7 @@ from typing import Optional
 import bcrypt
 
 from models.repository.repository import Repository
-from repositories.pot import instance as pot_repository
+from repositories.pot import PotRepository, instance as pot_repository
 
 
 class UserRepository(Repository):
@@ -21,29 +21,80 @@ class UserRepository(Repository):
     def __init__(self, pot_repository):
         super().__init__()
         self.table = "user"
-        self.pot_repository = pot_repository
+        self.pot_repository:PotRepository = pot_repository
 
     def get_by_username(self, username) -> User:
-        u = self.db.get_by_username(username)
-        if u is None:
-            return None
-        pots = pot_repository.get_user_pots(u["id"])
-        user = User(u["id"], u["username"], u["mail"], u["password"], pots)
-        return user
-     
+        try:
+            u = self.db.get_by_username(username)
+            if u is None:
+                return {
+                    "Function": "get_by_username()",
+                    "status": False,
+                    "detail": f"No se encontró ningún usuario con username '{username}'"
+                }
 
+            pots = self.pot_repository.get_user_pots(u["id"])
+            user = User(u["id"], u["username"], u["mail"], u["password"], pots)
+            return user
+
+        except Exception as e:
+            return {
+                "Function": "get_by_username()",
+                "status": False,
+                "detail": f"Excepción al obtener usuario: {str(e)}"
+            }
+     
     def validate_user(self, username: str):
         return self.db.validate_user(username)
     
     def create_obj(self, data: dict):
         pots = pot_repository.get_user_pots(data["id"])
-        user = User(data["id"], data["username"], data["mail"], data["password"])
+        user = User(data["id"], data["username"], data["mail"], data["password"], pots, data["last_modified"])
         return user
 
-    def update_user(self, user_id, field, old_data, new_data):
-        return self.db.update_user(user_id, field, old_data, new_data)
-    
-    
+    def update_user(self, user: User, field: str, old_data: str, new_data: str) -> dict:
+
+        db_user = self.db.get_by_username(user.username)
+
+        if not db_user:
+            return {    
+                "function": "update_user()",
+                "status": False,
+                "detail": "Usuario no encontrado en la base de datos"
+            }
+
+        if field not in ["username", "password"]:
+            return {
+                "function": "update_user()",
+                "status": False,
+                "detail": f"Campo inválido: {field}"
+            }
+
+        if old_data != db_user[field]:
+            return {
+                "function": "update_user()",
+                "status": False,
+                "detail": f"El valor anterior de '{field}' no coincide"
+            }
+
+        if field == "username":
+            user.username = new_data
+        elif field == "password":
+            user.password = new_data
+
+        user.update_modified()
+        success = self.db.save(user.get_dict())
+
+        if success:
+            return success  
+        
+        return {
+            "function": "update_user()",
+            "status": False,
+            "detail": "Error al guardar en la base de datos"
+        }
+
+
 
 instance = UserRepository(pot_repository)
 
