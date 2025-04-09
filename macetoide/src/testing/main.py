@@ -56,7 +56,6 @@ def home():
 @app.post("/token", tags=["Auth"])
 def login(response: Response, login_form: LoginForm):
     user = user_repository.get_by_username(login_form.username)
-    print(user)
     if user is None:
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
 
