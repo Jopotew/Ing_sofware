@@ -51,7 +51,9 @@ token_exp = 3
 def home():
     return {"Retorno a Home"}
 
-#Modificar entidades para q tamb exista BASEMODEL en si, esas son las que se usn en las func. 
+
+# Modificar entidades para q tamb exista BASEMODEL en si, esas son las que se usn en las func.
+
 
 @app.post("/token", tags=["Auth"])
 def login(response: Response, login_form: LoginForm):
@@ -60,8 +62,8 @@ def login(response: Response, login_form: LoginForm):
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
 
     if not verify_password(login_form.password, user.password):
-        print("USER IN DB PW",user.password)
-        print("USER IN LOGIN FORM PW",login_form.password)
+        print("USER IN DB PW", user.password)
+        print("USER IN LOGIN FORM PW", login_form.password)
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
 
     token = create_token(user)
@@ -111,15 +113,16 @@ def get_user_email(user: Annotated[User, Depends(get_current_user)]):
 
 
 @app.get("/user/pots", tags=["Pots"])
-def get_user_pots(user: Annotated[User,Depends(get_current_user)]):
+def get_user_pots(user: Annotated[User, Depends(get_current_user)]):
     if user:
         pots = pot_repository.get_pots(user.id)
         return pots
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
+
 @app.post("/user/pots", tags=["Pots"])
-def save_pot(pot: dict, user: Annotated[User,Depends(get_current_user)]):
+def save_pot(pot: dict, user: Annotated[User, Depends(get_current_user)]):
     if user:
         st = pot_repository.save_pot(pot)
         if st:
@@ -131,7 +134,7 @@ def save_pot(pot: dict, user: Annotated[User,Depends(get_current_user)]):
 
 
 @app.get("/user/pots/pot", tags=["Pot"])
-def get_pot_by_id(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
+def get_pot_by_id(pot_dict: dict, user: Annotated[User, Depends(get_current_user)]):
     if user:
         pot = pot_repository.create_obj(pot_dict)
         p = pot_repository.get_by_id(pot.id)
@@ -143,7 +146,7 @@ def get_pot_by_id(pot_dict: dict, user: Annotated[User,Depends(get_current_user)
 
 
 @app.get("/user/pots/pot/plant", tags=["Plant"])
-def get_plant_by_id(plant_dict: dict, user: Annotated[User,Depends(get_current_user)]):
+def get_plant_by_id(plant_dict: dict, user: Annotated[User, Depends(get_current_user)]):
     if user:
         plant = plant_repository.create_obj(plant_dict)
         p = plant_repository.get_by_id(plant.id)
@@ -152,10 +155,10 @@ def get_plant_by_id(plant_dict: dict, user: Annotated[User,Depends(get_current_u
         return p
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    
+
 
 @app.get("/plants", tags=["Plants"])
-def get_all_plants(user: Annotated[User,Depends(get_current_user)]):
+def get_all_plants(user: Annotated[User, Depends(get_current_user)]):
     if user:
         return plant_repository.get_all()
     else:
@@ -163,7 +166,7 @@ def get_all_plants(user: Annotated[User,Depends(get_current_user)]):
 
 
 @app.get("/user/pots/pot/logs/log", tags=["Log"])
-def get_last_log(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
+def get_last_log(pot_dict: dict, user: Annotated[User, Depends(get_current_user)]):
     if user:
         pot = pot_repository.create_obj(pot_dict)
         return log_repository.get_last_log(pot)
@@ -172,7 +175,7 @@ def get_last_log(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]
 
 
 @app.get("/user/pots/pot/logs", tags=["Logs"])
-def get_logs(pot_dict : dict , user: Annotated[User,Depends(get_current_user)]):
+def get_logs(pot_dict: dict, user: Annotated[User, Depends(get_current_user)]):
     if user:
         pot = pot_repository.create_pot(pot_dict)
         return log_repository.get_logs(pot)
@@ -191,7 +194,9 @@ def save_log(log: dict):
 
 
 @app.post("/users/user", tags=["User"])
-def update_username(old_username: str, new_username, user: Annotated[User,Depends(get_current_user)]):
+def update_username(
+    old_username: str, new_username, user: Annotated[User, Depends(get_current_user)]
+):
     if user:
         st = user_repository.update_user(user, "username", old_username, new_username)
         if st:
@@ -200,9 +205,14 @@ def update_username(old_username: str, new_username, user: Annotated[User,Depend
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    
+
+
 @app.post("/users/user", tags=["User"])
-def update_password(old_password: str, new_password: str, user: Annotated[User,Depends(get_current_user)]):
+def update_password(
+    old_password: str,
+    new_password: str,
+    user: Annotated[User, Depends(get_current_user)],
+):
     if user:
         old_pw_hash = hash_password(old_password)
         new_pw_hash = hash_password(new_password)
@@ -210,15 +220,16 @@ def update_password(old_password: str, new_password: str, user: Annotated[User,D
         if st:
             return st
         else:
-           # st es  un dict  con el error           
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail = st)
+            # st es  un dict  con el error
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=st)
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    
 
 
 @app.post("/users/user", tags=["User"])
-def update_mail(old_mail: str, new_mail: str, user: Annotated[User,Depends(get_current_user)]):
+def update_mail(
+    old_mail: str, new_mail: str, user: Annotated[User, Depends(get_current_user)]
+):
     if user:
         st = user_repository.update_user(user.id, "mail", old_mail, new_mail)
         if st:
@@ -228,9 +239,10 @@ def update_mail(old_mail: str, new_mail: str, user: Annotated[User,Depends(get_c
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
-#modificar pots
+
+# modificar pots
 @app.post("/users/user/pots/pot/", tags=["Pot"])
-def update_pot(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
+def update_pot(pot_dict: dict, user: Annotated[User, Depends(get_current_user)]):
     if user:
         st = pot_repository.save(pot_dict["id"])
         if st:
@@ -238,14 +250,11 @@ def update_pot(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
         else:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     else:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED) 
-
-
-
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
 @app.post("/users/user/pots/pot/", tags=["Pot"])
-def delete_pot(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
+def delete_pot(pot_dict: dict, user: Annotated[User, Depends(get_current_user)]):
     if user:
         st = pot_repository.delete(pot_dict["id"])
         if st:
@@ -253,10 +262,11 @@ def delete_pot(pot_dict: dict, user: Annotated[User,Depends(get_current_user)]):
         else:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     else:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)     
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
 
 @app.post("/users/user", tags=["User"])
-def delete_user(user: Annotated[User,Depends(get_current_user)]):
+def delete_user(user: Annotated[User, Depends(get_current_user)]):
     if user:
         st = pot_repository.delete(user.id)
         if st:
@@ -264,20 +274,26 @@ def delete_user(user: Annotated[User,Depends(get_current_user)]):
         else:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     else:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED) 
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
 @app.post("/users/", tags=["User"])
 def create_user(user: dict):
     if not user_repository.validate_user(user["username"]):
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Nombre de Usuario ya en uso.")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail="Nombre de Usuario ya en uso."
+        )
     if "password" in user:
         user["password"] = hash_password(user["password"])
     st = user_repository.save(user)
     if st:
         return st
     else:
-        raise HTTPException(status_code=status.HTTP_418_IM_A_TEAPOT, detail="No se pudo crear el usuario")
+        raise HTTPException(
+            status_code=status.HTTP_418_IM_A_TEAPOT,
+            detail="No se pudo crear el usuario",
+        )
+
 
 # def common_parameters(id: str, edad: int, nombre: str) -> dict:
 #     return { "id": id, "edad": edad, "nombre": nombre}

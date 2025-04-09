@@ -21,60 +21,76 @@ class UserRepository(Repository):
     def __init__(self, pot_repository):
         super().__init__()
         self.table = "user"
-        self.pot_repository:PotRepository = pot_repository
+        self.pot_repository: PotRepository = pot_repository
 
-    def get_by_username(self, username) -> User:
+    def get_by_username(self, username) -> User | dict:
         try:
             u = self.db.get_by_username(username)
             if u is None:
                 return {
                     "Function": "get_by_username()",
                     "status": False,
-                    "detail": f"No se encontró ningún usuario con username '{username}'"
+                    "detail": f"No se encontró ningún usuario con username '{username}'",
                 }
 
             pots = self.pot_repository.get_user_pots(u["id"])
-            user = User(u["id"], u["username"], u["mail"], u["password"], pots)
+            user = User(
+                u["id"],
+                u["username"],
+                u["mail"],
+                u["password"],
+                pots,
+                u["last_modified"],
+            )
             return user
 
         except Exception as e:
             return {
                 "Function": "get_by_username()",
                 "status": False,
-                "detail": f"Excepción al obtener usuario: {str(e)}"
+                "detail": f"Excepción al obtener usuario: {str(e)}",
             }
-     
-    def validate_user(self, username: str):
+
+    def validate_user(self, username: str) -> bool:
         return self.db.validate_user(username)
-    
-    def create_obj(self, data: dict):
+
+    def create_obj(self, data: dict) -> User:
         pots = pot_repository.get_user_pots(data["id"])
-        user = User(data["id"], data["username"], data["mail"], data["password"], pots, data["last_modified"])
+        user = User(
+            data["id"],
+            data["username"],
+            data["mail"],
+            data["password"],
+            pots,
+            data["last_modified"],
+        )
         return user
 
-    def update_user(self, user: User, field: str, old_data: str, new_data: str) -> dict:
+    def update_user(
+        self, user: User, field: str, old_data: str, new_data: str
+    ) -> bool | dict:
 
         db_user = self.db.get_by_username(user.username)
 
         if not db_user:
-            return {    
+            return {
                 "function": "update_user()",
                 "status": False,
-                "detail": "Usuario no encontrado en la base de datos"
+                "detail": "Usuario no encontrado en la base de datos",
             }
 
         if field not in ["username", "password"]:
             return {
                 "function": "update_user()",
                 "status": False,
-                "detail": f"Campo inválido: {field}"
+                "detail": f"Campo inválido: {field}",
             }
 
         if old_data != db_user[field]:
             return {
                 "function": "update_user()",
                 "status": False,
-                "detail": f"El valor anterior de '{field}' no coincide"
+                "detail": f"El valor anterior de '{field}' no coincide",
             }
 
         if field == "username":
@@ -86,15 +102,13 @@ class UserRepository(Repository):
         success = self.db.save(user.get_dict())
 
         if success:
-            return success  
-        
+            return success
+
         return {
             "function": "update_user()",
             "status": False,
-            "detail": "Error al guardar en la base de datos"
+            "detail": "Error al guardar en la base de datos",
         }
 
 
-
 instance = UserRepository(pot_repository)
-

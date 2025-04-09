@@ -14,7 +14,6 @@ from models.entities.pot import Pot
 from models.repository.repository import Repository
 
 
-
 class PotRepository(Repository):
     def __init__(self):
         super().__init__()
@@ -27,26 +26,30 @@ class PotRepository(Repository):
             data["id_plant"],
             data["analysis_time"],
             data["id_user"],
-            data["last_checked"] 
-            )
-        
+            data["last_checked"],
+        )
+
         return pot
-        
-    def get_user_pots(self, user: User) -> Optional[list]:
+
+    def get_user_pots(self, user: User) -> Optional[list] | dict:
         p = self.db.get_user_pots(user.id)
 
         if not p:
-            return {"function":"get_user_pots", "status": False, "detail": "Failed to get data from database"}
-        
+            return {
+                "function": "get_user_pots",
+                "status": False,
+                "detail": "Failed to get data from database",
+            }
+
         if len(p) == 0:
             return []
-        
+
         for i in p:
             user.add_pot(self.create_obj(i))
 
         return user.pots
 
-    def set_last_checked(self, pot: Pot, new_time):
+    def set_last_checked(self, pot: Pot, new_time) -> bool | dict:
         pot.set_last_checked(new_time)
         pot.update_modified()
         if self.db.save(pot.get_dto):
@@ -54,7 +57,7 @@ class PotRepository(Repository):
         else:
             return {}
 
-    def change_plant(self, pot: Pot, new_plant_id):
+    def change_plant(self, pot: Pot, new_plant_id) -> bool | dict:
         pot.link_plant_id(new_plant_id)
         pot.update_modified()
         if self.db.save(pot.get_dto):
@@ -62,15 +65,13 @@ class PotRepository(Repository):
         else:
             return {}
 
-    def change_analysis_time(self, pot: Pot, new_analysis_time):
+    def change_analysis_time(self, pot: Pot, new_analysis_time) -> bool | dict:
         pot.link_analysis_time(new_analysis_time)
         pot.update_modified()
         if self.db.save(pot.get_dto):
             return True
         else:
             return {}
-    
 
 
 instance = PotRepository()
-    
