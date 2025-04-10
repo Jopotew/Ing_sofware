@@ -51,9 +51,15 @@ token_exp = 3
 def home():
     return {"Retorno a Home"}
 
-
-# Modificar entidades para q tamb exista BASEMODEL en si, esas son las que se usn en las func.
-
+"""
+TODO:
+    - MODIFICAR LAS FUNCIONES PARA QUE RECIBAN LOS ERRORES O LOS VALORES DESEADOS A PARTIR DE UN RAISE EXCEPTION
+    - MODIFICAR LAS FUNCS DE MAIN PARA QUE TENGAN UN TRY / CATCH Y MANEJEN ESOS ERRORES
+    - TESTEAR LUEGO DE ESO
+    - .... 3 DORITOS DESPUES
+    - FIN BACK
+    - EMPEZAR CON TEMA DE FRONTEND O SENSORES. DEPENDE CUAL SE QUIERA HACER PRIMERO 
+"""
 
 @app.post("/token", tags=["Auth"])
 def login(response: Response, login_form: LoginForm):
@@ -62,8 +68,6 @@ def login(response: Response, login_form: LoginForm):
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
 
     if not verify_password(login_form.password, user.password):
-        print("USER IN DB PW", user.password)
-        print("USER IN LOGIN FORM PW", login_form.password)
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
 
     token = create_token(user)
@@ -198,13 +202,22 @@ def update_username(
     old_username: str, new_username, user: Annotated[User, Depends(get_current_user)]
 ):
     if user:
-        st = user_repository.update_user(user, "username", old_username, new_username)
-        if st:
-            return st
-        else:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    else:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        try:
+            st = user_repository.update_user(user, "username", old_username, new_username)
+            if st:
+                return st
+        except Exception as e:
+            e.args
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Nombre de Usuario ya en uso.",
+            )
+    
+
+    #         else:
+    #             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    # else:
+    #     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
 
 @app.post("/users/user", tags=["User"])

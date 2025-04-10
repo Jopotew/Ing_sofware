@@ -8,10 +8,7 @@ sys.path.append(src_path)
 
 
 from models.entities.user import User
-from models.server_credentials.security import verify_password
 from typing import Optional
-import bcrypt
-
 from models.repository.repository import Repository
 from repositories.pot import PotRepository, instance as pot_repository
 
@@ -73,11 +70,7 @@ class UserRepository(Repository):
         db_user = self.db.get_by_username(user.username)
 
         if not db_user:
-            return {
-                "function": "update_user()",
-                "status": False,
-                "detail": "Usuario no encontrado en la base de datos",
-            }
+            raise ValueError("Usuario no encontrado en la base de datos")
 
         if field not in ["username", "password"]:
             return {
@@ -92,6 +85,7 @@ class UserRepository(Repository):
                 "status": False,
                 "detail": f"El valor anterior de '{field}' no coincide",
             }
+        
 
         if field == "username":
             user.username = new_data

@@ -419,7 +419,7 @@ class FakeDatabase():
         ]
 
 
-    def get_all(self, table: str):
+    def get_all(self, table: str) -> list[dict] | None:
         if table == "user":
             return self.users
         elif table == "pots":
@@ -431,7 +431,6 @@ class FakeDatabase():
         return None
 
     def save(self, data: dict, table: str) -> bool:
-         
         if table == "user":
             for i, user in enumerate(self.users):
                 if user["id"] == data["id"]:
@@ -479,7 +478,7 @@ class FakeDatabase():
 
         return False
 
-    def get_by_id(self, table, id):
+    def get_by_id(self, table, id) -> dict | None:
         if table == "user":
             for user in self.users:
                 if user["id"] == id:
@@ -516,7 +515,7 @@ class FakeDatabase():
 
         return False
   
-    def get_by_username(self, username):
+    def get_by_username(self, username) -> dict | None:
         for user in self.users:
             if user["username"] == username:
                 return user
@@ -528,7 +527,7 @@ class FakeDatabase():
                 return True
         return False
 
-    def get_user_pots(self, user_id):
+    def get_user_pots(self, user_id) -> list[dict]:
         u_pots: list = []
         for pot in self.pots:
             if pot["user_id"] == user_id:
@@ -537,12 +536,12 @@ class FakeDatabase():
 
 
 
-    def get_last_log(self, pot_id) -> Optional[dict]:
+    def get_last_log(self, pot_id) -> dict | None:
         logs = [log for log in self.logs if log["pot_id"] == pot_id]
         return logs[-1] if logs else None
 
     
-    def get_all_logs(self, pot_id: int, limit: int = None) -> list:
+    def get_all_logs(self, pot_id: int, limit: int = None) -> list[dict]:
     
         logs = [log for log in self.logs if log["pot_id"] == pot_id]
 
@@ -553,17 +552,4 @@ class FakeDatabase():
         return logs
 
 
-    def update_pot_last_checked():
-        pass
-
-    def update_pot_id_plant():
-        pass
-
-    def update_pot_analysis_time():
-        pass
-
-    def  update_timestamp_modifier():
-        pass
-
-# falta user (validaciones)
 database = FakeDatabase()
