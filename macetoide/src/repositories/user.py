@@ -85,7 +85,6 @@ class UserRepository(Repository):
                 "status": False,
                 "detail": f"El valor anterior de '{field}' no coincide",
             }
-        
 
         if field == "username":
             user.username = new_data

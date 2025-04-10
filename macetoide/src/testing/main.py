@@ -51,6 +51,7 @@ token_exp = 3
 def home():
     return {"Retorno a Home"}
 
+
 """
 TODO:
     - MODIFICAR LAS FUNCIONES PARA QUE RECIBAN LOS ERRORES O LOS VALORES DESEADOS A PARTIR DE UN RAISE EXCEPTION
@@ -60,6 +61,7 @@ TODO:
     - FIN BACK
     - EMPEZAR CON TEMA DE FRONTEND O SENSORES. DEPENDE CUAL SE QUIERA HACER PRIMERO 
 """
+
 
 @app.post("/token", tags=["Auth"])
 def login(response: Response, login_form: LoginForm):
@@ -203,7 +205,9 @@ def update_username(
 ):
     if user:
         try:
-            st = user_repository.update_user(user, "username", old_username, new_username)
+            st = user_repository.update_user(
+                user, "username", old_username, new_username
+            )
             if st:
                 return st
         except Exception as e:
@@ -212,7 +216,6 @@ def update_username(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="Nombre de Usuario ya en uso.",
             )
-    
 
     #         else:
     #             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
