@@ -121,7 +121,7 @@ def get_user_email(user: Annotated[User, Depends(get_current_user)]):
 @app.get("/user/pots", tags=["Pots"])
 def get_user_pots(user: Annotated[User, Depends(get_current_user)]):
     if user:
-        pots = pot_repository.get_pots(user.id)
+        pots = pot_repository.get_user_pots(user.id)
         return pots
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
@@ -130,7 +130,7 @@ def get_user_pots(user: Annotated[User, Depends(get_current_user)]):
 @app.post("/user/pots", tags=["Pots"])
 def save_pot(pot: dict, user: Annotated[User, Depends(get_current_user)]):
     if user:
-        st = pot_repository.save_pot(pot)
+        st = pot_repository.save(pot)
         if st:
             return st
         else:
@@ -310,68 +310,3 @@ def create_user(user: dict):
             detail="No se pudo crear el usuario",
         )
 
-
-# def common_parameters(id: str, edad: int, nombre: str) -> dict:
-#     return { "id": id, "edad": edad, "nombre": nombre}
-
-# @app.get("/ajksdksjd", tags=["Auth"])
-# def get_algo(persona: Annotated[dict, Depends(common_parameters)]):
-#     return persona
-
-# @app.get("/ajksdksjd2", tags=["Auth"])
-# def get_algo2(persona: Annotated[dict, Depends(common_parameters)], nombre_padre: Annotated[str, Query()]):
-#     return persona
-
-
-# @app.post("/login", tags=["Auth"])
-# def login(data: LoginRequest, response: Response):
-
-#     user: User = user_repository.verify_user(data.username, data.password)
-#     if not user:
-#         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
-
-#     response.set_cookie(key="user_id", value=str(user.id), httponly=True)
-#     return {"message": "Login exitoso"}
-
-
-# @app.get("/pots/", tags=["Pots"])
-# def get_user_pots(user: User = Depends(get_current_user)):
-#     return user_repository.get_pots(user.id)
-
-
-# @app.post("/users/{user_id}/pots/", tags=["Pots"])
-# def add_new_pot(
-#     user_id: int,
-# ):
-#     """
-#     Agrega una maceta a un usuario donde el id de la maceta es el id del usuario
-#     1)checkear si el user id existe y esta logeado, mandando la request
-#     2)checkear si el pot id existe, y pertenece al user
-#     """
-#     user = user_repository.get_by_id(user_id)
-#     if user is None:
-#         raise HTTPException(status_code=404, detail="User not found")
-
-#     pot = create_pot()
-
-#     if pot.user != user:
-#         raise HTTPException(status_code=403, detail="Pot does not belong to user")
-
-#     user.add_pot(pot)
-#     return pot.get_dto()
-
-
-# @app.get("/users/{user_id}/pots/{pot_id}", tags=["Pots"])
-# def get_pot(user_id: int, pot_id: int):
-#     user = user_repository.get_by_id(user_id)
-#     if user is None:
-#         raise HTTPException(status_code=404, detail="User not found")
-
-#     pot = pot_repository.get_by_id(pot_id)
-#     if pot is None:
-#         raise HTTPException(status_code=404, detail="Pot not found")
-
-#     if pot.user != user:
-#         raise HTTPException(status_code=403, detail="Pot does not belong to user")
-
-#     return pot.get_dto()

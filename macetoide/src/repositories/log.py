@@ -1,3 +1,4 @@
+from exceptions.exceptions import LogDataFetchError, DatabaseOperationError
 from models.repository.repository import Repository
 from models.entities.log import Log
 from models.entities.pot import Pot
@@ -9,7 +10,7 @@ class LogRepository(Repository):
         self.table = "log"
 
     def create_obj(self, data: dict) -> Log:
-        log = Log(
+        return Log(
             data["id"],
             data["pot_id"],
             data["plant_id"],
@@ -19,30 +20,23 @@ class LogRepository(Repository):
             data["image_path"],
             data["expert_advice"],
         )
-        return log
 
     def last_log(self, pot: Pot) -> Log | dict:
-
         l = self.db.get_last_log(pot.id)
 
-        if l == None:
+        if l is None:
             return {}
 
-        log = self.create_obj(l)
-        return log
+        return self.create_obj(l)
 
-    def get_logs(self, pot: Pot, quantity: int = None) -> list | dict:
+    def get_logs(self, pot: Pot, quantity: int = None) -> list[Log]:
 
-        ls = self.db.get_all_logs(pot.id, limit=quantity)
+        logs_data = self.db.get_all_logs(pot.id, limit=quantity)
 
-        if not ls:
-            return {
-                "function": "get_logs",
-                "status": False,
-                "detail": "Failed to get logs in database.",
-            }
+        if not logs_data:
+            raise LogDataFetchError("Failed to get logs from the database.")
 
-        return [self.create_obj(log_data) for log_data in ls]
+        return [self.create_obj(log_data) for log_data in logs_data]
 
 
 instance = LogRepository()

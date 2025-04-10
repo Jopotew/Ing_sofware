@@ -502,6 +502,30 @@ class FakeDatabase():
         else:
             return None
     
+    def get_by_name(self, name: str, table: str):
+        if table == "user":
+            for user in self.users:
+                if user["username"] == name:
+                    return user
+            return None
+
+        elif table == "plants":
+            for plant in self.plants:
+                if plant["name"] == name:
+                    return plant
+            return None
+
+        elif table == "pots":
+            for pot in self.pots:
+                if pot["name"] == name:
+                    return pot
+            return None
+
+        else:
+            return None
+
+
+
     def update_user(self, user_id: int, field: str, old_value: str, new_value: str) -> bool:
         if field not in ["username", "password", "mail"]:
             return False
