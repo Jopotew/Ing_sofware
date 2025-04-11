@@ -29,5 +29,5 @@ class LogDataFetchError(RepositoryError):
 
 
 
-class PlantError(RepositoryError):
+class PlantSearchError(RepositoryError):
     pass
