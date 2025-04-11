@@ -21,7 +21,7 @@ class LogRepository(Repository):
             data["expert_advice"],
         )
 
-    def last_log(self, pot: Pot) -> Log | dict:
+    def get_last_log(self, pot: Pot) -> Log | dict:
         l = self.db.get_last_log(pot.id)
 
         if l is None:
