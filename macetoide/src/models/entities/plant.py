@@ -7,7 +7,7 @@ class Plant:
     Class that represents a plant in the pot system.
     """
 
-    def __init__(self, name: str, last_modified, species: str = None, description: str = None):
+    def __init__(self, name: str, species: str = None, description: str = None):
         """
         Initializes a new plant with its name, species, and an optional description.
         """
@@ -15,7 +15,7 @@ class Plant:
         self.name: str = name
         self.species: str = species
         self.description: str = description
-        self.last_modified = last_modified
+        self.last_modified: datetime = datetime.now()
 
     def update_modified(self):
         self.last_modified = datetime.now()       

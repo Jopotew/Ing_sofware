@@ -31,25 +31,28 @@ class PotRepository(Repository):
             data["last_checked"],
         )
 
-    def get_user_pots(self, user: User) -> list[Pot]:
-        p = self.db.get_user_pots(user.id)
+    def get_user_pots(self, user_id: int) -> list[Pot]:
+        p = self.db.get_user_pots(user_id)
+        p_list: list = []
 
         if p is None:
             raise DatabaseOperationError("Failed to fetch pots from database.")
 
         if len(p) == 0:
             return []
-        
-        for i in p:
-            user.add_pot(self.create_obj(i))
 
-        return user.pots
+        for i in p:
+            p_list.add_pot(self.create_obj(i))
+
+        return p_list.pots
 
     def set_last_checked(self, pot: Pot, new_time) -> bool:
         pot.set_last_checked(new_time)
         pot.update_modified()
         if not self.db.save(pot.get_dto):
-            raise DatabaseOperationError("Failed to update pot's last_checked in database.")
+            raise DatabaseOperationError(
+                "Failed to update pot's last_checked in database."
+            )
         return True
 
     def change_plant(self, pot: Pot, new_plant_id) -> bool:
@@ -63,9 +66,10 @@ class PotRepository(Repository):
         pot.link_analysis_time(new_analysis_time)
         pot.update_modified()
         if not self.db.save(pot.get_dto):
-            raise DatabaseOperationError("Failed to update pot's analysis_time in database.")
+            raise DatabaseOperationError(
+                "Failed to update pot's analysis_time in database."
+            )
         return True
-
 
 
 instance = PotRepository()

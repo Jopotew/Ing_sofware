@@ -32,28 +32,14 @@ class UserRepository(Repository):
             raise UserNotFoundError(f"No user found with username '{username}'")
 
         pots = self.pot_repository.get_user_pots(u["id"])
-        return User(
-            u["id"],
-            u["username"],
-            u["mail"],
-            u["password"],
-            pots,
-            u["last_modified"],
-        )
+        return User(u["id"], u["username"], u["mail"], u["password"], pots)
 
     def validate_user(self, username: str) -> bool:
         return self.db.validate_user(username)
 
     def create_obj(self, data: dict) -> User:
         pots = self.pot_repository.get_user_pots(data["id"])
-        return User(
-            data["id"],
-            data["username"],
-            data["mail"],
-            data["password"],
-            pots,
-            data["last_modified"],
-        )
+        return User(data["id"], data["username"], data["mail"], data["password"], pots)
 
     def update_user(self, user: User, field: str, old_data: str, new_data: str) -> bool:
         db_user = self.db.get_by_username(user.username)
@@ -61,7 +47,7 @@ class UserRepository(Repository):
         if not db_user:
             raise UserNotFoundError("User not found in database")
 
-        if field not in ["username", "password"]:
+        if field not in ["username", "password", "mail"]:
             raise UserFieldValidationError(f"Invalid field: {field}")
 
         if old_data != db_user[field]:
@@ -71,9 +57,11 @@ class UserRepository(Repository):
             user.username = new_data
         elif field == "password":
             user.password = new_data
+        elif field == "mail":
+            user.mail = new_data
 
         user.update_modified()
-        success = self.db.save(user.get_dict())
+        success = self.db.save(user.get_dict(), self.table)
 
         if not success:
             raise DatabaseOperationError("Failed to save updated user to database")

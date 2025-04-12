@@ -1,11 +1,11 @@
 from exceptions.exceptions import PlantSearchError, DatabaseOperationError
 from models.repository.repository import Repository
 from models.entities.plant import Plant
-from models.entities.open_ai_api import Chatbot, instance_chatbot as chatbot
+#from models.entities.open_ai_api import Chatbot, instance_chatbot as chatbot
 
 
 class PlantRepository(Repository):
-    def __init__(self, chatbot: Chatbot):
+    def __init__(self, chatbot: str):
         super().__init__()
         self.table = "plant"
         self.chatbot = chatbot
@@ -68,4 +68,4 @@ class PlantRepository(Repository):
 
 
 
-instance = PlantRepository(chatbot)
+instance = PlantRepository("chatbot")
