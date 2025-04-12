@@ -1,7 +1,29 @@
-- Modificar Repositories para que incluyan una devolcion de objetos. 
-    - Clase user tiene que agregar pots como objs a su obj(user)
-    - Modificar Logs
-    - Ver las funcs de la bd para que sea mas simple
+✅ TODO LIST – Funciones Faltantes en Backend Macetoide
+
+--- PLANT.PY ---
+[ ] GET /plants/user -> Obtener todas las plantas asociadas a un usuario.
+
+--- POT.PY ---
+[ ] GET /check -> Verificar si una maceta necesita riego según humedad.
+[ ] POST /assign/plant -> Asignar una planta a una maceta.
+[ ] GET /pots/all -> Obtener todas las macetas del sistema (modo admin).
+[ ] GET /pot/logs/summary -> Devolver resumen de logs (promedios de temperatura, humedad, etc.).
+
+--- LOG.PY ---
+[ ] GET /?quantity=n -> Agregar parámetro `quantity` para limitar cantidad de logs.
+[ ] GET /filter -> Filtrar logs por fechas (start_date, end_date).
 
 
-- Modificar Main para devolucion de objetos.
+--- USER.PY ---
+[ ] GET /profile -> Devolver todos los datos del usuario autenticado.
+[ ] GET /user/all -> Obtener todos los usuarios (modo admin).
+[ ] GET /user/id -> Obtener info de un usuario por su ID.
+
+--- AUTH.PY ---
+[ ] POST /logout -> Eliminar cookie de sesión y cerrar sesión.
+[ ] POST /token/refresh -> Renovar el token si está por expirar.
+[ ] Middleware de autorización por roles (admin, user, etc.). --> Moficar clase user y consecuentes para que tenga ROLE (ADMIN, USER)
+
+
+--- MAIN.PY ---
+[ ] GET / -> Ruta raíz que muestre "status": "ok" o versión de la API.

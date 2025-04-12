@@ -1,7 +1,6 @@
 import sys
 import os
 
-
 current_dir = os.path.dirname(os.path.abspath(__file__))
 src_path = os.path.join(current_dir, "..")
 sys.path.append(src_path)
@@ -11,7 +10,9 @@ from exceptions.exceptions import (
     UserFieldValidationError,
     DatabaseOperationError,
 )
-from models.entities.user import User
+from typing import Union
+from models.entities.viewer_user import ViewerUser
+from models.entities.admin_user import AdminUser
 from models.repository.repository import Repository
 from repositories.pot import PotRepository, instance as pot_repository
 
@@ -22,7 +23,7 @@ class UserRepository(Repository):
         self.table = "user"
         self.pot_repository = pot_repository
 
-    def get_by_username(self, username) -> User:
+    def get_by_username(self, username) -> ViewerUser | AdminUser:
         try:
             u = self.db.get_by_username(username)
         except Exception as e:
@@ -32,16 +33,28 @@ class UserRepository(Repository):
             raise UserNotFoundError(f"No user found with username '{username}'")
 
         pots = self.pot_repository.get_user_pots(u["id"])
-        return User(u["id"], u["username"], u["mail"], u["password"], pots)
+
+        if u.get("admin_role") == True:
+            return AdminUser(u["id"], u["username"], u["mail"], u["password"])
+        else:
+            viewer = ViewerUser(u["id"], u["username"], u["mail"], u["password"])
+            viewer.pots = pots
+            return viewer
 
     def validate_user(self, username: str) -> bool:
         return self.db.validate_user(username)
 
-    def create_obj(self, data: dict) -> User:
+    def create_obj(self, data: dict) -> ViewerUser | AdminUser:
         pots = self.pot_repository.get_user_pots(data["id"])
-        return User(data["id"], data["username"], data["mail"], data["password"], pots)
 
-    def update_user(self, user: User, field: str, old_data: str, new_data: str) -> bool:
+        if data.get("admin_role") == True:
+            return AdminUser(data["id"], data["username"], data["mail"], data["password"])
+        else:
+            viewer = ViewerUser(data["id"], data["username"], data["mail"], data["password"])
+            viewer.pots = pots
+            return viewer
+
+    def update_user(self, user: ViewerUser | AdminUser, field: str, old_data: str, new_data: str) -> bool:
         db_user = self.db.get_by_username(user.username)
 
         if not db_user:

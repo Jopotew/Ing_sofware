@@ -447,7 +447,7 @@ class FakeDatabase():
             self.logs.append(data)
             return True
 
-        elif table == "plants":
+        elif table == "plant":
             for i, plant in enumerate(self.plants):
                 if plant["id"] == data["id"]:
                     self.plants[i] = data
@@ -455,7 +455,7 @@ class FakeDatabase():
             self.plants.append(data)
             return True
 
-        elif table == "pots":
+        elif table == "pot":
             for i, pot in enumerate(self.pots):
                 if pot["id"] == data["id"]:
                     self.pots[i] = data
