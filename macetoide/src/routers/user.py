@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, status
 from typing import Annotated
 from models.forms.base_models import DataUpdateForm, RegisterForm
 from models.entities.viewer_user import ViewerUser
@@ -71,7 +71,20 @@ def create_user(register_form: RegisterForm):
 
 
 
+@router.get("/admin/user/{username}")
+def get_user_by_username(
+    username: str,
+    user: Annotated[AdminUser, Depends(get_current_user)]
+):
+    if not isinstance(user, AdminUser):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No autorizado")
 
+    target_user = user_repository.get_by_username(username)
+
+    if isinstance(target_user, ViewerUser):
+        return target_user.get_dto()
+
+    return target_user.get_dto()
 
 
 

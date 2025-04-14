@@ -10,4 +10,10 @@ class AdminUser(User):
         self.admin_role = True  
 
 
-   
+    def get_dto(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "mail": self.mail,
+            "role": "admin"
+        }
