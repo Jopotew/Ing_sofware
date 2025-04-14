@@ -70,3 +70,32 @@ class LogForm(BaseModel):
     image_path: str
     expert_advice: str
     timestamp: datetime
+
+
+
+
+class DataUpdateForm(BaseModel):
+    old_data: str
+    new_data: str
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

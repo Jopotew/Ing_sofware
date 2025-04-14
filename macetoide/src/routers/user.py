@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Annotated
-from models.forms.base_models import RegisterForm
+from models.forms.base_models import DataUpdateForm, RegisterForm
 from models.entities.viewer_user import ViewerUser
 from models.entities.admin_user import AdminUser
 from repositories.user import instance as user_repository
@@ -8,7 +8,6 @@ from models.security.security import hash_password
 from routers.auth import get_current_user
 
 router = APIRouter(prefix="/user", tags=["User"])
-
 
 
 
@@ -26,29 +25,31 @@ def get_user_username(user: Annotated[ViewerUser, Depends(get_current_user)]):
 
 @router.post("/update/username")
 def update_username(
-    old_username: str,
-    new_username: str,
     user: Annotated[ViewerUser, Depends(get_current_user)],
+    body: DataUpdateForm
 ):
-    return user_repository.update_user(user, "username", old_username, new_username)
+    return user_repository.update_user(user, "username", body.old_data, body.new_data)
 
 
 @router.post("/update/password")
 def update_password(
-    old_password: str,
-    new_password: str,
     user: Annotated[ViewerUser, Depends(get_current_user)],
+    body: DataUpdateForm
 ):
     return user_repository.update_user(
-        user, "password", hash_password(old_password), hash_password(new_password)
+        user,
+        "password",
+        hash_password(body.old_data),
+        hash_password(body.new_data)
     )
 
 
 @router.post("/update/mail")
 def update_mail(
-    old_mail: str, new_mail: str, user: Annotated[ViewerUser, Depends(get_current_user)]
+    user: Annotated[ViewerUser, Depends(get_current_user)],
+    body: DataUpdateForm
 ):
-    return user_repository.update_user(user, "mail", old_mail, new_mail)
+    return user_repository.update_user(user, "mail", body.old_data, body.new_data)
 
 
 @router.post("/delete")
@@ -62,7 +63,6 @@ def create_user(register_form: RegisterForm):
         raise HTTPException(status_code=409, detail="Nombre de Usuario ya en uso.")
     register_form.password = hash_password(register_form.password)
     return user_repository.save(register_form.to_dict())
-
 
 
 
