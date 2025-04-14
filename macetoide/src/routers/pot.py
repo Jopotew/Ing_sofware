@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Body, HTTPException, Depends
 from typing import Annotated
 from macetoide.src.models.entities.pot import Pot
 from models.entities.viewer_user import ViewerUser
@@ -52,3 +52,31 @@ def delete_pot(pot: PotForm, user: Annotated[ViewerUser, Depends(get_current_use
     if pot_obj.user_id != user.id:
         raise HTTPException(status_code=403, detail="No autorizado")
     return pot_repository.delete(pot.id)
+
+
+@router.post("/pot/update/name")
+def update_pot_name(
+    user: Annotated[ViewerUser, Depends(get_current_user)],
+    pot: PotForm,
+    new_name: str = Body(...),
+):
+    pot_obj: Pot = pot_repository.create_obj(pot.to_dict())
+
+    if pot_obj.user_id != user.id:
+        raise HTTPException(status_code=403, detail="No autorizado")
+
+    return pot_repository.change_name(pot_obj, new_name)
+
+
+@router.post("/pot/assign")
+def assign_plant_to_pot(
+    user: Annotated[ViewerUser, Depends(get_current_user)],
+    pot: PotForm,
+    new_plant_id: int = Body(...),
+):
+    pot_obj: Pot = pot_repository.create_obj(pot.to_dict())
+
+    if pot_obj.user_id != user.id:
+        raise HTTPException(status_code=403, detail="No autorizado")
+
+    return pot_repository.change_plant(pot_obj, new_plant_id)

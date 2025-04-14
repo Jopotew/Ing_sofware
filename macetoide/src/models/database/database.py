@@ -558,7 +558,12 @@ class FakeDatabase():
                 u_pots.append(pot)
         return u_pots
 
-
+    def update_pot_name(self, pot_id: int, new_name: str) -> bool:
+        for pot in self.pots:
+            if pot["id"] == pot_id:
+                pot["name"] = new_name
+                return True
+        return False
 
     def get_last_log(self, pot_id) -> dict | None:
         logs = [log for log in self.logs if log["pot_id"] == pot_id]

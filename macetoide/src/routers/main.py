@@ -22,7 +22,11 @@ from exceptions.exceptions import (
 
 
 app = FastAPI()
-
+app.title = "Macetoide API"
+app.description = (
+    "API for Macetoide, a platform for sharing and checking your macetoides."
+)
+app.version = "0.69"
 
 @app.exception_handler(UserNotFoundError)
 @app.exception_handler(PotNotFoundError)
@@ -47,3 +51,15 @@ app.include_router(user.router)
 app.include_router(pot.router)
 app.include_router(log.router)
 app.include_router(plant.router)
+
+
+
+@app.get("/")
+def root_status():
+    return {
+        "status": "ok",
+        "title": app.title,
+        "version": app.version,
+        "description": app.description,
+        "message": "Bienvenido a la API de Macetoide 🌱"
+    }

@@ -1,4 +1,5 @@
 from exceptions.exceptions import PlantSearchError, DatabaseOperationError
+from macetoide.src.models.entities.pot import Pot
 from macetoide.src.models.entities.viewer_user import ViewerUser
 from models.repository.repository import Repository
 from models.entities.plant import Plant
@@ -84,6 +85,10 @@ class PlantRepository(Repository):
                 plant_objs.append(plant)
 
         return plant_objs
+    
+
+
+
 
 
 
