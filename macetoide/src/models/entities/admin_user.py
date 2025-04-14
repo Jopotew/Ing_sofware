@@ -1,7 +1,7 @@
 
 
 
-from macetoide.src.models.entities.user import User
+from models.entities.user import User
 
 
 class AdminUser(User):

@@ -1,13 +1,18 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Annotated
-from macetoide.src.models.forms.base_models import RegisterForm
+from models.forms.base_models import RegisterForm
 from models.entities.viewer_user import ViewerUser
+from models.entities.admin_user import AdminUser
 from repositories.user import instance as user_repository
 from models.security.security import hash_password
 from routers.auth import get_current_user
 
 router = APIRouter(prefix="/user", tags=["User"])
 
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~VIEWER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 @router.get("/email")
 def get_user_email(user: Annotated[ViewerUser, Depends(get_current_user)]):
@@ -57,3 +62,54 @@ def create_user(register_form: RegisterForm):
         raise HTTPException(status_code=409, detail="Nombre de Usuario ya en uso.")
     register_form.password = hash_password(register_form.password)
     return user_repository.save(register_form.to_dict())
+
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ADMIN~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,6 @@
 
-from macetoide.src.models.entities.pot import Pot
-from macetoide.src.models.entities.user import User
+from models.entities.pot import Pot
+from models.entities.user import User
 
 
 class ViewerUser(User):

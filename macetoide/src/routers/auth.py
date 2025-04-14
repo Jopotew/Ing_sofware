@@ -3,10 +3,10 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from typing import Union
 
-from macetoide.src.models.entities.user import User
-from macetoide.src.models.entities.viewer_user import ViewerUser
-from macetoide.src.models.entities.admin_user import AdminUser
-from macetoide.src.models.forms.base_models import LoginForm
+from models.entities.user import User
+from models.entities.viewer_user import ViewerUser
+from models.entities.admin_user import AdminUser
+from models.forms.base_models import LoginForm
 from models.security.security import verify_password
 from repositories.user import instance as user_repository
 

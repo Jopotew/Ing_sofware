@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body, HTTPException, Depends
 from typing import Annotated
-from macetoide.src.models.entities.pot import Pot
+from models.entities.pot import Pot
 from models.entities.viewer_user import ViewerUser
 from routers.auth import get_current_user
 from repositories.pot import instance as pot_repository

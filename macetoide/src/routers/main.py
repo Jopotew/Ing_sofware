@@ -7,7 +7,7 @@ src_path = os.path.join(current_dir, "..")
 sys.path.append(src_path)
 
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from routers import auth, user, pot, log, plant
 from exceptions.exceptions import (
@@ -33,17 +33,17 @@ app.version = "0.69"
 @app.exception_handler(LogDataFetchError)
 @app.exception_handler(PlantSearchError)
 async def not_found_handler(request: Request, exc: RepositoryError):
-    return JSONResponse(status_code=404, content={"detail": str(exc)})
+    return JSONResponse(status_code=status.HTTP_404_NOT_FOUND, content={"detail": str(exc)})
 
 
 @app.exception_handler(UserFieldValidationError)
 async def validation_error_handler(request: Request, exc: UserFieldValidationError):
-    return JSONResponse(status_code=409, content={"detail": str(exc)})
+    return JSONResponse(status_code=status.HTTP_409_CONFLICT, content={"detail": str(exc)})
 
 
 @app.exception_handler(DatabaseOperationError)
 async def db_error_handler(request: Request, exc: RepositoryError):
-    return JSONResponse(status_code=500, content={"detail": str(exc)})
+    return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={"detail": str(exc)})
 
 
 app.include_router(auth.router)

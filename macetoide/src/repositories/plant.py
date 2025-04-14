@@ -1,6 +1,5 @@
 from exceptions.exceptions import PlantSearchError, DatabaseOperationError
-from macetoide.src.models.entities.pot import Pot
-from macetoide.src.models.entities.viewer_user import ViewerUser
+from models.entities.viewer_user import ViewerUser
 from models.repository.repository import Repository
 from models.entities.plant import Plant
 #from models.entities.open_ai_api import Chatbot, instance_chatbot as chatbot
