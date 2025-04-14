@@ -15,13 +15,16 @@ from models.entities.viewer_user import ViewerUser
 from models.entities.admin_user import AdminUser
 from models.repository.repository import Repository
 from repositories.pot import PotRepository, instance as pot_repository
+from repositories.log import LogRepository, instance as log_repository
+
 
 
 class UserRepository(Repository):
-    def __init__(self, pot_repository: PotRepository):
+    def __init__(self, pot_repository: PotRepository, log_repository: LogRepository):
         super().__init__()
         self.table = "user"
         self.pot_repository = pot_repository
+        self.log_repository = log_repository
 
     def get_by_username(self, username) -> ViewerUser | AdminUser:
         try:
@@ -53,6 +56,16 @@ class UserRepository(Repository):
             viewer = ViewerUser(data["id"], data["username"], data["mail"], data["password"])
             viewer.pots = pots
             return viewer
+        
+
+    def delete_by_username(self, username: str) -> bool:
+        success = self.db.delete_by_username(username)
+
+        if not success:
+            raise UserNotFoundError(f"Usuario '{username}' no encontrado.")
+
+        return True
+
 
     def update_user(self, user: ViewerUser | AdminUser, field: str, old_data: str, new_data: str) -> bool:
         db_user = self.db.get_by_username(user.username)
@@ -80,6 +93,19 @@ class UserRepository(Repository):
             raise DatabaseOperationError("Failed to save updated user to database")
 
         return True
+    
+
+    def get_system_stats(self) -> dict:
+        total_users = len(self.get_all())
+        total_pots = len(self.pot_repository.get_all())
+        total_logs = len(self.log_repository.get_all())
+
+        return {
+            "users": total_users,
+            "pots": total_pots,
+            "logs": total_logs
+        }
 
 
-instance = UserRepository(pot_repository)
+
+instance = UserRepository(pot_repository, log_repository)

@@ -5,10 +5,6 @@ from models.entities.plant import Plant
 
 @dataclass
 class Log:
-    """
-    Class that represents a log record of a pot's analysis process & status.
-    """
-
     def __init__(
         self,
         id: int,
@@ -17,7 +13,6 @@ class Log:
         temperature: float,
         soil_humidity: float,
         air_humidity: float,
-        image_path: str,
         expert_advice: str,
     ):
 
@@ -27,6 +22,5 @@ class Log:
         self.temperature: float = temperature
         self.soil_humidity: float = soil_humidity
         self.air_humidity: float = air_humidity
-        self.image_path: str = image_path
         self.expert_advice: str = expert_advice
         self.timestamp: datetime = datetime.now()

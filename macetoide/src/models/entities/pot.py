@@ -29,8 +29,8 @@ class Pot:
         self.last_modified: datetime = datetime.now()
         self.logs: list[Log] = []
 
-    def set_last_checked(self):
-        self.last_checked = datetime.now()
+    def set_last_checked(self, time: datetime):
+        self.last_checked = time
 
     def link_plant_id(self, new_plant_id):
         self.plant_id = new_plant_id

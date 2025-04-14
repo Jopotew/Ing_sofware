@@ -154,9 +154,25 @@ def create_user_by_admin(
     }
 
 
+@router.delete("/admin/user/{username}")
+def delete_user_by_username(
+    username: str,
+    user: Annotated[AdminUser, Depends(get_current_user)]
+):
+    if not isinstance(user, AdminUser):
+        raise HTTPException(status_code=403, detail="No autorizado")
+
+    user_repository.delete_by_username(username)
+    return {"message": f"Usuario '{username}' eliminado correctamente."}
 
 
 
+@router.get("/admin/analytics")
+def get_analytics(user: Annotated[AdminUser, Depends(get_current_user)]):
+    if not isinstance(user, AdminUser):
+        raise HTTPException(status_code=403, detail="No autorizado")
+
+    return user_repository.get_system_stats()
 
 
 

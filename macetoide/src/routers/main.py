@@ -10,6 +10,8 @@ sys.path.append(src_path)
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from routers import auth, user, pot, log, plant
+import threading
+from services.log_scheduler import LogScheduler
 from exceptions.exceptions import (
     RepositoryError,
     UserNotFoundError,
@@ -63,3 +65,12 @@ def root_status():
         "description": app.description,
         "message": "Bienvenido a la API de Macetoide 🌱"
     }
+
+
+scheduler = LogScheduler()
+
+def schedule_log_check():
+    scheduler.run()
+    threading.Timer(60, schedule_log_check).start()
+
+schedule_log_check()

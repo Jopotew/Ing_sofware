@@ -1,3 +1,4 @@
+from datetime import timedelta
 from fastapi import APIRouter, Body, HTTPException, Depends
 from typing import Annotated
 from models.entities.pot import Pot
@@ -80,3 +81,26 @@ def assign_plant_to_pot(
         raise HTTPException(status_code=403, detail="No autorizado")
 
     return pot_repository.change_plant(pot_obj, new_plant_id)
+
+
+
+
+@router.get("/pot/next-analysis")
+def get_next_analysis(
+    pot: PotForm,
+    user: Annotated[ViewerUser, Depends(get_current_user)]
+):
+    pot_obj: Pot = pot_repository.create_obj(pot.to_dict())
+
+    if pot_obj.user_id != user.id:
+        raise HTTPException(status_code=403, detail="No autorizado")
+
+    next_analysis = pot_obj.last_checked + timedelta(hours=pot_obj.analysis_time)
+
+    return {
+        "pot_id": pot_obj.id,
+        "name": pot_obj.name,
+        "last_checked": pot_obj.last_checked.strftime("%Y-%m-%d %H:%M:%S"),
+        "analysis_time": pot_obj.analysis_time,
+        "next_analysis": next_analysis.strftime("%Y-%m-%d %H:%M:%S")
+    }

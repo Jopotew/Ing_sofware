@@ -477,6 +477,14 @@ class FakeDatabase():
                 return True
 
         return False
+    
+    def delete_by_username(self, username: str) -> bool:
+        for i, user in enumerate(self.users):
+            if user["username"] == username:
+                del self.users[i]
+                return True
+        return False
+
 
     def get_by_id(self, table, id) -> dict | None:
         if table == "user":
