@@ -72,7 +72,20 @@ class LogForm(BaseModel):
     timestamp: datetime
 
 
+class AdminRegisterForm(BaseModel):
+    username: str
+    mail: str
+    password: str
+    admin_role: bool = False
 
+
+    def to_dict(self) -> dict:
+        return {
+            "username": self.username,
+            "mail": self.mail,
+            "password": self.password,
+            "admin_role": self.admin_role,
+        }
 
 class DataUpdateForm(BaseModel):
     old_data: str
