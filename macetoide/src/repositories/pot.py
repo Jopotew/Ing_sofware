@@ -31,41 +31,64 @@ class PotRepository(Repository):
             data["last_checked"],
         )
 
-    def get_user_pots(self, user: User) -> list[Pot]:
-        p = self.db.get_user_pots(user.id)
+    def get_user_pots(self, user_id: int) -> list[Pot]:
+        p = self.db.get_user_pots(user_id)
+        p_list: list[Pot] = []
 
         if p is None:
             raise DatabaseOperationError("Failed to fetch pots from database.")
 
         if len(p) == 0:
             return []
-        
+
         for i in p:
-            user.add_pot(self.create_obj(i))
+            p_list.add_pot(self.create_obj(i))
 
-        return user.pots
+        return p_list
 
-    def set_last_checked(self, pot: Pot, new_time) -> bool:
+    def set_last_checked(self, pot: Pot, new_time) -> dict:
         pot.set_last_checked(new_time)
         pot.update_modified()
-        if not self.db.save(pot.get_dto):
-            raise DatabaseOperationError("Failed to update pot's last_checked in database.")
-        return True
 
-    def change_plant(self, pot: Pot, new_plant_id) -> bool:
+        if not self.db.save(pot.get_dto()):
+            raise DatabaseOperationError(
+                "Failed to update pot's last_checked in database."
+            )
+
+        return {"message": f"Última revisión actualizada para la maceta {pot.id}."}
+
+
+    def change_plant(self, pot: Pot, new_plant_id: int) -> dict:
         pot.link_plant_id(new_plant_id)
         pot.update_modified()
-        if not self.db.save(pot.get_dto):
-            raise DatabaseOperationError("Failed to update pot's plant_id in database.")
-        return True
 
-    def change_analysis_time(self, pot: Pot, new_analysis_time) -> bool:
+        if not self.db.save(pot.get_dto()):
+            raise DatabaseOperationError("Failed to update pot's plant_id in database.")
+
+        return {"message": f"Planta {new_plant_id} asignada correctamente a la maceta {pot.id}."}
+
+
+    def change_analysis_time(self, pot: Pot, new_analysis_time) -> dict:
         pot.link_analysis_time(new_analysis_time)
         pot.update_modified()
-        if not self.db.save(pot.get_dto):
-            raise DatabaseOperationError("Failed to update pot's analysis_time in database.")
-        return True
+
+        if not self.db.save(pot.get_dto()):
+            raise DatabaseOperationError(
+                "Failed to update pot's analysis_time in database."
+            )
+
+        return {"message": f"Hora de análisis actualizada para la maceta {pot.id}."}
 
 
+    def change_name(self, pot: Pot, new_name: str) -> bool:
+        pot.name = new_name
+        pot.update_modified()
+
+        success = self.db.update_pot_name(pot.id, new_name)
+
+        if not success:
+            raise DatabaseOperationError("No se pudo actualizar el nombre de la maceta.")
+
+        return {"message": f"Nombre de la maceta {pot.id} actualizado a '{new_name}' correctamente."}
 
 instance = PotRepository()

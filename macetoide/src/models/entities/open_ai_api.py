@@ -148,5 +148,5 @@ class Chatbot:
         return description
 
 
-instance_chatbot = Chatbot() 
-instance_assistant = PlantAssistant()
+# instance_chatbot = Chatbot() 
+# instance_assistant = PlantAssistant()

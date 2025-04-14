@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from time import time
+from datetime import datetime
 from models.entities.plant import Plant
 
 
@@ -10,20 +10,18 @@ class Log:
     """
 
     def __init__(
-            
-            self, 
-            id: int, 
-            pot_id: int,
-            plant_id: int, 
-            temperature: float, 
-            soil_humidity:float, 
-            air_humidity: float, 
-            image_path: str, 
-            expert_advice: str, 
-            ):
-        
-       
-        self.id = id,
+        self,
+        id: int,
+        pot_id: int,
+        plant_id: int,
+        temperature: float,
+        soil_humidity: float,
+        air_humidity: float,
+        image_path: str,
+        expert_advice: str,
+    ):
+
+        self.id = (id,)
         self.pot_id: int = pot_id
         self.plant_id: int = plant_id
         self.temperature: float = temperature
@@ -31,4 +29,4 @@ class Log:
         self.air_humidity: float = air_humidity
         self.image_path: str = image_path
         self.expert_advice: str = expert_advice
-        self.timestamp: float = time.now()
+        self.timestamp: datetime = datetime.now()

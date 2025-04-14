@@ -447,7 +447,7 @@ class FakeDatabase():
             self.logs.append(data)
             return True
 
-        elif table == "plants":
+        elif table == "plant":
             for i, plant in enumerate(self.plants):
                 if plant["id"] == data["id"]:
                     self.plants[i] = data
@@ -455,7 +455,7 @@ class FakeDatabase():
             self.plants.append(data)
             return True
 
-        elif table == "pots":
+        elif table == "pot":
             for i, pot in enumerate(self.pots):
                 if pot["id"] == data["id"]:
                     self.pots[i] = data
@@ -558,7 +558,12 @@ class FakeDatabase():
                 u_pots.append(pot)
         return u_pots
 
-
+    def update_pot_name(self, pot_id: int, new_name: str) -> bool:
+        for pot in self.pots:
+            if pot["id"] == pot_id:
+                pot["name"] = new_name
+                return True
+        return False
 
     def get_last_log(self, pot_id) -> dict | None:
         logs = [log for log in self.logs if log["pot_id"] == pot_id]

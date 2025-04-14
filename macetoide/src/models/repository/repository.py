@@ -15,10 +15,8 @@ class Repository:
         self.table: str = None
         self.id_counter = 0
 
-
-    def save(self, entity):
+    def save(self, entity: dict):
         return db.save(entity, self.table)
-        
 
     def delete(self, id):
         return db.delete(id, self.table)
@@ -29,13 +27,11 @@ class Repository:
         for i in results:
             objs.append(self.create_obj(i))
         return objs
-    
-    def get_by_id(self, id): 
+
+    def get_by_id(self, id):
         i_dict = db.get_by_id(self.table, id)
         obj = self.create_obj(i_dict)
         return obj
-        
-    def create_obj(self, data: dict):
-        pass    
 
-    
+    def create_obj(self, data: dict):
+        pass

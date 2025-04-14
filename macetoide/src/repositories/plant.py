@@ -1,11 +1,13 @@
 from exceptions.exceptions import PlantSearchError, DatabaseOperationError
+from macetoide.src.models.entities.pot import Pot
+from macetoide.src.models.entities.viewer_user import ViewerUser
 from models.repository.repository import Repository
 from models.entities.plant import Plant
-from models.entities.open_ai_api import Chatbot, instance_chatbot as chatbot
+#from models.entities.open_ai_api import Chatbot, instance_chatbot as chatbot
 
 
 class PlantRepository(Repository):
-    def __init__(self, chatbot: Chatbot):
+    def __init__(self, chatbot: str):
         super().__init__()
         self.table = "plant"
         self.chatbot = chatbot
@@ -67,5 +69,27 @@ class PlantRepository(Repository):
                 raise DatabaseOperationError("Error while saving plant info to DB.")
 
 
+    def get_plants_by_user(self, user: ViewerUser) -> list[Plant]:
+    
+        plant_objs: list[Plant] = []
+        found_ids: set[int] = set()
 
-instance = PlantRepository(chatbot)
+        for pot in user.pots:
+            plant_id = pot.plant_id
+            if plant_id not in found_ids:
+                found_ids.add(plant_id)
+                data = self.db.get_by_id(self.table , plant_id)
+                if not data:
+                    raise PlantSearchError(f"No se encontró la planta con ID {plant_id}")
+                plant = self.create_obj(data)
+                plant_objs.append(plant)
+
+        return plant_objs
+    
+
+
+
+
+
+
+instance = PlantRepository("chatbot")
