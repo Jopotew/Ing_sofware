@@ -12,6 +12,7 @@ from fastapi.responses import JSONResponse
 from routers import auth, user, pot, log, plant
 import threading
 
+print(dir(threading))
 
 from services.log_scheduler import LogScheduler
 from exceptions.exceptions import (
@@ -80,7 +81,8 @@ scheduler = LogScheduler()
 
 def schedule_log_check():
     scheduler.run()
-    threading.Timer(60, schedule_log_check).start()
-
+    t= threading.Timer(60, schedule_log_check)
+    t.start()
+    print("start")
 
 schedule_log_check()
