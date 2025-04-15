@@ -361,7 +361,7 @@ class FakeDatabase:
                 "id": 5,
                 "name": "Maceta de pedro #5",
                 "plant_id": 5,
-                "analysis_time": 0.75,
+                "analysis_time": 0.1,
                 "last_checked": "2025-04-12 10:10:00",
                 "user_id": 5,
                 "last_modified": 0,
@@ -398,8 +398,8 @@ class FakeDatabase:
 
         self.logs = [
             {
-                "id": 1,
-                "pot_id": 1,
+                "id": 14,
+                "pot_id": 2,
                 "plant_id": 1,
                 "temperature": 22.5,
                 "soil_humidity": 40.2,
@@ -409,7 +409,7 @@ class FakeDatabase:
                 "timestamp": "2025-03-30 08:00:00",
             },
             {
-                "id": 2,
+                "id": 4322,
                 "pot_id": 1,
                 "plant_id": 1,
                 "temperature": 24.1,
@@ -420,7 +420,7 @@ class FakeDatabase:
                 "timestamp": "2025-03-30 08:10:00",
             },
             {
-                "id": 3,
+                "id": 333,
                 "pot_id": 1,
                 "plant_id": 1,
                 "temperature": 23.8,
@@ -431,7 +431,7 @@ class FakeDatabase:
                 "timestamp": "2025-03-30 08:20:00",
             },
             {
-                "id": 4,
+                "id": 3334,
                 "pot_id": 4,
                 "plant_id": 4,
                 "temperature": 21.0,
@@ -442,7 +442,7 @@ class FakeDatabase:
                 "timestamp": "2025-03-30 08:30:00",
             },
             {
-                "id": 5,
+                "id": 3335,
                 "pot_id": 5,
                 "plant_id": 5,
                 "temperature": 25.0,
@@ -455,18 +455,18 @@ class FakeDatabase:
         ]
 
     def get_all(self, table: str) -> list[dict] | None:
-        if table == "user":
+        if table == "users":
             return self.users
         elif table == "pots":
             return self.pots
         elif table == "plants":
             return self.plants
-        elif table == "log":
+        elif table == "logs":
             return self.logs
         return None
 
     def save(self, data: dict, table: str) -> bool:
-        if table == "user":
+        if table == "users":
             for i, user in enumerate(self.users):
                 if user["id"] == data["id"]:
                     self.users[i] = data
@@ -474,7 +474,7 @@ class FakeDatabase:
             self.users.append(data)
             return True
 
-        elif table == "log":
+        elif table == "logs":
             for i, log in enumerate(self.logs):
                 if log["id"] == data["id"]:
                     self.logs[i] = data
@@ -482,7 +482,7 @@ class FakeDatabase:
             self.logs.append(data)
             return True
 
-        elif table == "plant":
+        elif table == "plants":
             for i, plant in enumerate(self.plants):
                 if plant["id"] == data["id"]:
                     self.plants[i] = data
@@ -490,7 +490,7 @@ class FakeDatabase:
             self.plants.append(data)
             return True
 
-        elif table == "pot":
+        elif table == "pots":
             for i, pot in enumerate(self.pots):
                 if pot["id"] == data["id"]:
                     self.pots[i] = data
@@ -521,12 +521,12 @@ class FakeDatabase:
         return False
 
     def get_by_id(self, table, id) -> dict | None:
-        if table == "user":
+        if table == "users":
             for user in self.users:
                 if user["id"] == id:
                     return user
             return None
-        elif table == "log":
+        elif table == "logs":
             for log in self.logs:
                 if log["id"] == id:
                     return log
@@ -545,7 +545,7 @@ class FakeDatabase:
             return None
 
     def get_by_name(self, name: str, table: str):
-        if table == "user":
+        if table == "users":
             for user in self.users:
                 if user["username"] == name:
                     return user

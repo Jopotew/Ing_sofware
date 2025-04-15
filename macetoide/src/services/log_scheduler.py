@@ -10,13 +10,15 @@ class LogScheduler:
         now = datetime.now()
         for pot in pots:
             if pot.last_checked is None:
-                # log_repository.trigger_analysis(pot)
-                # print(f"Log inicial generado para pot {pot.id}: ({pot.name})")
-                # continue
-                print("none")
+                log_repository.trigger_analysis(pot)
+                print(f"Log generado desde cero")
+                continue
+                
 
             next_time = pot.last_checked + timedelta(hours=pot.analysis_time)
             if now >= next_time:
-                print("checked")
-                # log_repository.trigger_analysis(pot)
-                # print(f"Log generado para pot {pot.id}: ({pot.name})")
+                
+                log_repository.trigger_analysis(pot)
+                print(f"Log generado")
+            else:
+                print("no checkin")

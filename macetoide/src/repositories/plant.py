@@ -9,7 +9,7 @@ from models.entities.plant import Plant
 class PlantRepository(Repository):
     def __init__(self, chatbot: str):
         super().__init__()
-        self.table = "plant"
+        self.table = "plants"
         self.chatbot = chatbot
 
     def create_obj(self, data: dict) -> Plant:

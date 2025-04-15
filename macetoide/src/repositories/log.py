@@ -1,5 +1,5 @@
 from datetime import datetime
-from random import uniform
+from random import randint, random, uniform
 from exceptions.exceptions import LogDataFetchError, DatabaseOperationError
 from models.repository.repository import Repository
 from repositories.pot import PotRepository, instance as pot_repository
@@ -11,7 +11,7 @@ class LogRepository(Repository):
     def __init__(self, pot_repository: PotRepository):
         super().__init__()
         self.pot_repository: PotRepository = pot_repository
-        self.table = "log"
+        self.table = "logs"
 
     def create_obj(self, data: dict) -> Log:
         return Log(
@@ -45,6 +45,7 @@ class LogRepository(Repository):
     def trigger_analysis(self, pot: Pot) -> bool:
 
         sensor_data = {
+            
             "temperature": round(uniform(18.0, 30.0), 1),
             "soil_humidity": round(uniform(10.0, 70.0), 1),
             "air_humidity": round(uniform(30.0, 80.0), 1),
@@ -56,6 +57,7 @@ class LogRepository(Repository):
         }
 
         new_log = {
+            "id" : randint(255, 999999),
             "pot_id": pot.id,
             "plant_id": pot.plant_id,
             "temperature": sensor_data["temperature"],

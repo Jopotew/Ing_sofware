@@ -21,7 +21,7 @@ from repositories.log import LogRepository, instance as log_repository
 class UserRepository(Repository):
     def __init__(self, pot_repository: PotRepository, log_repository: LogRepository):
         super().__init__()
-        self.table = "user"
+        self.table = "users"
         self.pot_repository = pot_repository
         self.log_repository = log_repository
 
