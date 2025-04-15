@@ -59,7 +59,6 @@ def get_current_user(request: Request) -> ViewerUser | AdminUser:
         )
 
 
-
 @router.post("/logout")
 def logout(request: Request, response: Response):
     token = request.cookies.get("token")
@@ -68,8 +67,6 @@ def logout(request: Request, response: Response):
 
     response.delete_cookie("token")
     return {"message": "Sesión cerrada correctamente"}
-
-
 
 
 @router.post("/token/refresh")
@@ -81,7 +78,9 @@ def refresh_token(request: Request, response: Response):
     try:
         payload = jwt.decode(token, secret_key, algorithms=["HS256"])
     except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expirado, no se puede renovar")
+        raise HTTPException(
+            status_code=401, detail="Token expirado, no se puede renovar"
+        )
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Token inválido")
 

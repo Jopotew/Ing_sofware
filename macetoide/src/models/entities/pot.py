@@ -12,7 +12,7 @@ class Pot:
         id: int,
         name: str,
         plant_id: int,
-        analysis_time: datetime,
+        analysis_time: float,
         user_id: int,
         last_checked: datetime,
     ):
@@ -23,7 +23,7 @@ class Pot:
         self.id = id
         self.name: str = name
         self.plant_id: int = plant_id
-        self.analysis_time = analysis_time
+        self.analysis_time: float = analysis_time
         self.user_id: int = user_id
         self.last_checked = last_checked
         self.last_modified: datetime = datetime.now()

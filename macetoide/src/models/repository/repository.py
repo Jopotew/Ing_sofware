@@ -25,7 +25,6 @@ class Repository:
         objs: list = []
         results = db.get_all(self.table)
         for i in results:
-            print(i)
             objs.append(self.create_obj(i))
         return objs
 

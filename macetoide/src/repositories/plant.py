@@ -2,7 +2,8 @@ from exceptions.exceptions import PlantSearchError, DatabaseOperationError
 from models.entities.viewer_user import ViewerUser
 from models.repository.repository import Repository
 from models.entities.plant import Plant
-#from models.entities.open_ai_api import Chatbot, instance_chatbot as chatbot
+
+# from models.entities.open_ai_api import Chatbot, instance_chatbot as chatbot
 
 
 class PlantRepository(Repository):
@@ -13,14 +14,10 @@ class PlantRepository(Repository):
 
     def create_obj(self, data: dict) -> Plant:
         plant = Plant(
-            data["name"],
-            data["last_modified"],
-            data["species"],
-            data["description"]
+            data["name"], data["last_modified"], data["species"], data["description"]
         )
         self._manage_info(plant)
         return plant
-
 
     def get_list_plants_in(self, p_dict: dict) -> list:
         if not p_dict:
@@ -46,9 +43,6 @@ class PlantRepository(Repository):
 
         return p_obj_list
 
-        
-
-
     def _manage_info(self, plant: Plant) -> None:
         updated = False
 
@@ -67,9 +61,8 @@ class PlantRepository(Repository):
             if not success:
                 raise DatabaseOperationError("Error while saving plant info to DB.")
 
-
     def get_plants_by_user(self, user: ViewerUser) -> list[Plant]:
-    
+
         plant_objs: list[Plant] = []
         found_ids: set[int] = set()
 
@@ -77,18 +70,15 @@ class PlantRepository(Repository):
             plant_id = pot.plant_id
             if plant_id not in found_ids:
                 found_ids.add(plant_id)
-                data = self.db.get_by_id(self.table , plant_id)
+                data = self.db.get_by_id(self.table, plant_id)
                 if not data:
-                    raise PlantSearchError(f"No se encontró la planta con ID {plant_id}")
+                    raise PlantSearchError(
+                        f"No se encontró la planta con ID {plant_id}"
+                    )
                 plant = self.create_obj(data)
                 plant_objs.append(plant)
 
         return plant_objs
-    
-
-
-
-
 
 
 instance = PlantRepository("chatbot")

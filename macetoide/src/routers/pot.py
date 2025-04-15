@@ -83,12 +83,9 @@ def assign_plant_to_pot(
     return pot_repository.change_plant(pot_obj, new_plant_id)
 
 
-
-
 @router.get("/pot/next-analysis")
 def get_next_analysis(
-    pot: PotForm,
-    user: Annotated[ViewerUser, Depends(get_current_user)]
+    pot: PotForm, user: Annotated[ViewerUser, Depends(get_current_user)]
 ):
     pot_obj: Pot = pot_repository.create_obj(pot.to_dict())
 
@@ -102,5 +99,5 @@ def get_next_analysis(
         "name": pot_obj.name,
         "last_checked": pot_obj.last_checked.strftime("%Y-%m-%d %H:%M:%S"),
         "analysis_time": pot_obj.analysis_time,
-        "next_analysis": next_analysis.strftime("%Y-%m-%d %H:%M:%S")
+        "next_analysis": next_analysis.strftime("%Y-%m-%d %H:%M:%S"),
     }

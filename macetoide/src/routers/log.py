@@ -56,8 +56,7 @@ def get_last_10_logs(
 
 @router.get("/pot/status")
 def get_pot_status(
-    pot: PotForm,
-    user: Annotated[ViewerUser, Depends(get_current_user)]
+    pot: PotForm, user: Annotated[ViewerUser, Depends(get_current_user)]
 ):
     pot_obj: Pot = pot_repository.create_obj(pot.to_dict())
 
@@ -83,16 +82,14 @@ def get_pot_status(
         "planta": {
             "nombre": plant.name,
             "especie": plant.species,
-            "descripcion": plant.description
-        }
+            "descripcion": plant.description,
+        },
     }
-
 
 
 @router.get("/pot/history")
 def get_pot_log_history(
-    pot: PotForm,
-    user: Annotated[ViewerUser, Depends(get_current_user)]
+    pot: PotForm, user: Annotated[ViewerUser, Depends(get_current_user)]
 ):
     pot_obj: Pot = pot_repository.create_obj(pot.to_dict())
 
@@ -104,13 +101,3 @@ def get_pot_log_history(
     sorted_logs = sorted(logs, key=lambda l: l.timestamp, reverse=True)
 
     return [log.get_dto() for log in sorted_logs]
-
-
-
-
-
-
-
-
-
-

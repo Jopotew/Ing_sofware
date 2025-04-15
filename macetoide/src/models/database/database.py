@@ -1,6 +1,7 @@
 import pymysql
 from typing import Optional
 
+
 class DatabaseConnection:
 
     def __init__(self):
@@ -203,7 +204,7 @@ class DatabaseConnection:
             return 0
 
     def get_by_username(self, username):
-        try: 
+        try:
             self.cursor.callproc("get_by_username", [username])
             result = result = self.cursor.fetchall()
             return result
@@ -277,21 +278,46 @@ class DatabaseConnection:
             return None
 
 
-
-
-
-class FakeDatabase():
+class FakeDatabase:
 
     def __init__(self):
-        
-        
 
         self.users = [
-        {"id": 1, "username": "juan", "password": "", "mail": "juan@123.com","last_modified": 0},
-        {"id": 2, "username": "maria", "password": "", "mail": "maria@correo.com","last_modified": 0},
-        {"id": 3, "username": "luis", "password": "", "mail": "luis@example.com","last_modified": 0},
-        {"id": 4, "username": "ana", "password": "", "mail": "ana@dominio.com","last_modified": 0},
-        {"id": 5, "username": "pedro", "password": "", "mail": "pedro@mail.com","last_modified": 0},
+            {
+                "id": 1,
+                "username": "juan",
+                "password": "",
+                "mail": "juan@123.com",
+                "last_modified": 0,
+            },
+            {
+                "id": 2,
+                "username": "maria",
+                "password": "",
+                "mail": "maria@correo.com",
+                "last_modified": 0,
+            },
+            {
+                "id": 3,
+                "username": "luis",
+                "password": "",
+                "mail": "luis@example.com",
+                "last_modified": 0,
+            },
+            {
+                "id": 4,
+                "username": "ana",
+                "password": "",
+                "mail": "ana@dominio.com",
+                "last_modified": 0,
+            },
+            {
+                "id": 5,
+                "username": "pedro",
+                "password": "",
+                "mail": "pedro@mail.com",
+                "last_modified": 0,
+            },
         ]
 
         self.pots = [
@@ -299,46 +325,46 @@ class FakeDatabase():
                 "id": 1,
                 "name": "Maceta de juan #1",
                 "plant_id": 1,
-                "analysis_time": "08:00",
-                "last_checked": "09:00",
+                "analysis_time": 0.5,
+                "last_checked": "2025-04-12 08:00:00",
                 "user_id": 1,
-                "last_modified": 0
+                "last_modified": 0,
             },
             {
                 "id": 2,
                 "name": "Maceta de ana #2",
                 "plant_id": 2,
-                "analysis_time": "08:10",
-                "last_checked": "09:10",
+                "analysis_time": 2,
+                "last_checked": "2025-04-12 07:30:00",
                 "user_id": 4,
-                "last_modified": 0
+                "last_modified": 0,
             },
             {
                 "id": 3,
                 "name": "Maceta de luis #3",
                 "plant_id": 3,
-                "analysis_time": "08:20",
-                "last_checked": "09:20",
+                "analysis_time": 1,
+                "last_checked": "2025-04-12 09:15:00",
                 "user_id": 3,
-                "last_modified": 0
+                "last_modified": 0,
             },
             {
                 "id": 4,
                 "name": "Maceta de maria #4",
                 "plant_id": 4,
-                "analysis_time": "08:30",
-                "last_checked": "09:30",
+                "analysis_time": 1.5,
+                "last_checked": "2025-04-12 06:45:00",
                 "user_id": 2,
-                "last_modified": 0
+                "last_modified": 0,
             },
             {
                 "id": 5,
                 "name": "Maceta de pedro #5",
                 "plant_id": 5,
-                "analysis_time": "08:40",
-                "last_checked": "09:40",
+                "analysis_time": 0.75,
+                "last_checked": "2025-04-12 10:10:00",
                 "user_id": 5,
-                "last_modified": 0
+                "last_modified": 0,
             },
         ]
 
@@ -356,8 +382,18 @@ class FakeDatabase():
                 "species": "Lavandula angustifolia",
                 "description": "",
             },
-            {"id": 4, "name": "Romero", "species": "Salvia rosmarinus", "description": ""},
-            {"id": 5, "name": "Cilantro", "species": "Coriandrum sativum", "description": ""},
+            {
+                "id": 4,
+                "name": "Romero",
+                "species": "Salvia rosmarinus",
+                "description": "",
+            },
+            {
+                "id": 5,
+                "name": "Cilantro",
+                "species": "Coriandrum sativum",
+                "description": "",
+            },
         ]
 
         self.logs = [
@@ -418,7 +454,6 @@ class FakeDatabase():
             },
         ]
 
-
     def get_all(self, table: str) -> list[dict] | None:
         if table == "user":
             return self.users
@@ -477,14 +512,13 @@ class FakeDatabase():
                 return True
 
         return False
-    
+
     def delete_by_username(self, username: str) -> bool:
         for i, user in enumerate(self.users):
             if user["username"] == username:
                 del self.users[i]
                 return True
         return False
-
 
     def get_by_id(self, table, id) -> dict | None:
         if table == "user":
@@ -509,7 +543,7 @@ class FakeDatabase():
             return None
         else:
             return None
-    
+
     def get_by_name(self, name: str, table: str):
         if table == "user":
             for user in self.users:
@@ -532,12 +566,12 @@ class FakeDatabase():
         else:
             return None
 
-
-
-    def update_user(self, user_id: int, field: str, old_value: str, new_value: str) -> bool:
+    def update_user(
+        self, user_id: int, field: str, old_value: str, new_value: str
+    ) -> bool:
         if field not in ["username", "password", "mail"]:
             return False
-      
+
         for user in self.users:
             if user["id"] == user_id:
                 if user.get(field) != old_value:
@@ -546,7 +580,7 @@ class FakeDatabase():
                 return True
 
         return False
-  
+
     def get_by_username(self, username) -> dict | None:
         for user in self.users:
             if user["username"] == username:
@@ -577,15 +611,14 @@ class FakeDatabase():
         logs = [log for log in self.logs if log["pot_id"] == pot_id]
         return logs[-1] if logs else None
 
-    
     def get_all_logs(self, pot_id: int, limit: int = None) -> list[dict]:
-    
+
         logs = [log for log in self.logs if log["pot_id"] == pot_id]
 
         logs.sort(key=lambda log: log["id_log"])
 
         if limit is not None:
-            logs = logs[-limit:]  
+            logs = logs[-limit:]
         return logs
 
 
