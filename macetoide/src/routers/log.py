@@ -30,7 +30,7 @@ def get_logs(pot: PotForm, user: Annotated[ViewerUser, Depends(get_current_user)
 
 @router.post("/log")
 def save_log(log: LogForm, user: Annotated[ViewerUser, Depends(get_current_user)]):
-    if log.pot_id != user.id:
+    if log.pot_id != user.id: # esta mal poprq pot_id no es user id
         raise HTTPException(status_code=403, detail="No autorizado")
     return log_repository.save(log.to_dict())
 

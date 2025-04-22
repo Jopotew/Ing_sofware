@@ -15,7 +15,7 @@ class Repository:
         self.table: str = None
         self.id_counter = 0
 
-    def save(self, entity: dict):
+    def save(self, entity: dict): #agregar exception a si falla
         return db.save(entity, self.table)
 
     def delete(self, id):

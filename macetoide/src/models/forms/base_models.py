@@ -7,6 +7,7 @@ class LoginForm(BaseModel):
     password: str
 
 
+
 class UserForm(BaseModel):
     id: int
     username: str

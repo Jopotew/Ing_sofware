@@ -23,3 +23,8 @@ def get_plant_by_id(
 @router.get("/plants/user")
 def get_user_plants(user: Annotated[ViewerUser, Depends(get_current_user)]):
     return plant_repository.get_plants_by_user(user)
+
+
+
+#get species
+#get description
